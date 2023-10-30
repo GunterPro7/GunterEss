@@ -1,5 +1,6 @@
 package com.GunterPro7uDerKatzenLord.Listener;
 
+import com.GunterPro7uDerKatzenLord.Command;
 import com.GunterPro7uDerKatzenLord.Gui.CustomIngameUI;
 import com.GunterPro7uDerKatzenLord.Gui.GunterAutoKickOverlay;
 import com.GunterPro7uDerKatzenLord.Gui.GunterCollectionOverlay;
@@ -15,6 +16,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.GuiNewChat;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.util.ChatComponentText;
@@ -40,10 +42,6 @@ import static com.GunterPro7uDerKatzenLord.Main.mc;
 public class Listeners {
     public static final ExecutorService POOL = Executors.newCachedThreadPool();
     public static Long time = System.currentTimeMillis();
-    public static String lastCopiedMessage;
-    public static final String brea = "§F";
-    public static final Map<Integer, MessageInformation> MAP;
-    public static int current_id;
     public static final List<Long> cropTimeList = new ArrayList<>();
     public static final boolean compactChatEnabled = true;
     public static boolean setGunterOverlayNextTick;
@@ -64,7 +62,7 @@ public class Listeners {
                 int scale = mc.gameSettings.guiScale;
                 //fontRenderer.drawString("Hello this is !", Mouse.getEventX() / scale, (Display.getHeight()-Mouse.getEventY()) / scale, 0x100000);
                 CustomIngameUI customIngameUI = new CustomIngameUI(0x80000000, 0xFF000000, "Mined Blocks: " + cropTimeList.size(), "Blocks / Second: " + Utils.getLengthPerSecond(cropTimeList), "Crops: " + totalCrops);
-                customIngameUI.drawInfoBox(Setting.MONEY_OVERLAY.getOffsetX(), Setting.MONEY_OVERLAY.getOffsetY());
+                customIngameUI.drawInfoBox(Setting.MONEY_OVERLAY.getOffsetX(), Setting.MONEY_OVERLAY.getOffsetY(), true);
             }
             if (Setting.COLLECTION_OVERLAY.isEnabled()) {
                 Collections collection = CURRENT_COLLECTION;
@@ -81,7 +79,7 @@ public class Listeners {
                 args.add("§f" + collection.getSimpleName() + "/ h: " + collectionDropsPerHour);
 
                 CustomIngameUI customIngameUI = new CustomIngameUI(0x501E1E1E, 0x501E1E1E, args);
-                customIngameUI.drawInfoBox(Setting.COLLECTION_OVERLAY.getOffsetX(), Setting.COLLECTION_OVERLAY.getOffsetY());
+                customIngameUI.drawInfoBox(Setting.COLLECTION_OVERLAY.getOffsetX(), Setting.COLLECTION_OVERLAY.getOffsetY(), true);
             }
         }
     }
@@ -109,65 +107,6 @@ public class Listeners {
             });
             time = System.currentTimeMillis();
         }
-    }
-
-    @SubscribeEvent
-    public void onChatMessage(final ClientChatReceivedEvent event) {
-        if (event.type != 0 || event.message.getUnformattedText().matches("\\{.*}")) { // TODO we can probably read the json sent by the server: {"server":"mini95DK","gametype":"SKYBLOCK","mode":"dynamic","map":"Private Island"}
-            return;
-        }
-        if (Setting.REMOVE_BLANK_LINES.isEnabled() && event.message.getUnformattedText().trim().equals("")) {
-            event.message = new ChatComponentText("");
-            return;
-        }
-
-        String text = event.message.getUnformattedText().replaceAll("§[0-9a-zA-Z]", "");
-
-        MessageInformation messageInformation;
-        if (MessageInformation.instances.containsKey(text)) {
-            messageInformation = MessageInformation.instances.get(text);
-        } else {
-            messageInformation = new MessageInformation(text, current_id++);
-            MessageInformation.instances.put(text, messageInformation);
-        }
-
-        messageInformation.count();
-        final int id = messageInformation.getId();
-        final String idString = Utils.convertToMinecraftId(id);
-        MAP.put(id, messageInformation);
-
-        final IChatComponent iChatComponent = new ChatComponentText("");
-        for (final IChatComponent chatComponent : event.message) {
-            final IChatComponent newIChatComponent = new ChatComponentText(chatComponent.getUnformattedTextForChat() + brea + idString);
-            newIChatComponent.setChatStyle(chatComponent.getChatStyle().createShallowCopy());
-            iChatComponent.appendSibling(newIChatComponent);
-        }
-
-        if (Setting.STACK_CHAT_MESSAGES.isEnabled()) {
-            if (messageInformation.getCount() != 1) {
-                iChatComponent.appendText(" §7(" + messageInformation.getCount() + ")" + brea + idString); // TODO check if the color looks nice
-            }
-
-            event.message = new ChatComponentText("");
-            event.setCanceled(true);
-            if (Setting.DONT_CHECK_USELESS_CHAT_MESSAGES.isEnabled()) {
-                if (Utils.isIgnoredMessage(text)) {
-                    // TODO do action ether dont do the (count) or just remove the whole message
-                }
-            }
-            Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(iChatComponent, messageInformation.getId());
-        } else {
-            event.message = iChatComponent;
-        }
-    }
-
-    @SubscribeEvent
-    public void onMouseInput(final GuiScreenEvent.MouseInputEvent event) {
-        try {
-            if (Setting.COPY_CHAT_ENABLED.isEnabled()) {
-                copyMessage();
-            }
-        } catch (Exception ignored) {}
     }
 
     @SubscribeEvent
@@ -216,45 +155,6 @@ public class Listeners {
         }
 
         totalCrops += crops;
-    }
-
-    public void copyMessage() {
-        if (Mouse.isButtonDown(1) && (Keyboard.isKeyDown(29) || Keyboard.isKeyDown(157))) {
-            final Minecraft mc = Minecraft.getMinecraft();
-            final int mouseX = Mouse.getEventX();
-            final int mouseY = Mouse.getEventY();
-            final IChatComponent chatComponent = mc.ingameGUI.getChatGUI().getChatComponent(mouseX, mouseY);
-            if (chatComponent != null) {
-                String messageToCopy;
-                MessageInformation messageInformation = null;
-                try {
-                    final String[] strings = chatComponent.getUnformattedText().split(brea);
-                    final String id = strings[strings.length - 1].replaceAll("§", "").replaceAll("[a-zA-Z]", "");
-                    final int intId = Integer.parseInt(id);
-                    messageInformation = MAP.get(intId);
-                    messageToCopy = messageInformation.getMessage();
-                    if (Setting.COPY_WITH_STACK.isEnabled() && messageInformation.getCount() != 1) {
-                        messageToCopy += " (" + messageInformation.getCount() + ")";
-                    }
-                    //System.out.println(MessageInformation.instances.get(messageToCopy).getCount());
-                    //System.out.println(MessageInformation.instances);
-                    //System.out.println(MAP);
-                } catch (Exception e) {
-                    messageToCopy = chatComponent.getUnformattedText().replaceAll("§[0-9a-zA-Z]", "");
-                }
-                Utils.copyToClipBoard(messageToCopy);
-                try {
-                    System.out.println(messageInformation.getCount() + " " + messageInformation.getTime());
-                } catch (Exception e) {
-
-                }
-            }
-        }
-    }
-
-    static {
-        lastCopiedMessage = "";
-        MAP = new HashMap<>();
     }
 
     @SubscribeEvent

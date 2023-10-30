@@ -7,11 +7,13 @@ import com.GunterPro7uDerKatzenLord.Utils.Utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
+import org.lwjgl.input.Mouse;
 
 import java.util.Arrays;
 import java.util.Objects;
 
 public class Command extends CommandBase {
+    public static boolean TESTSTOP = false;
     private static final String NAME = "gunterEss";
 
     @Override
@@ -40,9 +42,15 @@ public class Command extends CommandBase {
             if (Objects.equals(args[0], "help")) {
                 Utils.sendPrivateMessage("copy <text> - Copies the text to clipboard");
             } else if (Objects.equals(args[0], "test")) {
-                Utils.execute(() -> {
-                    new AutoDungeonJoiner();
-                }, 2500);
+                //Utils.execute(() -> {
+                //    new AutoDungeonJoiner();
+                //}, 2500);
+                //TESTSTOP = !TESTSTOP;
+
+                int x = Minecraft.getMinecraft().ingameGUI.getChatGUI().getChatWidth() + 10;
+                int y = Minecraft.getMinecraft().displayHeight - Mouse.getY();
+
+                Utils.sendPrivateMessage("X: " + x + ", Y: " + y);
             }
         }
     }

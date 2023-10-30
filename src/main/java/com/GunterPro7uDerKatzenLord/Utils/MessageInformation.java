@@ -1,5 +1,7 @@
 package com.GunterPro7uDerKatzenLord.Utils;
 
+import com.GunterPro7uDerKatzenLord.Gui.CustomIngameUI;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,7 +10,7 @@ public class MessageInformation {
     private final String message;
     private final int id;
     private int count;
-    private final long time;
+    private long time;
 
     public MessageInformation(String message, int id) {
         this.message = message;
@@ -20,6 +22,7 @@ public class MessageInformation {
 
     public void count() {
         count++;
+        time = System.currentTimeMillis();
     }
 
     public String getMessage() {
@@ -36,5 +39,10 @@ public class MessageInformation {
 
     public long getTime() {
         return time;
+    }
+
+    public void drawTimeInfoBox(int x, int y, boolean background) {
+        CustomIngameUI customIngameUI = new CustomIngameUI(0xFF1E1E1E, 0xFF121212, Utils.formatTime(time, "HH:mm:ss"));
+        customIngameUI.drawInfoBox(x, y, background);
     }
 }

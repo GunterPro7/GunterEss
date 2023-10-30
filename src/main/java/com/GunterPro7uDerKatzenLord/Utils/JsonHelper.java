@@ -99,7 +99,7 @@ public class JsonHelper {
             if (entry.getValue().isJsonObject()) {
                 String key = entry.getKey();
                 if (Collections.includesAPI(key)) {
-                    Collections.valueOfAPI(key).setCollection(new JsonCollection(entry.getValue()));
+                    Collections.valueOfAPI(key).setCollection(new JsonCollection((JsonObject) entry.getValue()));
                 }
                 addEntriesToEnum(entry.getValue().getAsJsonObject());
             }

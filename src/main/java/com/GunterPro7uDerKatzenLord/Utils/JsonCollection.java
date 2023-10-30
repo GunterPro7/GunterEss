@@ -20,8 +20,8 @@ public class JsonCollection {
     private final int tiers;
     private final Rewards[] rewards;
 
-    public JsonCollection(Object gson) {
-        this.gson = (JsonObject) gson;
+    public JsonCollection(JsonObject gson) {
+        this.gson = gson;
         tiers = this.gson.get("maxTiers").getAsInt();
         rewards = new Rewards[tiers];
 

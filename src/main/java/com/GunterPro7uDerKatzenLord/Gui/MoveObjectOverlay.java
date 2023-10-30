@@ -35,7 +35,7 @@ public class MoveObjectOverlay extends GuiScreen {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawDefaultBackground();
-        customIngameUI.drawInfoBox(offsetX + mouseOffsetX, offsetY + mouseOffsetY);
+        customIngameUI.drawInfoBox(offsetX + mouseOffsetX, offsetY + mouseOffsetY, true);
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 

@@ -1,5 +1,6 @@
 package com.GunterPro7uDerKatzenLord;
 
+import com.GunterPro7uDerKatzenLord.Listener.AdvancedChat;
 import com.GunterPro7uDerKatzenLord.Listener.ClientBlockListener;
 import com.GunterPro7uDerKatzenLord.Listener.Listeners;
 import com.GunterPro7uDerKatzenLord.Utils.JsonHelper;
@@ -23,6 +24,7 @@ public class Main {
     public void serverStarting(final FMLInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(new ClientBlockListener());
         MinecraftForge.EVENT_BUS.register(new Listeners());
+        MinecraftForge.EVENT_BUS.register(new AdvancedChat());
         ClientCommandHandler.instance.registerCommand(new Command());
         if (Setting.COLLECTION_OVERLAY.isEnabled()) {
             try {

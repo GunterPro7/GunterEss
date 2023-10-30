@@ -7,10 +7,9 @@ import net.minecraft.util.ChatComponentText;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
 
 public class Utils {
@@ -84,5 +83,12 @@ public class Utils {
         // 1. Check if it contains only "-"
         // 2. Check if 'text' is in 'ignoredMessages'
         // 3. Fill 'ignoredMessages' List
+    }
+
+    public static String formatTime(long time, String pattern) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
+        dateFormat.setTimeZone(java.util.TimeZone.getTimeZone("UTC"));
+
+        return dateFormat.format(new Date(time));
     }
 }
