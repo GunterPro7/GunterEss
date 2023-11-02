@@ -1,6 +1,7 @@
 package com.GunterPro7uDerKatzenLord.Listener;
 
 import com.GunterPro7uDerKatzenLord.Setting;
+import com.GunterPro7uDerKatzenLord.Utils.MathUtils;
 import com.GunterPro7uDerKatzenLord.Utils.MessageInformation;
 import com.GunterPro7uDerKatzenLord.Utils.Utils;
 import net.minecraft.client.Minecraft;
@@ -21,10 +22,15 @@ public class AdvancedChat {
     public static int current_id = 1;
     public static final Map<Integer, MessageInformation> MAP = new HashMap<>();
     public static final String brea = "§F";
-
+    public static final Map<ChatCondition, Function> actionMap = Utils.createMap(ChatCondition.class, Function.class,
+            new ChatCondition("QUICK MATHS! Solve: ", Condition.STARTSWITH), (Function) message -> Utils.sendChatMessageAsPlayer("/ac " + String.valueOf(MathUtils.eval(message.getUnformattedText().replaceAll("§[0-9a-zA-Z]", "").substring("QUICK MATHS! Solve: ".length()).replaceAll("x", "*"))).replace(".0", "")),
+            new ChatCondition("Click HERE to sign the ", Condition.STARTSWITH), (Function) message -> Utils.sendChatMessageAsPlayer(message.getChatStyle().getChatClickEvent().getValue()),
+            new ChatCondition("[FEAR] Public Speaking Demon: Speak ", Condition.STARTSWITH), (Function) message -> Utils.sendChatMessageAsPlayer("/ac q weqwe qwe qwe qeqwe qweqwe qwe qwe ")
+    );
 
     @SubscribeEvent
     public void onChatMessage(final ClientChatReceivedEvent event) {
+
         if (event.type == 2 || event.message.getUnformattedText().matches("\\{.*}")) { // TODO we can probably read the json sent by the server: {"server":"mini95DK","gametype":"SKYBLOCK","mode":"dynamic","map":"Private Island"}
             return;
         }
@@ -34,6 +40,24 @@ public class AdvancedChat {
         }
 
         String text = event.message.getUnformattedText().replaceAll("§[0-9a-zA-Z]", "");
+
+        // Do Chat Actions if specific message
+
+        System.out.println(actionMap);
+
+        for (Map.Entry<ChatCondition, Function> entry : actionMap.entrySet()) {
+            ChatCondition key = entry.getKey();
+
+            if (key.getCondition().check(key.getText(), text)) {
+                entry.getValue().action(event.message);
+                break;
+            }
+        }
+
+
+
+
+        // Change message so they can be copied afterwards
 
         MessageInformation messageInformation;
         if (MessageInformation.instances.containsKey(text)) {
@@ -75,7 +99,7 @@ public class AdvancedChat {
 
     @SubscribeEvent
     public void onChatTooltipRenderer(final RenderGameOverlayEvent.Post event) {
-        if (event.type == RenderGameOverlayEvent.ElementType.TEXT) {
+        if (event.type == RenderGameOverlayEvent.ElementType.CHAT) {
             if (Minecraft.getMinecraft().currentScreen instanceof GuiChat) {
                 IChatComponent chatComponent = Minecraft.getMinecraft().ingameGUI.getChatGUI().getChatComponent(Mouse.getX(), Mouse.getY());
                 if (chatComponent != null) {
@@ -94,8 +118,6 @@ public class AdvancedChat {
                 }
             }
         }
-
-        System.out.println(event.type.name());
     }
 
     @SubscribeEvent
@@ -177,5 +199,57 @@ public class AdvancedChat {
                 }
             }
         }
+    }
+
+    public static class ChatCondition {
+        private final String text;
+        private final Condition condition;
+
+        public ChatCondition(String text, Condition condition) {
+            this.text = text;
+            this.condition = condition;
+        }
+
+        public String getText() {
+            return text;
+        }
+
+        public Condition getCondition() {
+            return condition;
+        }
+    }
+
+    public enum Condition {
+        STARTSWITH {
+            @Override
+            public boolean check(String part, String text) {
+                return text.startsWith(part);
+            }
+        },
+        ENDSWITH {
+            @Override
+            public boolean check(String part, String text) {
+                return text.endsWith(part);
+            }
+        },
+        CONTAINS {
+            @Override
+            public boolean check(String part, String text) {
+                return text.contains(part);
+            }
+        },
+        EQUALS {
+            @Override
+            public boolean check(String part, String text) {
+                return text.equals(part);
+            }
+        };
+
+        public abstract boolean check(String part, String target);
+    }
+
+    @FunctionalInterface
+    public interface Function {
+        void action(IChatComponent message);
     }
 }
