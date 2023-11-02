@@ -30,7 +30,6 @@ public class AdvancedChat {
 
     @SubscribeEvent
     public void onChatMessage(final ClientChatReceivedEvent event) {
-
         if (event.type == 2 || event.message.getUnformattedText().matches("\\{.*}")) { // TODO we can probably read the json sent by the server: {"server":"mini95DK","gametype":"SKYBLOCK","mode":"dynamic","map":"Private Island"}
             return;
         }
