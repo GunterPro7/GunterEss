@@ -15,26 +15,24 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class AdvancedChat {
     public static int current_id = 1;
-    public static final Map<Integer, MessageInformation> MAP = new HashMap<>();
     public static final String brea = "§F";
     public static final Map<ChatCondition, Function> actionMap = Utils.createMap(ChatCondition.class, Function.class,
-            new ChatCondition("QUICK MATHS! Solve: ", Condition.STARTSWITH), (Function) message -> Utils.sendChatMessageAsPlayer("/ac " + String.valueOf(MathUtils.eval(message.getUnformattedText().replaceAll("§[0-9a-zA-Z]", "").substring("QUICK MATHS! Solve: ".length()).replaceAll("x", "*"))).replace(".0", "")),
+            new ChatCondition("QUICK MATHS! Solve: ", Condition.STARTSWITH), (Function) message -> Utils.sendChatMessageAsPlayer("/ac " + String.valueOf(MathUtils.eval(Utils.clearChatComponent(message.getUnformattedText()).substring("QUICK MATHS! Solve: ".length()).replaceAll("x", "*"))).replace(".0", "")),
             new ChatCondition("Click HERE to sign the ", Condition.STARTSWITH), (Function) message -> Utils.sendChatMessageAsPlayer(message.getChatStyle().getChatClickEvent().getValue()),
             new ChatCondition("[FEAR] Public Speaking Demon: Speak ", Condition.STARTSWITH), (Function) message -> Utils.sendChatMessageAsPlayer("/ac q weqwe qwe qwe qeqwe qweqwe qwe qwe ")
     );
 
     @SubscribeEvent
     public void onChatMessage(final ClientChatReceivedEvent event) {
-        if (event.message.getUnformattedText().matches("\\{.*}")) {
-            System.out.println("NOW");
-            Utils.sendPrivateMessage("NOW!!! + SERVER: " + event.message.getUnformattedText().split("\"server\":")[1].split(",")[0].replaceAll("\"", ""));
-            return;
-        }
+        //if (event.message.getUnformattedText().matches("\\{.*}")) {
+        //    System.out.println("NOW");
+        //    Utils.sendPrivateMessage("NOW!!! + SERVER: " + event.message.getUnformattedText().split("\"server\":")[1].split(",")[0].replaceAll("\"", ""));
+        //    return;
+        //}
         if (event.type == 2 || event.message.getUnformattedText().matches("\\{.*}")) { // TODO we can probably read the json sent by the server: {"server":"mini95DK","gametype":"SKYBLOCK","mode":"dynamic","map":"Private Island"}
             return;
         }
@@ -43,7 +41,7 @@ public class AdvancedChat {
             return;
         }
 
-        String text = event.message.getUnformattedText().replaceAll("§[0-9a-zA-Z]", "");
+        String text = Utils.clearChatComponent(event.message.getUnformattedText());
 
         // Do Chat Actions if specific message
 
@@ -59,33 +57,16 @@ public class AdvancedChat {
         }
 
 
-
-
         // Change message so they can be copied afterwards
 
-        MessageInformation messageInformation;
-        if (MessageInformation.instances.containsKey(text)) {
-            messageInformation = MessageInformation.instances.get(text);
-        } else {
-            messageInformation = new MessageInformation(text, current_id++);
-            MessageInformation.instances.put(text, messageInformation);
-        }
-
+        MessageInformation messageInformation = MessageInformation.instances.computeIfAbsent(text, key -> new MessageInformation(key, current_id++));
         messageInformation.count();
-        final int id = messageInformation.getId();
-        final String idString = Utils.convertToMinecraftId(id);
-        MAP.put(id, messageInformation);
 
-        final IChatComponent iChatComponent = new ChatComponentText("");
-        for (final IChatComponent chatComponent : event.message) {
-            final IChatComponent newIChatComponent = new ChatComponentText(chatComponent.getUnformattedTextForChat() + brea + idString);
-            newIChatComponent.setChatStyle(chatComponent.getChatStyle().createShallowCopy());
-            iChatComponent.appendSibling(newIChatComponent);
-        }
+        final IChatComponent iChatComponent = formatChatComponentForCopy(event.message, text);
 
         if (Setting.STACK_CHAT_MESSAGES.isEnabled()) {
             if (messageInformation.getCount() != 1) {
-                iChatComponent.appendText(" §7(" + messageInformation.getCount() + ")" + brea + idString); // TODO check if the color looks nice
+                iChatComponent.appendSibling(formatChatComponentForCopy(new ChatComponentText(" §7(" + messageInformation.getCount() + ")"), text));
             }
 
             event.message = new ChatComponentText("");
@@ -99,6 +80,17 @@ public class AdvancedChat {
         } else {
             event.message = iChatComponent;
         }
+    }
+
+    public static IChatComponent formatChatComponentForCopy(IChatComponent message, String insertion) {
+        final IChatComponent iChatComponent = new ChatComponentText("");
+        for (final IChatComponent chatComponent : message) {
+            final IChatComponent newIChatComponent = new ChatComponentText(chatComponent.getUnformattedTextForChat());
+            newIChatComponent.setChatStyle(chatComponent.getChatStyle().setInsertion(insertion).createShallowCopy());
+            iChatComponent.appendSibling(newIChatComponent);
+        }
+
+        return iChatComponent;
     }
 
     @SubscribeEvent
@@ -128,21 +120,25 @@ public class AdvancedChat {
     public void onMouseInput(final GuiScreenEvent.MouseInputEvent event) {
         if (Setting.COPY_CHAT_ENABLED.isEnabled()) {
             IChatComponent chatComponent = getHoveredChatComponent();
-            if (Mouse.isButtonDown(1)) {
-                MessageInformation messageInformation = getMessageInformation(chatComponent);
-                if (Keyboard.isKeyDown(29) || Keyboard.isKeyDown(157)) {
-                    String messageToCopy;
-                    if (messageInformation != null) {
-                        messageToCopy = messageInformation.getMessage();
-                        if (Setting.COPY_WITH_STACK.isEnabled() && messageInformation.getCount() != 1) {
-                            messageToCopy += " (" + messageInformation.getCount() + ")";
+            if (chatComponent != null) {
+                if (Mouse.isButtonDown(1)) {
+                    MessageInformation messageInformation = getMessageInformation(chatComponent);
+                    if (Keyboard.isKeyDown(29) || Keyboard.isKeyDown(157)) {
+                        String messageToCopy;
+                        if (messageInformation != null) {
+                            messageToCopy = messageInformation.getMessage();
+                            if (Setting.COPY_WITH_STACK.isEnabled() && messageInformation.getCount() != 1) {
+                                messageToCopy += " (" + messageInformation.getCount() + ")";
+                            }
+                        } else {
+                            messageToCopy = Utils.clearChatComponent(chatComponent.getUnformattedText());
                         }
-                    } else {
-                        messageToCopy = chatComponent.getUnformattedText().replaceAll("§[0-9a-zA-Z]", "");
+                        Utils.copyToClipBoard(messageToCopy);
+                    } else if (Keyboard.isKeyDown(42) || Keyboard.isKeyDown(52)) {
+                        Utils.sendPrivateMessage("Open the GUI here from textChatComponent -> " + (messageInformation != null ? messageInformation.getMessage() : Utils.clearChatComponent(chatComponent.getUnformattedTextForChat())));
+                        Utils.sendPrivateMessage(chatComponent.getChatStyle().getInsertion());
+
                     }
-                    Utils.copyToClipBoard(messageToCopy);
-                } else if (Keyboard.isKeyDown(42) || Keyboard.isKeyDown(52)) {
-                    Utils.sendPrivateMessage("Open the GUI here from textChatComponent -> " + (messageInformation != null ? messageInformation.getMessage() : chatComponent.getUnformattedTextForChat().replaceAll("§[0-9a-zA-Z]", "")));
                 }
             }
         }
@@ -150,59 +146,16 @@ public class AdvancedChat {
 
     public static MessageInformation getMessageInformation(final IChatComponent chatComponent) {
         if (chatComponent != null) {
-            final String[] strings = chatComponent.getUnformattedText().split(brea);
-            if (strings.length > 1) {
-                final String id = strings[strings.length - 1].replaceAll("§", "").replaceAll("[a-zA-Z]", "");
-                int intId;
-                try {
-                    intId = Integer.parseInt(id);
-                } catch (NumberFormatException e) {
-                    return null;
-                }
-                return MAP.get(intId);
+            String insertion = chatComponent.getChatStyle().getInsertion();
+            if (insertion != null) {
+                return MessageInformation.instances.get(insertion);
             }
         }
-
         return null;
     }
 
     public static IChatComponent getHoveredChatComponent() {
         return Minecraft.getMinecraft().ingameGUI.getChatGUI().getChatComponent(Mouse.getX(), Mouse.getY());
-    }
-
-    @Deprecated
-    private void copyMessage() {
-        if (Mouse.isButtonDown(1) && (Keyboard.isKeyDown(29) || Keyboard.isKeyDown(157) || Keyboard.isKeyDown(42) || Keyboard.isKeyDown(52))) {
-            final Minecraft mc = Minecraft.getMinecraft();
-            final int mouseX = Mouse.getEventX();
-            final int mouseY = Mouse.getEventY();
-            final IChatComponent chatComponent = mc.ingameGUI.getChatGUI().getChatComponent(mouseX, mouseY);
-            if (chatComponent != null) {
-                String messageToCopy;
-                MessageInformation messageInformation = null;
-                try {
-                    final String[] strings = chatComponent.getUnformattedText().split(brea);
-                    final String id = strings[strings.length - 1].replaceAll("§", "").replaceAll("[a-zA-Z]", "");
-                    final int intId = Integer.parseInt(id);
-                    messageInformation = MAP.get(intId);
-                    messageToCopy = messageInformation.getMessage();
-                    if (Setting.COPY_WITH_STACK.isEnabled() && messageInformation.getCount() != 1) {
-                        messageToCopy += " (" + messageInformation.getCount() + ")";
-                    }
-                    //System.out.println(MessageInformation.instances.get(messageToCopy).getCount());
-                    //System.out.println(MessageInformation.instances);
-                    //System.out.println(MAP);
-                } catch (Exception e) {
-                    messageToCopy = chatComponent.getUnformattedText().replaceAll("§[0-9a-zA-Z]", "");
-                }
-                Utils.copyToClipBoard(messageToCopy);
-                try {
-                    System.out.println(messageInformation.getCount() + " " + messageInformation.getTime());
-                } catch (Exception e) {
-
-                }
-            }
-        }
     }
 
     public static class ChatCondition {

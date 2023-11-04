@@ -1,5 +1,6 @@
 package com.GunterPro7uDerKatzenLord.Gui;
 
+import com.GunterPro7uDerKatzenLord.Utils.Utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -78,7 +79,7 @@ public class GunterAutoKickOverlay extends GuiScreen {
             if (localButton == button) {
                 String displayString = localButton.displayString;
                 boolean b = displayString.endsWith("Disabled");
-                localButton.displayString = displayString.split("Disabled|Enabled")[0].replaceAll("§[0-9a-zA-Z]", "") + (b ? "§a§lEnabled" : "§c§lDisabled");
+                localButton.displayString = Utils.clearChatComponent(displayString.split("Disabled|Enabled")[0]) + (b ? "§a§lEnabled" : "§c§lDisabled");
                 values[localButton.id] = b;
             }
         }

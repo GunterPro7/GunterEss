@@ -1,6 +1,6 @@
 package com.GunterPro7uDerKatzenLord.Utils;
 
-import com.GunterPro7uDerKatzenLord.Gui.MoveObjectOverlay;
+import com.GunterPro7uDerKatzenLord.Listener.AdvancedChat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ChatComponentText;
 
@@ -8,9 +8,8 @@ import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.text.SimpleDateFormat;
-import java.util.*;
 import java.util.List;
-import java.util.function.Function;
+import java.util.*;
 
 public class Utils {
     public static final Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
@@ -21,7 +20,8 @@ public class Utils {
     }
 
     public static void sendPrivateMessage(String text) {
-        Minecraft.getMinecraft().thePlayer.addChatMessage(new ChatComponentText("§a§lGunterEss > §r" + text));
+        String string = "§a§lGunterEss > §r" + text;
+        Minecraft.getMinecraft().thePlayer.addChatMessage(AdvancedChat.formatChatComponentForCopy(new ChatComponentText(string), clearChatComponent(string)));
     }
 
     public static int getLengthPerSecond(List<Long> cropTimeList) {
@@ -113,5 +113,9 @@ public class Utils {
 
     public static void sendChatMessageAsPlayer(String text) {
         Minecraft.getMinecraft().thePlayer.sendChatMessage(text);
+    }
+
+    public static String clearChatComponent(String text) {
+        return text.replaceAll("§[0-9a-zA-Z]", "");
     }
 }

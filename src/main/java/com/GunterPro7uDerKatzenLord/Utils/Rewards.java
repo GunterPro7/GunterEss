@@ -1,7 +1,5 @@
 package com.GunterPro7uDerKatzenLord.Utils;
 
-import java.util.Arrays;
-
 public class Rewards {
     public final int tier;
     public final int amountRequired;

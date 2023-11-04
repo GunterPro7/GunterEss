@@ -1,7 +1,6 @@
 package com.GunterPro7uDerKatzenLord;
 
 import com.GunterPro7uDerKatzenLord.Gui.GunterAutoKickOverlay;
-import com.GunterPro7uDerKatzenLord.Listener.AutoDungeonJoiner;
 import com.GunterPro7uDerKatzenLord.Listener.Listeners;
 import com.GunterPro7uDerKatzenLord.Utils.Utils;
 import net.minecraft.client.Minecraft;
@@ -33,7 +32,7 @@ public class Command extends CommandBase {
         }
         if (args.length > 1) {
             if (Objects.equals(args[0], "copy")) {
-                Utils.copyToClipBoard(String.join(" ", Arrays.copyOfRange(args, 1, args.length)).replaceAll("§[0-9a-zA-Z]", ""));
+                Utils.copyToClipBoard(Utils.clearChatComponent(String.join(" ", Arrays.copyOfRange(args, 1, args.length))));
             }
             if (Objects.equals(args[0], "ignore")) {
                 GunterAutoKickOverlay.addIgnoredPlayer(args[1]);

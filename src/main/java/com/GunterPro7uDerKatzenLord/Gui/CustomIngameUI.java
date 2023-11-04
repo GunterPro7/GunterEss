@@ -1,17 +1,8 @@
 package com.GunterPro7uDerKatzenLord.Gui;
 
 import com.GunterPro7uDerKatzenLord.Listener.Listeners;
-import com.GunterPro7uDerKatzenLord.Main;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.WorldRenderer;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.client.resources.model.IBakedModel;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
 
 import java.util.List;
 
@@ -25,12 +16,11 @@ public class CustomIngameUI {
     public int boxWidth;
     public int boxHeight;
 
-    private CustomIngameUI(int backgroundColor, int borderColor) {
+    public CustomIngameUI(int backgroundColor, int borderColor, String... lines) {
         this.backgroundColor = backgroundColor;
         this.borderColor = borderColor;
-    }
+        this.lines = lines;
 
-    private void initLines() {
         FontRenderer fontRenderer = mc.fontRendererObj;
         int maxWidth = 0;
         for (String line : lines) {
@@ -44,18 +34,10 @@ public class CustomIngameUI {
         boxHeight = (fontRenderer.FONT_HEIGHT + 4) * lines.length;
     }
 
-    public CustomIngameUI(int backgroundColor, int borderColor, String... lines) {
-        this(backgroundColor, borderColor);
-        this.lines = lines;
-        initLines();
-    }
-
 
 
     public CustomIngameUI(int backgroundColor, int borderColor, List<String> lines) {
-        this(backgroundColor, borderColor);
-        this.lines = lines.toArray(new String[0]);
-        initLines(); // TODO give this into the private constructor
+        this(backgroundColor, borderColor, lines.toArray(new String[0]));
     }
 
     public void drawInfoBox(int offsetX, int offsetY, boolean background) {

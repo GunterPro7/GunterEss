@@ -1,38 +1,25 @@
 package com.GunterPro7uDerKatzenLord.Listener;
 
-import com.GunterPro7uDerKatzenLord.Command;
 import com.GunterPro7uDerKatzenLord.Gui.CustomIngameUI;
 import com.GunterPro7uDerKatzenLord.Gui.GunterAutoKickOverlay;
 import com.GunterPro7uDerKatzenLord.Gui.GunterCollectionOverlay;
 import com.GunterPro7uDerKatzenLord.Gui.GunterOverlay;
-import com.GunterPro7uDerKatzenLord.Main;
 import com.GunterPro7uDerKatzenLord.Setting;
 import com.GunterPro7uDerKatzenLord.Utils.Collections;
 import com.GunterPro7uDerKatzenLord.Utils.JsonHelper;
-import com.GunterPro7uDerKatzenLord.Utils.MessageInformation;
 import com.GunterPro7uDerKatzenLord.Utils.Utils;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiChat;
-import net.minecraft.client.gui.GuiNewChat;
 import net.minecraft.client.network.NetworkPlayerInfo;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.IChatComponent;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
-import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import org.intellij.lang.annotations.Subst;
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -130,7 +117,7 @@ public class Listeners {
                     try {
                         String text = info.getDisplayName().getFormattedText();
                         if (text.contains("Farming Fortune:")) {
-                            farmingFortune = Utils.parseInt(text.substring(17).replaceAll("§[0-9a-zA-Z]", ""));
+                            farmingFortune = Utils.parseInt(Utils.clearChatComponent(text.substring(17)));
                         }
                     } catch (NullPointerException ignored) {
                     }
@@ -165,7 +152,7 @@ public class Listeners {
     @SubscribeEvent
     public void onClientChatReceive(ClientChatReceivedEvent event) {
         if (Setting.AUTO_KICKER_ENABLED.isEnabled()) {
-            String message = event.message.getUnformattedText().replaceAll("§[0-9a-zA-Z]", "");
+            String message = Utils.clearChatComponent(event.message.getUnformattedText());
             if (message.matches("Party Finder > .* joined the dungeon group! \\(.* Level \\d+\\)")) {
                 System.out.println(message.indexOf("Level"));
                 int index = message.indexOf("Level");

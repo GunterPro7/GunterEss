@@ -1,18 +1,9 @@
 package com.GunterPro7uDerKatzenLord.Utils;
 
-import com.GunterPro7uDerKatzenLord.Main;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 public class JsonCollection {
