@@ -11,15 +11,19 @@ import net.minecraft.util.IChatComponent;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class AdvancedChat {
     public static int current_id = 1;
-    public static final String brea = "§F";
+    public static String lastJson;
+    public static final Map<String, Long> jsonList = new HashMap<>();
+
     public static final Map<ChatCondition, Function> actionMap = Utils.createMap(ChatCondition.class, Function.class,
             new ChatCondition("QUICK MATHS! Solve: ", Condition.STARTSWITH), (Function) message -> Utils.sendChatMessageAsPlayer("/ac " + String.valueOf(MathUtils.eval(Utils.clearChatComponent(message.getUnformattedText()).substring("QUICK MATHS! Solve: ".length()).replaceAll("x", "*"))).replace(".0", "")),
             new ChatCondition("Click HERE to sign the ", Condition.STARTSWITH), (Function) message -> Utils.sendChatMessageAsPlayer(message.getChatStyle().getChatClickEvent().getValue()),
@@ -28,11 +32,19 @@ public class AdvancedChat {
 
     @SubscribeEvent
     public void onChatMessage(final ClientChatReceivedEvent event) {
-        //if (event.message.getUnformattedText().matches("\\{.*}")) {
-        //    System.out.println("NOW");
-        //    Utils.sendPrivateMessage("NOW!!! + SERVER: " + event.message.getUnformattedText().split("\"server\":")[1].split(",")[0].replaceAll("\"", ""));
-        //    return;
-        //}
+        String unformattedText = event.message.getUnformattedText();
+
+        if (unformattedText.matches("\\{.*}")) {
+            if (!unformattedText.equals(lastJson)) {
+                if (jsonList.containsKey(unformattedText)) {
+                    long time = System.currentTimeMillis() - jsonList.get(unformattedText);
+                    Utils.sendPrivateMessage("You already joined this server " + Utils.formatTime(time, "H'h' m'm' s's'") + " ago!");
+                }
+                jsonList.put(lastJson, System.currentTimeMillis());
+            }
+            lastJson = unformattedText;
+            return;
+        }
         if (event.type == 2 || event.message.getUnformattedText().matches("\\{.*}")) { // TODO we can probably read the json sent by the server: {"server":"mini95DK","gametype":"SKYBLOCK","mode":"dynamic","map":"Private Island"}
             return;
         }
@@ -41,7 +53,7 @@ public class AdvancedChat {
             return;
         }
 
-        String text = Utils.clearChatComponent(event.message.getUnformattedText());
+        String text = Utils.clearChatComponent(unformattedText);
 
         // Do Chat Actions if specific message
 
@@ -65,15 +77,19 @@ public class AdvancedChat {
         final IChatComponent iChatComponent = formatChatComponentForCopy(event.message, text);
 
         if (Setting.STACK_CHAT_MESSAGES.isEnabled()) {
-            if (messageInformation.getCount() != 1) {
-                iChatComponent.appendSibling(formatChatComponentForCopy(new ChatComponentText(" §7(" + messageInformation.getCount() + ")"), text));
-            }
-
             event.message = new ChatComponentText("");
             event.setCanceled(true);
+
+            boolean addCount = true;
             if (Setting.DONT_CHECK_USELESS_CHAT_MESSAGES.isEnabled()) {
                 if (Utils.isIgnoredMessage(text)) {
-                    // TODO do action ether dont do the (count) or just remove the whole message
+                    addCount = false;
+                }
+            }
+
+            if (addCount) {
+                if (messageInformation.getCount() != 1) {
+                    iChatComponent.appendSibling(formatChatComponentForCopy(new ChatComponentText(" §7(" + messageInformation.getCount() + ")"), text));
                 }
             }
             Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(iChatComponent, messageInformation.getId());

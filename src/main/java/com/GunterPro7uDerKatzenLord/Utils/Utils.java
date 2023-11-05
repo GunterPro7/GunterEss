@@ -78,11 +78,7 @@ public class Utils {
     }
 
     public static boolean isIgnoredMessage(String text) {
-        return false;
-        // TODO
-        // 1. Check if it contains only "-"
-        // 2. Check if 'text' is in 'ignoredMessages'
-        // 3. Fill 'ignoredMessages' List
+        return text.matches("▬+|-+") || ignoredMessages.contains(text);
     }
 
     public static String formatTime(long time, String pattern) {
