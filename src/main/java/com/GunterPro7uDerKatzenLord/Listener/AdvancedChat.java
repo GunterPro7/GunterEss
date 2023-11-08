@@ -11,7 +11,6 @@ import net.minecraft.util.IChatComponent;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
@@ -34,7 +33,7 @@ public class AdvancedChat {
     public void onChatMessage(final ClientChatReceivedEvent event) {
         String unformattedText = event.message.getUnformattedText();
 
-        if (unformattedText.matches("\\{.*}")) {
+        if (unformattedText.matches("\\{.*}")) { // Example: {"server":"mini95DK","gametype":"SKYBLOCK","mode":"dynamic","map":"Private Island"}
             if (!unformattedText.equals(lastJson)) {
                 if (jsonList.containsKey(unformattedText)) {
                     long time = System.currentTimeMillis() - jsonList.get(unformattedText);
@@ -45,7 +44,7 @@ public class AdvancedChat {
             lastJson = unformattedText;
             return;
         }
-        if (event.type == 2 || event.message.getUnformattedText().matches("\\{.*}")) { // TODO we can probably read the json sent by the server: {"server":"mini95DK","gametype":"SKYBLOCK","mode":"dynamic","map":"Private Island"}
+        if (event.type == 2) {
             return;
         }
         if (Setting.REMOVE_BLANK_LINES.isEnabled() && event.message.getUnformattedText().trim().equals("")) {

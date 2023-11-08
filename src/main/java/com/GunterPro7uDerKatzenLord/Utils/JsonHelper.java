@@ -11,7 +11,9 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
-import java.io.IOException;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.*;
 
 public class JsonHelper {
@@ -25,6 +27,48 @@ public class JsonHelper {
         HttpResponse httpResponse = httpClient.execute(httpGet);
 
         return EntityUtils.toString(httpResponse.getEntity());
+    }
+
+    @Deprecated
+    public static String fetch2(String urlString) throws IOException {
+        try {
+            URL url = new URL(urlString);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+
+            int responseCode = connection.getResponseCode();
+
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                String inputLine;
+                StringBuilder response = new StringBuilder();
+
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+
+                in.close();
+
+                return response.toString();
+            } else {
+                throw new IOException("Timed out!");
+            }
+        } catch (IOException e) {
+            throw new IOException("Timed out");
+        }
+    }
+
+    public static void downloadFile(String url, String fileName) {
+        try (BufferedInputStream in = new BufferedInputStream(new URL(url).openStream());
+             FileOutputStream fileOutputStream = new FileOutputStream(fileName)) {
+            byte dataBuffer[] = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = in.read(dataBuffer, 0, 1024)) != -1) {
+                fileOutputStream.write(dataBuffer, 0, bytesRead);
+            }
+        } catch (IOException e) {
+            // handle exception
+        }
     }
 
     public static void collectionApiFetch() throws IOException {
