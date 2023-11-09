@@ -1,12 +1,9 @@
 package com.GunterPro7uDerKatzenLord.Gui;
 
 import com.GunterPro7uDerKatzenLord.Setting;
-import com.GunterPro7uDerKatzenLord.Utils.Utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-
-import javax.swing.text.Position;
 
 public class MoveObjectOverlay extends GuiScreen {
     public final GuiScreen lastScreen;

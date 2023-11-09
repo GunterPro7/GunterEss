@@ -1,6 +1,7 @@
 package com.GunterPro7uDerKatzenLord;
 
 import com.GunterPro7uDerKatzenLord.Gui.GunterAutoKickOverlay;
+import com.GunterPro7uDerKatzenLord.Listener.AdvancedChat;
 import com.GunterPro7uDerKatzenLord.Listener.Listeners;
 import com.GunterPro7uDerKatzenLord.Utils.Utils;
 import net.minecraft.client.Minecraft;
@@ -32,14 +33,14 @@ public class Command extends CommandBase {
         }
         if (args.length > 1) {
             if (Objects.equals(args[0], "copy")) {
-                Utils.copyToClipBoard(Utils.clearChatComponent(String.join(" ", Arrays.copyOfRange(args, 1, args.length))));
+                Utils.copyToClipBoard(AdvancedChat.clearChatComponent(String.join(" ", Arrays.copyOfRange(args, 1, args.length))));
             }
             if (Objects.equals(args[0], "ignore")) {
                 GunterAutoKickOverlay.addIgnoredPlayer(args[1]);
             }
         } else if (args.length > 0) {
             if (Objects.equals(args[0], "help")) {
-                Utils.sendPrivateMessage("copy <text> - Copies the text to clipboard");
+                AdvancedChat.sendPrivateMessage("copy <text> - Copies the text to clipboard");
             } else if (Objects.equals(args[0], "test")) {
                 //Utils.execute(() -> {
                 //    new AutoDungeonJoiner();
@@ -49,7 +50,7 @@ public class Command extends CommandBase {
                 int x = Minecraft.getMinecraft().ingameGUI.getChatGUI().getChatWidth() + 10;
                 int y = Minecraft.getMinecraft().displayHeight - Mouse.getY();
 
-                Utils.sendPrivateMessage("X: " + x + ", Y: " + y);
+                AdvancedChat.sendPrivateMessage("X: " + x + ", Y: " + y);
             }
         }
     }

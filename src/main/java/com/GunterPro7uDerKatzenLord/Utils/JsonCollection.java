@@ -1,5 +1,6 @@
 package com.GunterPro7uDerKatzenLord.Utils;
 
+import com.GunterPro7uDerKatzenLord.Listener.AdvancedChat;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
@@ -39,7 +40,7 @@ public class JsonCollection {
 
     public List<String> getRewardsAsString(int start, int end) {
         if (end > tiers || start > tiers || start > end) {
-            Utils.sendPrivateMessage("§CInvalid Input!");
+            AdvancedChat.sendPrivateMessage("§CInvalid Input!");
         }
         List<String> rewardList = new ArrayList<>();
 

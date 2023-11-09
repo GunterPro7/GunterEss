@@ -1,7 +1,6 @@
 package com.GunterPro7uDerKatzenLord.Listener;
 
 import com.GunterPro7uDerKatzenLord.Utils.DungeonUtils;
-import com.GunterPro7uDerKatzenLord.Utils.Utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.inventory.Container;
@@ -61,7 +60,7 @@ public class AutoDungeonJoiner extends ContainerInformation {
         public DungeonInformation(String displayName, List<String> lore, int slotIndex) {
             super(displayName, lore, slotIndex);
 
-            if (!Utils.clearChatComponent(lore.get(0)).endsWith("'s Party")) {
+            if (!AdvancedChat.clearChatComponent(lore.get(0)).endsWith("'s Party")) {
                 throw new IllegalArgumentException("Not a valid dungeonInformationField ItemStack");
             }
 
@@ -69,7 +68,7 @@ public class AutoDungeonJoiner extends ContainerInformation {
             boolean membersNow = false;
 
             for (String l : lore) {
-                String line = Utils.clearChatComponent(l);
+                String line = AdvancedChat.clearChatComponent(l);
                 String[] parts = line.split(":");
 
                 if (parts.length != 2) {
@@ -113,7 +112,7 @@ public class AutoDungeonJoiner extends ContainerInformation {
                 }
             }
 
-            available = Utils.clearChatComponent(lore.get(lore.size() - 1)).equals("Click to join!");
+            available = AdvancedChat.clearChatComponent(lore.get(lore.size() - 1)).equals("Click to join!");
 
         }
 

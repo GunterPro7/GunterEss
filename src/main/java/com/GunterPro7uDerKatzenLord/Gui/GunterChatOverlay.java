@@ -4,8 +4,6 @@ import com.GunterPro7uDerKatzenLord.Setting;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 
-import java.io.IOException;
-
 public class GunterChatOverlay extends GuiScreen {
     private final GuiScreen lastScreen;
     private GuiButton button0;

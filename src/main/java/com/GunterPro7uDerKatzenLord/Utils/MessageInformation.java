@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MessageInformation {
-    public static Map<String, MessageInformation> instances = new HashMap<>();
+    private static final Map<String, MessageInformation> instances = new HashMap<>();
     private final String message;
     private final int id;
     private int count;
@@ -44,5 +44,13 @@ public class MessageInformation {
     public void drawTimeInfoBox(int x, int y, boolean background) {
         CustomIngameUI customIngameUI = new CustomIngameUI(0xFF1E1E1E, 0xFF121212, Utils.formatTime(time, "HH:mm:ss"));
         customIngameUI.drawInfoBox(x, y, background);
+    }
+
+    public static Map<String, MessageInformation> getInstances() {
+        return instances;
+    }
+
+    public static MessageInformation getInstance(String text) {
+        return instances.get(text);
     }
 }

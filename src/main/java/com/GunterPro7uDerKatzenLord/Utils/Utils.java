@@ -2,7 +2,6 @@ package com.GunterPro7uDerKatzenLord.Utils;
 
 import com.GunterPro7uDerKatzenLord.Listener.AdvancedChat;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.ChatComponentText;
 
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
@@ -17,11 +16,6 @@ public class Utils {
     private static final List<String> ignoredMessages = new ArrayList<>();
     public static void copyToClipBoard(String text) {
         clipboard.setContents(new StringSelection(text), null);
-    }
-
-    public static void sendPrivateMessage(String text) {
-        String string = "§a§lGunterEss > §r" + text;
-        Minecraft.getMinecraft().thePlayer.addChatMessage(AdvancedChat.formatChatComponentForCopy(new ChatComponentText(string), clearChatComponent(string)));
     }
 
     public static int getLengthPerSecond(List<Long> cropTimeList) {
@@ -70,7 +64,7 @@ public class Utils {
 
     public static void executeCommand(String command, int waitTime) {
         execute(() -> Minecraft.getMinecraft().thePlayer.sendChatMessage(command), waitTime);
-        sendPrivateMessage("§rSending Command '" + command + "'");
+        AdvancedChat.sendPrivateMessage("§rSending Command '" + command + "'");
     }
 
     public static void execute(Runnable f, int waitTime) {
@@ -105,13 +99,5 @@ public class Utils {
         }
 
         return map;
-    }
-
-    public static void sendChatMessageAsPlayer(String text) {
-        Minecraft.getMinecraft().thePlayer.sendChatMessage(text);
-    }
-
-    public static String clearChatComponent(String text) {
-        return text.replaceAll("§[0-9a-zA-Z]", "");
     }
 }

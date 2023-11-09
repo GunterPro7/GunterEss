@@ -117,7 +117,7 @@ public class Listeners {
                     try {
                         String text = info.getDisplayName().getFormattedText();
                         if (text.contains("Farming Fortune:")) {
-                            farmingFortune = Utils.parseInt(Utils.clearChatComponent(text.substring(17)));
+                            farmingFortune = Utils.parseInt(AdvancedChat.clearChatComponent(text.substring(17)));
                         }
                     } catch (NullPointerException ignored) {
                     }
@@ -152,7 +152,7 @@ public class Listeners {
     @SubscribeEvent
     public void onClientChatReceive(ClientChatReceivedEvent event) {
         if (Setting.AUTO_KICKER_ENABLED.isEnabled()) {
-            String message = Utils.clearChatComponent(event.message.getUnformattedText());
+            String message = AdvancedChat.clearChatComponent(event.message.getUnformattedText());
             if (message.matches("Party Finder > .* joined the dungeon group! \\(.* Level \\d+\\)")) {
                 System.out.println(message.indexOf("Level"));
                 int index = message.indexOf("Level");

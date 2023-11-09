@@ -1,8 +1,10 @@
 package com.GunterPro7uDerKatzenLord.Gui;
 
-import com.GunterPro7uDerKatzenLord.Setting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.*;
+import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.GuiSlider;
+import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.util.ResourceLocation;
 
 import java.io.IOException;
