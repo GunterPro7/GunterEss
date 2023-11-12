@@ -6,6 +6,8 @@ import net.minecraft.client.Minecraft;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.*;
@@ -14,6 +16,7 @@ public class Utils {
     public static final Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
     public static final Map<Long, Runnable> commandTasks = new HashMap<>();
     private static final List<String> ignoredMessages = new ArrayList<>();
+
     public static void copyToClipBoard(String text) {
         clipboard.setContents(new StringSelection(text), null);
     }
@@ -23,7 +26,7 @@ public class Utils {
             return 0;
         }
         int count = 0;
-        for (int i = cropTimeList.size()-1; i >= 0; i--) {
+        for (int i = cropTimeList.size() - 1; i >= 0; i--) {
             if (System.currentTimeMillis() - cropTimeList.get(i) <= 1000) {
                 count++;
             }
@@ -99,5 +102,19 @@ public class Utils {
         }
 
         return map;
+    }
+
+    public static String getJavaRuntime() throws IOException {
+        String os = System.getProperty("os.name");
+        String javaHome = System.getProperty("java.home");
+        String fileSeparator = System.getProperty("file.separator");
+
+        String java = javaHome + fileSeparator + "bin" + fileSeparator +
+                (os != null && os.toLowerCase().startsWith("windows") ? "java.exe" : "java");
+
+        if (!new File(java).isFile()) {
+            throw new IOException("Unable to find suitable java runtime at $java");
+        }
+        return java;
     }
 }
