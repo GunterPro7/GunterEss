@@ -14,6 +14,8 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import org.spongepowered.asm.launch.MixinBootstrap;
+import org.spongepowered.asm.mixin.Mixins;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,13 +30,15 @@ import static com.GunterPro7uDerKatzenLord.Listener.Listeners.collectionJson;
 public class Main {
     public static final Minecraft mc = Minecraft.getMinecraft();
     public static boolean starting = true;
-    public static final String VERSION = "1.1";
+    public static final String VERSION = "1.2";
     public static final boolean DEV = false;
     public static File configDirectory;
     public static File gunterEssDelFile;
 
     @Mod.EventHandler
     public void preServerStarting(final FMLPreInitializationEvent event) throws IOException {
+        MixinBootstrap.init();
+        Mixins.addConfiguration("mixins.GunterEss.json");
         configDirectory = event.getModConfigurationDirectory();
         File gunterEssDirectory = new File(configDirectory.getAbsolutePath() + "/GunterEss/");
         if (!gunterEssDirectory.exists()) gunterEssDirectory.mkdir();
@@ -118,7 +122,7 @@ public class Main {
 
         MinecraftForge.EVENT_BUS.register(new ClientBlockListener());
         MinecraftForge.EVENT_BUS.register(new Listeners());
-        MinecraftForge.EVENT_BUS.register(new AdvancedChat());
+        MinecraftForge.EVENT_BUS.register(AdvancedChat.getInstance());
         ClientCommandHandler.instance.registerCommand(new Command());
         if (Setting.COLLECTION_OVERLAY.isEnabled()) {
             try {

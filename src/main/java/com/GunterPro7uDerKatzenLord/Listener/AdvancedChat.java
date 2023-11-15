@@ -11,6 +11,7 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IChatComponent;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.client.event.GuiScreenEvent;
+import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -26,12 +27,19 @@ public class AdvancedChat {
     public static String lastJson;
     public static final Map<String, Long> jsonList = new HashMap<>();
     private static boolean pasteEnabled;
+    private static final AdvancedChat instance = new AdvancedChat();
 
     public static final Map<ChatCondition, Function> actionMap = Utils.createMap(ChatCondition.class, Function.class,
             new ChatCondition("QUICK MATHS! Solve: ", Condition.STARTSWITH), (Function) message -> AdvancedChat.sendChatMessageAsPlayer("/ac " + String.valueOf(MathUtils.eval(clearChatComponent(message.getUnformattedText()).substring("QUICK MATHS! Solve: ".length()).replaceAll("x", "*"))).replace(".0", "")),
             new ChatCondition("Click HERE to sign the ", Condition.STARTSWITH), (Function) message -> AdvancedChat.sendChatMessageAsPlayer(message.getChatStyle().getChatClickEvent().getValue()),
             new ChatCondition("[FEAR] Public Speaking Demon: Speak ", Condition.STARTSWITH), (Function) message -> AdvancedChat.sendChatMessageAsPlayer("/ac q weqwe qwe qwe qeqwe qweqwe qwe qwe ")
     );
+
+    private AdvancedChat() {}
+
+    public static AdvancedChat getInstance() {
+        return instance;
+    }
 
     @SubscribeEvent
     public void onChatMessage(final ClientChatReceivedEvent event) {
