@@ -15,7 +15,6 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
-import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
@@ -182,7 +181,7 @@ public class Listeners {
         }
     }
 
-    public static final SearchChat searchChat = new SearchChat(Minecraft.getMinecraft());
+    public static final SearchChatGui searchChat = new SearchChatGui(Minecraft.getMinecraft());
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {

@@ -113,13 +113,13 @@ public class AdvancedChat {
     public void onChatTooltipRenderer(final RenderGameOverlayEvent.Post event) {
         if (event.type == RenderGameOverlayEvent.ElementType.CHAT) {
             if (Minecraft.getMinecraft().currentScreen instanceof GuiChat) {
-                IChatComponent chatComponent = Minecraft.getMinecraft().ingameGUI.getChatGUI().getChatComponent(Mouse.getX(), Mouse.getY());
+                IChatComponent chatComponent = getHoveredChatComponent();
                 if (chatComponent != null) {
                     MessageInformation messageInformation = getMessageInformation(chatComponent);
                     if (messageInformation == null) {
                         return;
                     }
-                    int scaling = Minecraft.getMinecraft().gameSettings.guiScale;
+                    int scaling = Minecraft.getMinecraft().gameSettings.guiScale == 0 ? 4 : Minecraft.getMinecraft().gameSettings.guiScale;
                     int height = Minecraft.getMinecraft().fontRendererObj.FONT_HEIGHT;
 
                     int x = Minecraft.getMinecraft().ingameGUI.getChatGUI().getChatWidth() + 5;
@@ -195,6 +195,7 @@ public class AdvancedChat {
     }
 
     public static IChatComponent getHoveredChatComponent() {
+        if (Listeners.searchChat.getChatOpen()) return Listeners.searchChat.getChatComponent(Mouse.getX(), Mouse.getY()); // TODO check ob das geht, weil SearchChat#getChatComponent keinen offsetY hat, wie meine #drawChat() methode
         return Minecraft.getMinecraft().ingameGUI.getChatGUI().getChatComponent(Mouse.getX(), Mouse.getY());
     }
 

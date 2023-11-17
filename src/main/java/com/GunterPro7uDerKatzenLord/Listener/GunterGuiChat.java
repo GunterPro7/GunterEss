@@ -1,20 +1,19 @@
 package com.GunterPro7uDerKatzenLord.Listener;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ChatLine;
 import net.minecraft.client.gui.GuiChat;
+import net.minecraft.util.IChatComponent;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
 
 public class GunterGuiChat extends GuiChat {
-    private final SearchChat searchChat;
+    private final SearchChatGui searchChat;
 
-    public GunterGuiChat(SearchChat searchChat) {
+    public GunterGuiChat(SearchChatGui searchChat) {
         this.searchChat = searchChat;
     }
-
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
@@ -57,5 +56,20 @@ public class GunterGuiChat extends GuiChat {
     public void onGuiClosed() {
         Keyboard.enableRepeatEvents(false);
         searchChat.resetScroll();
+    }
+
+    @Override
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+        if (mouseButton == 0) {
+            IChatComponent ichatcomponent = searchChat.getChatComponent(Mouse.getX(), Mouse.getY());
+
+            if (ichatcomponent != null && isShiftKeyDown()) {
+                String insertion = ichatcomponent.getChatStyle().getInsertion();
+                if (insertion != null) inputField.writeText(insertion);
+            }
+        }
+
+        this.inputField.mouseClicked(mouseX, mouseY, mouseButton);
+        super.mouseClicked(mouseX, mouseY, mouseButton);
     }
 }

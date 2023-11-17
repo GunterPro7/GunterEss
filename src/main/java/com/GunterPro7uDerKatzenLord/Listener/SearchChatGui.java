@@ -1,8 +1,3 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by FernFlower decompiler)
-//
-
 package com.GunterPro7uDerKatzenLord.Listener;
 
 import com.google.common.collect.Lists;
@@ -20,20 +15,20 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class SearchChat extends Gui {
+public class SearchChatGui extends Gui {
     private final Minecraft mc;
     public final List<ChatLine> chatLines = Lists.newArrayList();
     public final List<ChatLine> drawnChatLines = Lists.newArrayList();
-    public final List<ChatLine> filteredChatLines = Lists.newArrayList();
     public int scrollPos;
     public boolean isScrolled;
 
-    public SearchChat(Minecraft minecraft) {
+    public SearchChatGui(Minecraft minecraft) {
         this.mc = minecraft;
     }
 
     public void drawChat(int updateCounter) {
-        int offsetY = (int) (this.mc.displayHeight / (this.mc.gameSettings.guiScale == 0 ? 4 : this.mc.gameSettings.guiScale) - (this.mc.fontRendererObj.FONT_HEIGHT * 5.5));
+        int offsetY = (int) (this.mc.displayHeight / (this.mc.gameSettings.guiScale == 0 ? 4 : this.mc.gameSettings.guiScale) - (this.mc.fontRendererObj.FONT_HEIGHT * 5.25));
+        int offsetX = 1;
         int i = this.getLineCount();
         boolean bl = false;
         int j = 0;
@@ -58,29 +53,27 @@ public class SearchChat extends Gui {
                 ChatLine chatLine = (ChatLine) this.drawnChatLines.get(m + this.scrollPos);
                 if (chatLine != null) {
                     n = updateCounter - chatLine.getUpdatedCounter();
-                    if (n < 200 || bl || true) {
-                        double d = (double) n / 200.0;
-                        d = 1.0 - d;
-                        d *= 10.0;
-                        d = MathHelper.clamp_double(d, 0.0, 1.0);
-                        d *= d;
-                        o = (int) (255.0 * d);
-                        if (bl) {
-                            o = 255;
-                        }
+                    double d = (double) n / 200.0;
+                    d = 1.0 - d;
+                    d *= 10.0;
+                    d = MathHelper.clamp_double(d, 0.0, 1.0);
+                    d *= d;
+                    o = (int) (255.0 * d);
+                    if (bl) {
+                        o = 255;
+                    }
 
-                        o = (int) ((float) o * f);
-                        ++j;
-                        if (o > 3) {
-                            p = 0;
-                            int q = -m * 9;
-                            GlStateManager.enableBlend();
-                            drawRect(p, offsetY + q - 9, p + l + 4, offsetY + q, 0x7F000000);
-                            String string = chatLine.getChatComponent().getFormattedText();
-                            this.mc.fontRendererObj.drawStringWithShadow(string, (float) p, offsetY + (float) (q - 8), 16777215 + (o << 24));
-                            GlStateManager.disableAlpha();
-                            GlStateManager.disableBlend();
-                        }
+                    o = (int) ((float) o * f);
+                    ++j;
+                    if (o > 3) {
+                        p = 0;
+                        int q = -m * 9;
+                        //GlStateManager.enableBlend();
+                        drawRect(p, offsetY + q - 9, p + l + 4, offsetY + q, 0x7F000000);
+                        String string = chatLine.getChatComponent().getFormattedText();
+                        this.mc.fontRendererObj.drawStringWithShadow(string, offsetX + (float) p, offsetY + (float) (q - 8), 16777215 + (o << 24));
+                        //GlStateManager.disableAlpha();
+                        //GlStateManager.disableBlend();
                     }
                 }
             }
@@ -128,28 +121,7 @@ public class SearchChat extends Gui {
             this.deleteChatLine(chatLineId);
         }
 
-        //int i = MathHelper.floor_float((float) this.getChatWidth() / this.getChatScale());
-        //List<IChatComponent> list = GuiUtilRenderComponents.splitText(chatComponent, i, this.mc.fontRendererObj, false, false);
-        //boolean bl = this.getChatOpen();
-//
-        //IChatComponent iChatComponent;
-        //for (Iterator iterator = list.iterator(); iterator.hasNext(); this.drawnChatLines.add(0, new ChatLine(updateCounter, iChatComponent, chatLineId))) {
-        //    iChatComponent = (IChatComponent) iterator.next();
-        //    if (bl && this.scrollPos > 0) {
-        //        this.isScrolled = true;
-        //        this.scroll(1);
-        //    }
-        //}
-//
-        //while (this.drawnChatLines.size() > 100) { // TODO DELETE THIS SHIT HERE
-        //    this.drawnChatLines.remove(this.drawnChatLines.size() - 1);
-        //}
-
         this.chatLines.add(0, new ChatLine(updateCounter, chatComponent, chatLineId));
-
-        //while (this.chatLines.size() > 100) { // TODO DELETE THIS SHIT HERE
-        //    this.chatLines.remove(this.chatLines.size() - 1);
-        //}
     }
 
     public void resetScroll() {
@@ -217,20 +189,11 @@ public class SearchChat extends Gui {
     }
 
     public void deleteChatLine(int id) {
-        Iterator<ChatLine> iterator = this.drawnChatLines.iterator();
+        Iterator<ChatLine> iterator = this.chatLines.iterator();
 
         ChatLine chatLine;
         while (iterator.hasNext()) {
-            chatLine = (ChatLine) iterator.next();
-            if (chatLine.getChatLineID() == id) {
-                iterator.remove();
-            }
-        }
-
-        iterator = this.chatLines.iterator();
-
-        while (iterator.hasNext()) {
-            chatLine = (ChatLine) iterator.next();
+            chatLine = iterator.next();
             if (chatLine.getChatLineID() == id) {
                 iterator.remove();
                 break;
