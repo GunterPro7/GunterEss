@@ -4,6 +4,7 @@ import com.GunterPro7uDerKatzenLord.Listener.AdvancedChat;
 import com.GunterPro7uDerKatzenLord.Listener.ClientBlockListener;
 import com.GunterPro7uDerKatzenLord.Listener.Listeners;
 import com.GunterPro7uDerKatzenLord.Utils.JsonHelper;
+import com.GunterPro7uDerKatzenLord.Utils.TimeUtils;
 import com.GunterPro7uDerKatzenLord.Utils.Utils;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -30,8 +31,8 @@ import static com.GunterPro7uDerKatzenLord.Listener.Listeners.collectionJson;
 public class Main {
     public static final Minecraft mc = Minecraft.getMinecraft();
     public static boolean starting = true;
-    public static final String VERSION = "1.2";
-    public static final boolean DEV = false;
+    public static final String VERSION = "1.2.1";
+    public static final boolean DEV = true;
     public static File configDirectory;
     public static File gunterEssDelFile;
 
@@ -122,6 +123,7 @@ public class Main {
 
         MinecraftForge.EVENT_BUS.register(new ClientBlockListener());
         MinecraftForge.EVENT_BUS.register(new Listeners());
+        MinecraftForge.EVENT_BUS.register(new TimeUtils());
         MinecraftForge.EVENT_BUS.register(AdvancedChat.getInstance());
         ClientCommandHandler.instance.registerCommand(new Command());
         if (Setting.COLLECTION_OVERLAY.isEnabled()) {

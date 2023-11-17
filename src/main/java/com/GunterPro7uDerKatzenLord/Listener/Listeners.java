@@ -13,7 +13,9 @@ import com.google.gson.JsonObject;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.network.NetworkPlayerInfo;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
+import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
@@ -24,6 +26,7 @@ import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import static com.GunterPro7uDerKatzenLord.Command.enableSearchChat;
 import static com.GunterPro7uDerKatzenLord.Main.mc;
 
 public class Listeners {
@@ -179,6 +182,8 @@ public class Listeners {
         }
     }
 
+    public static final SearchChat searchChat = new SearchChat(Minecraft.getMinecraft());
+
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
         if (!Utils.commandTasks.isEmpty()) {
@@ -188,6 +193,22 @@ public class Listeners {
                     command.run();
                     Utils.commandTasks.remove(time);
                 }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public void searchInChat(RenderGameOverlayEvent.Pre event) {
+        if (enableSearchChat) {
+            if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
+                enableSearchChat = false;
+                Minecraft.getMinecraft().gameSettings.chatVisibility = EntityPlayer.EnumChatVisibility.FULL;
+                return;
+            }
+            searchChat.drawChat(0);
+            if (!(Minecraft.getMinecraft().currentScreen instanceof GunterGuiChat)) {
+                Minecraft.getMinecraft().gameSettings.chatVisibility = EntityPlayer.EnumChatVisibility.HIDDEN;
+                Minecraft.getMinecraft().displayGuiScreen(new GunterGuiChat(searchChat));
             }
         }
     }

@@ -4,10 +4,8 @@ import com.GunterPro7uDerKatzenLord.Gui.GunterAutoKickOverlay;
 import com.GunterPro7uDerKatzenLord.Listener.AdvancedChat;
 import com.GunterPro7uDerKatzenLord.Listener.Listeners;
 import com.GunterPro7uDerKatzenLord.Utils.Utils;
-import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
-import org.lwjgl.input.Mouse;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -26,6 +24,8 @@ public class Command extends CommandBase {
         return NAME + "";
     }
 
+    public static boolean enableSearchChat = false;
+
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
         if (args.length == 0) {
@@ -42,15 +42,16 @@ public class Command extends CommandBase {
             if (Objects.equals(args[0], "help")) {
                 AdvancedChat.sendPrivateMessage("copy <text> - Copies the text to clipboard");
             } else if (Objects.equals(args[0], "test")) {
-                //Utils.execute(() -> {
-                //    new AutoDungeonJoiner();
-                //}, 2500);
+                Utils.execute(() -> {
+                    enableSearchChat = true;
+                    //Minecraft.getMinecraft().displayGuiScreen(new SearchTest());
+                }, 500);
                 //TESTSTOP = !TESTSTOP;
 
-                int x = Minecraft.getMinecraft().ingameGUI.getChatGUI().getChatWidth() + 10;
-                int y = Minecraft.getMinecraft().displayHeight - Mouse.getY();
-
-                AdvancedChat.sendPrivateMessage("X: " + x + ", Y: " + y);
+                //int x = Minecraft.getMinecraft().ingameGUI.getChatGUI().getChatWidth() + 10;
+                //int y = Minecraft.getMinecraft().displayHeight - Mouse.getY();
+//
+                //AdvancedChat.sendPrivateMessage("X: " + x + ", Y: " + y);
             }
         }
     }

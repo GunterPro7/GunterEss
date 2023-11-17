@@ -1,9 +1,7 @@
 package com.GunterPro7uDerKatzenLord.Listener;
 
 import com.GunterPro7uDerKatzenLord.Setting;
-import com.GunterPro7uDerKatzenLord.Utils.MathUtils;
-import com.GunterPro7uDerKatzenLord.Utils.MessageInformation;
-import com.GunterPro7uDerKatzenLord.Utils.Utils;
+import com.GunterPro7uDerKatzenLord.Utils.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.GuiTextField;
@@ -107,6 +105,8 @@ public class AdvancedChat {
         } else {
             event.message = iChatComponent;
         }
+
+        Listeners.searchChat.setChatLine(iChatComponent, messageInformation.getId(), 0);
     }
 
     @SubscribeEvent
@@ -154,21 +154,21 @@ public class AdvancedChat {
                             //sendPrivateMessage(chatComponent.getChatStyle().getInsertion());
                         } else if ((Keyboard.isKeyDown(29) || Keyboard.isKeyDown(157)) && Mouse.isButtonDown(1)) {
                             Utils.copyToClipBoard(messageToCopy);
-                        } else if (Mouse.isButtonDown(0) && (Keyboard.isKeyDown(42) || Keyboard.isKeyDown(52))) {
-                            if (messageInformation == null) {
-                                // Access of Private Field
-                                Class<?> clazz = GuiChat.class;
-                                Field privateField = clazz.getDeclaredField("field_146415_a");
-                                privateField.setAccessible(true);
-                                GuiTextField value = (GuiTextField) privateField.get(Minecraft.getMinecraft().currentScreen);
+                        } if (Mouse.isButtonDown(0) && (Keyboard.isKeyDown(42) || Keyboard.isKeyDown(52))) {
+                            Class<?> clazz = GuiChat.class;
+                            Field privateField = clazz.getDeclaredField("field_146415_a");
+                            privateField.setAccessible(true);
+                            GuiTextField guiTextField = (GuiTextField) privateField.get(Minecraft.getMinecraft().currentScreen);
 
+                            if (messageInformation != null && Setting.COPY_WITH_STACK.isEnabled()) {
                                 // Check if it got copied already
                                 if (pasteEnabled) {
-                                    value.writeText(messageToCopy);
+                                    int count = messageInformation.getCount();
+                                    if (count > 1) TimeUtils.addToQueue(1, () -> guiTextField.writeText(" (" + count + ")"));
                                     pasteEnabled = false;
                                 }
                             } else {
-                                pasteEnabled = false;
+                                guiTextField.writeText(messageToCopy);
                             }
                         }
                     }

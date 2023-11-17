@@ -3,6 +3,7 @@ package com.GunterPro7uDerKatzenLord.Gui;
 import com.GunterPro7uDerKatzenLord.Setting;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.GuiTextField;
 
 public class GunterChatOverlay extends GuiScreen {
     private final GuiScreen lastScreen;
@@ -11,6 +12,7 @@ public class GunterChatOverlay extends GuiScreen {
     private GuiButton button2;
     private GuiButton button3;
     private GuiButton button4;
+    private GuiTextField textField0;
 
     public GunterChatOverlay(GuiScreen lastScreen) {
         this.lastScreen = lastScreen;
@@ -38,6 +40,9 @@ public class GunterChatOverlay extends GuiScreen {
         buttonList.add(button2);
         buttonList.add(button3);
         buttonList.add(button4);
+        textField0 = new GuiTextField(0, fontRendererObj, width / 2 + 100, height / 2 + 120, 100, 20);
+        textField0.setMaxStringLength(100);
+        textField0.setFocused(true);
     }
 
     @Override
@@ -45,6 +50,8 @@ public class GunterChatOverlay extends GuiScreen {
         drawDefaultBackground();
         drawCenteredString(fontRendererObj, "§lGunter Essentials", width / 2, 40, 0xFFFFFF);
         drawCenteredString(fontRendererObj, "-> Chat Features", width / 2, 60, 0xFFFFFF);
+        drawCenteredString(fontRendererObj, "Time messages are stacking (seconds):", width / 2, height / 2 + 120, 0xFFFFFF);
+        textField0.drawTextBox();
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
