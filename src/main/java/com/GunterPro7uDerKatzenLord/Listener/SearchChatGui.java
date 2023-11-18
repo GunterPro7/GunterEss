@@ -103,7 +103,7 @@ public class SearchChatGui extends Gui {
 
         for (ChatLine chatLine : this.chatLines) {
             IChatComponent chatComponent = chatLine.getChatComponent();
-            String text = chatLine.getChatComponent().getUnformattedText();
+            String text = AdvancedChat.clearChatComponent(chatLine.getChatComponent().getUnformattedText());
 
             if (text.contains(s)) {
                 List<IChatComponent> list = GuiUtilRenderComponents.splitText(chatComponent, i, this.mc.fontRendererObj, false, false);
@@ -121,7 +121,7 @@ public class SearchChatGui extends Gui {
             this.deleteChatLine(chatLineId);
         }
 
-        this.chatLines.add(0, new ChatLine(updateCounter, chatComponent, chatLineId));
+        this.chatLines.add(new ChatLine(updateCounter, chatComponent, chatLineId));
     }
 
     public void resetScroll() {

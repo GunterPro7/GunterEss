@@ -200,18 +200,20 @@ public class Listeners {
     }
 
     @SubscribeEvent
-    public void searchInChat(RenderGameOverlayEvent.Pre event) {
-        if (enableSearchChat) {
-            if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
-                enableSearchChat = false;
-                mc.gameSettings.chatVisibility = EntityPlayer.EnumChatVisibility.FULL;
-                mc.displayGuiScreen(new GuiChat());
-                return;
-            }
-            searchChat.drawChat(0);
-            if (!(Minecraft.getMinecraft().currentScreen instanceof GunterGuiChat)) {
-                mc.gameSettings.chatVisibility = EntityPlayer.EnumChatVisibility.HIDDEN;
-                mc.displayGuiScreen(new GunterGuiChat(searchChat));
+    public void searchInChat(RenderGameOverlayEvent.Post event) {
+        if (event.type == RenderGameOverlayEvent.ElementType.CHAT) {
+            if (enableSearchChat) {
+                if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
+                    enableSearchChat = false;
+                    mc.gameSettings.chatVisibility = EntityPlayer.EnumChatVisibility.FULL;
+                    return;
+                }
+                searchChat.drawChat(0);
+                if (!(Minecraft.getMinecraft().currentScreen instanceof GunterGuiChat)) {
+                    mc.gameSettings.chatVisibility = EntityPlayer.EnumChatVisibility.HIDDEN;
+                    searchChat.sortChatLines("");
+                    mc.displayGuiScreen(new GunterGuiChat(searchChat));
+                }
             }
         }
     }
