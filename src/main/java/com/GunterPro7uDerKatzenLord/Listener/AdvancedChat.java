@@ -195,7 +195,7 @@ public class AdvancedChat {
     }
 
     public static IChatComponent getHoveredChatComponent() {
-        if (Listeners.searchChat.getChatOpen()) return Listeners.searchChat.getChatComponent(Mouse.getX(), Mouse.getY()); // TODO check ob das geht, weil SearchChat#getChatComponent keinen offsetY hat, wie meine #drawChat() methode
+        if (Listeners.searchChat.getChatOpen()) return Listeners.searchChat.getChatComponent(Mouse.getX(), Mouse.getY());
         return Minecraft.getMinecraft().ingameGUI.getChatGUI().getChatComponent(Mouse.getX(), Mouse.getY());
     }
 
