@@ -68,12 +68,9 @@ public class SearchChatGui extends Gui {
                     if (o > 3) {
                         p = 0;
                         int q = -m * 9;
-                        //GlStateManager.enableBlend();
                         drawRect(p, offsetY + q - 9, p + l + 4, offsetY + q, 0x7F000000);
                         String string = chatLine.getChatComponent().getFormattedText();
                         this.mc.fontRendererObj.drawStringWithShadow(string, offsetX + (float) p, offsetY + (float) (q - 8), 16777215 + (o << 24));
-                        //GlStateManager.disableAlpha();
-                        //GlStateManager.disableBlend();
                     }
                 }
             }
@@ -99,7 +96,7 @@ public class SearchChatGui extends Gui {
 
     public void sortChatLines(String s) {
         this.drawnChatLines.clear();
-        int i = MathHelper.floor_float((float) this.getChatWidth() / this.getChatScale());
+        int i = MathHelper.floor_float((float) this.getChatWidth() / this.getChatScale())+1; // TODO check ob das hier geht, ob der text noch immer in die nmächste zeile springt
 
         for (ChatLine chatLine : this.chatLines) {
             IChatComponent chatComponent = chatLine.getChatComponent();
