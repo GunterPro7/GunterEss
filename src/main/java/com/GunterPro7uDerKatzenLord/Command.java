@@ -4,8 +4,11 @@ import com.GunterPro7uDerKatzenLord.Gui.GunterAutoKickOverlay;
 import com.GunterPro7uDerKatzenLord.Listener.AdvancedChat;
 import com.GunterPro7uDerKatzenLord.Listener.Listeners;
 import com.GunterPro7uDerKatzenLord.Utils.Utils;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 import java.util.Arrays;
 import java.util.Objects;

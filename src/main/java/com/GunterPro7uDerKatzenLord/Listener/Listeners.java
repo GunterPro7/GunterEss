@@ -5,14 +5,15 @@ import com.GunterPro7uDerKatzenLord.Gui.GunterAutoKickOverlay;
 import com.GunterPro7uDerKatzenLord.Gui.GunterCollectionOverlay;
 import com.GunterPro7uDerKatzenLord.Gui.GunterOverlay;
 import com.GunterPro7uDerKatzenLord.Setting;
+import com.GunterPro7uDerKatzenLord.Utils.*;
 import com.GunterPro7uDerKatzenLord.Utils.Collections;
-import com.GunterPro7uDerKatzenLord.Utils.JsonHelper;
-import com.GunterPro7uDerKatzenLord.Utils.Utils;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiChat;
+import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
@@ -21,6 +22,7 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import org.lwjgl.input.Keyboard;
 
 import java.util.*;
@@ -228,4 +230,21 @@ public class Listeners {
             }
         }
     }
+
+    //public static String lastTitle;
+//
+    //@SubscribeEvent
+    //public void tickEventForDanceRoom(TickEvent.ClientTickEvent event) throws IllegalAccessException {
+    //    String title = (String) ReflectionHelper.findField(GuiIngame.class, "displayedTitle", "field_175201_x").get(Minecraft.getMinecraft().ingameGUI);
+    //    if (title != null && !title.isEmpty()) {
+    //        lastTitle = title;
+    //    }
+//
+//
+    //    if (Keyboard.isKeyDown(Keyboard.KEY_G)) {
+    //        for (DanceRoom danceRoom : MirrorverseUtils.DanceRoom.parse(lastTitle)) {
+    //            new EntityPlayerSP().
+    //        }
+    //    }
+    //}
 }

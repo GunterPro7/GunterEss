@@ -34,6 +34,7 @@ public class GunterGuiChat extends GuiChat {
     @Override
     protected void keyTyped(char eventChar, int keyCode) throws IOException {
         if (keyCode == 28 || keyCode == 156) {
+            searchChat.resetScroll();
             searchChat.sortChatLines(inputField.getText());
         } else {
             super.keyTyped(eventChar, keyCode);

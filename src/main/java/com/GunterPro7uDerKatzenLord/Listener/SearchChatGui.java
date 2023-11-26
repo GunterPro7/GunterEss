@@ -2,6 +2,7 @@ package com.GunterPro7uDerKatzenLord.Listener;
 
 import com.google.common.collect.Lists;
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -17,16 +18,18 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class SearchChatGui extends Gui {
     private final Minecraft mc;
-    public final List<ChatLine> chatLines = Lists.newArrayList();
-    public final List<ChatLine> drawnChatLines = Lists.newArrayList();
-    public int scrollPos;
-    public boolean isScrolled;
+    private final List<ChatLine> chatLines = Lists.newArrayList();
+    private final List<ChatLine> drawnChatLines = Lists.newArrayList();
+    private String sortValue = "";
+    private int scrollPos;
+    private boolean isScrolled;
 
     public SearchChatGui(Minecraft minecraft) {
         this.mc = minecraft;
     }
 
     public void drawChat(int updateCounter) {
+        FontRenderer fontRenderer = Minecraft.getMinecraft().fontRendererObj;
         int offsetY = (int) (this.mc.displayHeight / (this.mc.gameSettings.guiScale == 0 ? 4 : this.mc.gameSettings.guiScale) - (this.mc.fontRendererObj.FONT_HEIGHT * 5.25));
         int offsetX = 1;
         int i = this.getLineCount();
@@ -70,6 +73,19 @@ public class SearchChatGui extends Gui {
                         int q = -m * 9;
                         drawRect(p, offsetY + q - 9, p + l + 4, offsetY + q, 0x7F000000);
                         String string = chatLine.getChatComponent().getFormattedText();
+                        String unformattedText = AdvancedChat.clearChatComponent(chatLine.getChatComponent().getUnformattedText());
+                        String[] parts = unformattedText.split("((?<=" + sortValue + ")|(?=" + sortValue + "))");
+
+                        StringBuilder stringBuilder = new StringBuilder();
+                        for (String part : parts) {
+                            if (sortValue.equalsIgnoreCase(part)) {
+                                int left = fontRenderer.getStringWidth(stringBuilder.toString());
+                                int width = fontRenderer.getStringWidth(part);
+                                drawRect(left, offsetY + (q - 8), left+width, offsetY + (q - 8) + fontRenderer.FONT_HEIGHT, 0xA7f9da15);
+                            }
+                            stringBuilder.append(part);
+                        }
+
                         this.mc.fontRendererObj.drawStringWithShadow(string, offsetX + (float) p, offsetY + (float) (q - 8), 16777215 + (o << 24));
                     }
                 }
@@ -95,20 +111,23 @@ public class SearchChatGui extends Gui {
     }
 
     public void sortChatLines(String s) {
+        this.sortValue = s;
         this.drawnChatLines.clear();
-        int i = MathHelper.floor_float((float) this.getChatWidth() / this.getChatScale())+1; // TODO check ob das hier geht, ob der text noch immer in die nmächste zeile springt
+        int i = MathHelper.floor_float((float) this.getChatWidth() / this.getChatScale()) + 1; // TODO check ob das hier geht, ob der text noch immer in die nmächste zeile springt
 
-        for (ChatLine chatLine : this.chatLines) {
-            IChatComponent chatComponent = chatLine.getChatComponent();
-            String text = AdvancedChat.clearChatComponent(chatLine.getChatComponent().getUnformattedText());
+        this.chatLines.forEach((chatLine) -> sortChatLine(chatLine, s, i));
+    }
 
-            if (text.contains(s)) {
-                List<IChatComponent> list = GuiUtilRenderComponents.splitText(chatComponent, i, this.mc.fontRendererObj, false, false);
-                IChatComponent iChatComponent;
+    private void sortChatLine(ChatLine chatLine, String s, int i) {
+        IChatComponent chatComponent = chatLine.getChatComponent();
+        String text = AdvancedChat.clearChatComponent(chatLine.getChatComponent().getUnformattedText());
 
-                for (Iterator<IChatComponent> iterator = list.iterator(); iterator.hasNext(); this.drawnChatLines.add(0, new ChatLine(chatLine.getUpdatedCounter(), iChatComponent, chatLine.getChatLineID()))) {
-                    iChatComponent = iterator.next();
-                }
+        if (text.toLowerCase().contains(s.toLowerCase())) {
+            List<IChatComponent> list = GuiUtilRenderComponents.splitText(chatComponent, i, this.mc.fontRendererObj, false, false);
+            IChatComponent iChatComponent;
+
+            for (Iterator<IChatComponent> iterator = list.iterator(); iterator.hasNext(); this.drawnChatLines.add(0, new ChatLine(chatLine.getUpdatedCounter(), iChatComponent, chatLine.getChatLineID()))) {
+                iChatComponent = iterator.next();
             }
         }
     }
@@ -118,7 +137,10 @@ public class SearchChatGui extends Gui {
             this.deleteChatLine(chatLineId);
         }
 
-        this.chatLines.add(new ChatLine(updateCounter, chatComponent, chatLineId));
+        ChatLine chatLine = new ChatLine(updateCounter, chatComponent, chatLineId);
+
+        sortChatLine(chatLine, this.sortValue, MathHelper.floor_float((float) this.getChatWidth() / this.getChatScale())+1);
+        this.chatLines.add(chatLine);
     }
 
     public void resetScroll() {
