@@ -73,17 +73,17 @@ public class SearchChatGui extends Gui {
                         int q = -m * 9;
                         drawRect(p, offsetY + q - 9, p + l + 4, offsetY + q, 0x7F000000);
                         String string = chatLine.getChatComponent().getFormattedText();
-                        String unformattedText = AdvancedChat.clearChatComponent(chatLine.getChatComponent().getUnformattedText());
-                        String[] parts = unformattedText.split("((?<=" + sortValue + ")|(?=" + sortValue + "))");
+                        String[] parts = string.split("((?<=" + sortValue + ")|(?=" + sortValue + "))");
 
                         StringBuilder stringBuilder = new StringBuilder();
                         for (String part : parts) {
                             if (sortValue.equalsIgnoreCase(part)) {
                                 int left = fontRenderer.getStringWidth(stringBuilder.toString());
-                                int width = fontRenderer.getStringWidth(part);
-                                drawRect(left, offsetY + (q - 8), left+width, offsetY + (q - 8) + fontRenderer.FONT_HEIGHT, 0xA7f9da15);
+                                int right = fontRenderer.getStringWidth(stringBuilder.append(part).toString());
+                                drawRect(left, offsetY + (q - 8), right, offsetY + (q - 8) + fontRenderer.FONT_HEIGHT, 0xA7f9da15);
+                            } else {
+                                stringBuilder.append(part);
                             }
-                            stringBuilder.append(part);
                         }
 
                         this.mc.fontRendererObj.drawStringWithShadow(string, offsetX + (float) p, offsetY + (float) (q - 8), 16777215 + (o << 24));
