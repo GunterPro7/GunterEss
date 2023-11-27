@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
@@ -73,7 +74,8 @@ public class SearchChatGui extends Gui {
                         int q = -m * 9;
                         drawRect(p, offsetY + q - 9, p + l + 4, offsetY + q, 0x7F000000);
                         String string = chatLine.getChatComponent().getFormattedText();
-                        String[] parts = string.split("((?<=(?i)" + sortValue + ")|(?=(?i)" + sortValue + "))");
+                        String quote = Pattern.quote(sortValue);
+                        String[] parts = string.split("((?<=(?i)" + quote + ")|(?=(?i)" + quote + "))");
 
                         StringBuilder stringBuilder = new StringBuilder();
                         for (String part : parts) {
