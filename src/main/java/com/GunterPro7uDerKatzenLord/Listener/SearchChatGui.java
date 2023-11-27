@@ -73,7 +73,7 @@ public class SearchChatGui extends Gui {
                         int q = -m * 9;
                         drawRect(p, offsetY + q - 9, p + l + 4, offsetY + q, 0x7F000000);
                         String string = chatLine.getChatComponent().getFormattedText();
-                        String[] parts = string.split("((?<=" + sortValue + ")|(?=" + sortValue + "))");
+                        String[] parts = string.split("((?<=(?i)" + sortValue + ")|(?=(?i)" + sortValue + "))");
 
                         StringBuilder stringBuilder = new StringBuilder();
                         for (String part : parts) {
