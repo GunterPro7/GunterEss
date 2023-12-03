@@ -8,12 +8,14 @@ import java.util.Map;
 public class MessageInformation {
     private static final Map<String, MessageInformation> instances = new HashMap<>();
     private final String message;
+    private final String colorMessage;
     private final int id;
     private int count;
     private long time;
 
-    public MessageInformation(String message, int id) {
+    public MessageInformation(String message, String colorMessage, int id) {
         this.message = message;
+        this.colorMessage = colorMessage;
         this.id = id;
         count = 0;
         time = System.currentTimeMillis();
@@ -52,5 +54,9 @@ public class MessageInformation {
 
     public static MessageInformation getInstance(String text) {
         return instances.get(text);
+    }
+
+    public String getColorMessage() {
+        return colorMessage;
     }
 }
