@@ -24,6 +24,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashMap;
 
 import static com.GunterPro7uDerKatzenLord.Listener.Listeners.collectionJson;
 
@@ -147,6 +148,8 @@ public class Main {
             System.out.println("Backend Service not available");
             return;
         }
+
+        //AdvancedChat.getInstance().doBackendLoop();
 
         boolean updateAvailable = Boolean.parseBoolean(response.split("\"update_available\":")[1].split(",")[0]);
         if (updateAvailable) {

@@ -14,7 +14,10 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
+import java.net.Socket;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -158,7 +161,7 @@ public class AdvancedChat {
                                 messageToCopy = messageInformation.getMessage();
                             }
                             if (Setting.COPY_WITH_STACK.isEnabled() && messageInformation.getCount() != 1) {
-                                messageToCopy += " (" + ((Keyboard.isKeyDown(29) || Keyboard.isKeyDown(157)) && Mouse.isButtonDown(1) ? "&7": "") + messageInformation.getCount() + ")";
+                                messageToCopy += " (" + ((Keyboard.isKeyDown(29) || Keyboard.isKeyDown(157)) && Mouse.isButtonDown(1) ? "&7" : "") + messageInformation.getCount() + ")";
                             }
                         } else {
                             messageToCopy = AdvancedChat.clearChatComponent(chatComponent.getUnformattedText());
@@ -211,6 +214,31 @@ public class AdvancedChat {
         }
     }
 
+    @SubscribeEvent
+    public void beforeMessageSent(ClientChatEvent event) {
+        String text = event.getText();
+        if (!text.endsWith("|GunterEss")) {
+            return;
+        }
+        // Originale Nachricht an backend
+        Map<String, String> args = new HashMap<>();
+        args.put("playerName", Minecraft.getMinecraft().thePlayer.getGameProfile().getName());
+        args.put("text", text);
+        args.put("time", String.valueOf(System.currentTimeMillis()));
+        JsonHelper.fetchToBackend("configuredMessages/addModifiedMessage.php", args);
+
+        // Change message for minecraft chat
+        text = text.replaceAll("\\$[0-9a-zA-Z]", "").replaceAll("\\$y.*\\$y", "");
+        event.setText(text);
+
+        // Farbe mit normalen minecraft $.. (muss hier nicht umgeändert werden) // TODO während dem rendern des chat text-field's zu farben ändern
+        // Hinterlegt mit z.b $z // TODO während man das schriebt schon hinterlegen
+        // Link so: Hier der Link: $yhttps://google$xcom/cooltest$xetc$y. :D // TODO
+
+        // TODO chatnachrichten sollen normal geschickt werden klnnen, chatnachricht wird zu meinen server geschickt, wenn es die selbe ist wie am anderen client, (also mein name und .contains) dann den part der .contains() wurde mit meiner geschickten nachricht erstezen
+        // TODO nur das machen, wenn es unter 10 sekunden an den client gesendet wird
+    }
+
     public void setTextFieldContent(String text) throws NoSuchFieldException, IllegalAccessException {
         getTextField().setText(text);
     }
@@ -259,6 +287,45 @@ public class AdvancedChat {
         return iChatComponent;
     }
 
+    @SubscribeEvent
+    public void backendRecieved(BackendRecievedEvent event) {
+        String text = event.getText();
+
+        if (text.startsWith("msg")) {
+            String[] parts = text.split(";");
+            String playerFrom = parts[1];
+            String message = String.join(" ", Arrays.copyOfRange(parts, 2, parts.length));
+            sendPrivateMessage(playerFrom + " > " + message);
+        }
+    }
+
+    // TODO change this #1
+    private boolean alej;
+
+    @SubscribeEvent
+    public void onTick(TickEvent.ClientTickEvent event) throws IOException {
+        BackendService backendService = BackendService.getInstance();
+        if (backendService != null) {
+            backendService.run();
+        }
+        if (Minecraft.getMinecraft().isIntegratedServerRunning()) {
+            if (backendService == null) {
+                // TODO change this #1
+                if (!alej) {
+                    alej = true;
+                    Utils.execute(() -> {
+                        try {
+                            new BackendService(new Socket("49.12.101.156", 5000));
+                            BackendService.getInstance().send("init;" + Minecraft.getMinecraft().thePlayer.getGameProfile().getName());
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }, 2000);
+                }
+            } // TODO erkennen falls verbindung zum server verloren geht, dann entsprechend reagieren und schließen und in x sekunden neue verbindung aufbauen
+        }
+    }
+
     public static void sendChatMessageAsPlayer(String text) {
         Minecraft.getMinecraft().thePlayer.sendChatMessage(text);
     }
@@ -270,6 +337,13 @@ public class AdvancedChat {
     public static void sendPrivateMessage(String text) {
         String string = "§a§lGunterEss > §r" + text;
         Minecraft.getMinecraft().thePlayer.addChatMessage(AdvancedChat.formatChatComponentForCopy(new ChatComponentText(string), AdvancedChat.clearChatComponent(string), false));
+    }
+
+    public void doBackendLoop() {
+        AdvancedChat.sendPrivateMessage(JsonHelper.fetchToBackend("configuredMessages/loopForMessages.php", new HashMap<>(), () -> {
+
+        }));
+
     }
 
     public static class ChatCondition {
@@ -322,5 +396,10 @@ public class AdvancedChat {
     @FunctionalInterface
     public interface Function {
         void action(IChatComponent message);
+    }
+
+    @FunctionalInterface
+    public interface Callback {
+        void run();
     }
 }

@@ -1,5 +1,6 @@
 package com.GunterPro7uDerKatzenLord.Utils;
 
+import com.GunterPro7uDerKatzenLord.Listener.AdvancedChat;
 import com.GunterPro7uDerKatzenLord.Listener.Listeners;
 import com.GunterPro7uDerKatzenLord.Main;
 import com.google.gson.JsonElement;
@@ -15,11 +16,15 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class JsonHelper {
     public static final String PLAYER_UUID = "ca9cc012-83cd-4570-ab57-48b36596ab5d";
     public static final String PROFILE_UUID = "f7b343ae1cc04f6c826bee85fa37a993";
     public static final String API_KEY = "a3d12e28-66d5-4d00-8449-2ad71aaa43f2"; // "a3d12e28-66d5-4d00-9449-2ad71aaa43f2"
+    private static final ExecutorService POOL = Executors.newCachedThreadPool();
 
     public static String fetch(String url) throws IOException {
         HttpClient httpClient = HttpClients.createDefault();
@@ -157,5 +162,37 @@ public class JsonHelper {
             return true;
         }
         return false;
+    }
+
+    public static String fetchToBackend(String file, Map<String, String> args) {
+        return fetchToBackend(file, args, () -> {});
+    }
+
+    public static String fetchToBackend(String file, Map<String, String> args, AdvancedChat.Callback callback) {
+        StringBuilder call = new StringBuilder("http://49.12.101.156/GunterEss/" + file);
+
+        if (args.size() > 0) {
+            call.append("?");
+        }
+
+        for (Map.Entry<String, String> arg : args.entrySet()) {
+            if (!call.toString().endsWith("?")) {
+                call.append("&");
+            }
+            call.append(arg.getKey()).append("=").append(arg.getValue());
+        }
+
+        StringBuilder response = new StringBuilder();
+        POOL.execute(() -> {
+            try {
+                response.append(fetch(call.toString()));
+                AdvancedChat.sendPrivateMessage(response.toString());
+                callback.run(); // TODO hier die response dann mitübergeben und dann ne action machen
+            } catch (IOException e) {
+                System.out.println("Unable to fetch to backend call: " + call);
+            }
+        });
+
+        return response.toString();
     }
 }

@@ -2,14 +2,14 @@ package com.GunterPro7uDerKatzenLord;
 
 import com.GunterPro7uDerKatzenLord.Gui.GunterAutoKickOverlay;
 import com.GunterPro7uDerKatzenLord.Listener.AdvancedChat;
+import com.GunterPro7uDerKatzenLord.Listener.BackendService;
 import com.GunterPro7uDerKatzenLord.Listener.Listeners;
 import com.GunterPro7uDerKatzenLord.Utils.Utils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -41,13 +41,26 @@ public class Command extends CommandBase {
             if (Objects.equals(args[0], "ignore")) {
                 GunterAutoKickOverlay.addIgnoredPlayer(args[1]);
             }
+            if (args[0].equalsIgnoreCase("msg")) {
+                String playerFrom = Minecraft.getMinecraft().thePlayer.getGameProfile().getName();
+                String playerTo = args[1];
+                String message = String.join(" ", Arrays.copyOfRange(args, 2, args.length));
+                try {
+                    BackendService.getInstance().send("msg;" + playerFrom + ";" + playerTo + ";" + message);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
         } else if (args.length > 0) {
             if (Objects.equals(args[0], "help")) {
                 AdvancedChat.sendPrivateMessage("copy <text> - Copies the text to clipboard");
             } else if (Objects.equals(args[0], "test")) {
                 Utils.execute(() -> {
-                    enableSearchChat = true;
-                    //Minecraft.getMinecraft().displayGuiScreen(new SearchTest());
+                    try {
+                        BackendService.getInstance().send("Test lol");
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }, 500);
                 //TESTSTOP = !TESTSTOP;
 
