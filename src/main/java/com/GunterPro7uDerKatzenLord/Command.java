@@ -51,6 +51,13 @@ public class Command extends CommandBase {
                     throw new RuntimeException(e);
                 }
             }
+            if (args[0].equalsIgnoreCase("party")) {
+                try {
+                    Party.processCommand(Arrays.copyOfRange(args, 1, args.length));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
         } else if (args.length > 0) {
             if (Objects.equals(args[0], "help")) {
                 AdvancedChat.sendPrivateMessage("copy <text> - Copies the text to clipboard");

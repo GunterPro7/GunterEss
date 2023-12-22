@@ -1,5 +1,6 @@
 package com.GunterPro7uDerKatzenLord.Listener;
 
+import com.GunterPro7uDerKatzenLord.Party;
 import com.GunterPro7uDerKatzenLord.Setting;
 import com.GunterPro7uDerKatzenLord.Utils.*;
 import net.minecraft.client.Minecraft;
@@ -115,8 +116,11 @@ public class AdvancedChat {
     }
 
     @SubscribeEvent
-    public void messageCheck(ClientChatEvent event) {
+    public void messageCheck(ClientChatEvent event) throws IOException {
         String text = event.getText();
+        if (Party.isAPartyToggled()) {
+            Party.getToggledParty().sendMessage(text);
+        }
         if (!text.trim().isEmpty() && Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
             event.setText(text + "|GunterEss");
         }
@@ -296,6 +300,8 @@ public class AdvancedChat {
             String playerFrom = parts[1];
             String message = String.join(" ", Arrays.copyOfRange(parts, 2, parts.length));
             sendPrivateMessage(playerFrom + " > " + message);
+        } else if (text.startsWith("party")) {
+            Party.processServerMessage(text);
         }
     }
 
@@ -335,7 +341,11 @@ public class AdvancedChat {
     }
 
     public static void sendPrivateMessage(String text) {
-        String string = "§a§lGunterEss > §r" + text;
+        sendPrivateMessage(new ChatComponentText(text));
+    }
+
+    public static void sendPrivateMessage(IChatComponent iChatComponent) {
+        String string = "§a§lGunterEss > §r" + iChatComponent.getFormattedText();
         Minecraft.getMinecraft().thePlayer.addChatMessage(AdvancedChat.formatChatComponentForCopy(new ChatComponentText(string), AdvancedChat.clearChatComponent(string), false));
     }
 
