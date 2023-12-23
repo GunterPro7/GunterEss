@@ -294,6 +294,8 @@ public class AdvancedChat {
     @SubscribeEvent
     public void backendRecieved(BackendRecievedEvent event) {
         String text = event.getText();
+        System.out.println(text);
+        AdvancedChat.sendPrivateMessage(text);
 
         if (text.startsWith("msg")) {
             String[] parts = text.split(";");
@@ -301,7 +303,7 @@ public class AdvancedChat {
             String message = String.join(" ", Arrays.copyOfRange(parts, 2, parts.length));
             sendPrivateMessage(playerFrom + " > " + message);
         } else if (text.startsWith("party")) {
-            Party.processServerMessage(text);
+            Party.processServerMessage(text.substring("party;".length()));
         }
     }
 
@@ -321,7 +323,8 @@ public class AdvancedChat {
                     alej = true;
                     Utils.execute(() -> {
                         try {
-                            new BackendService(new Socket("49.12.101.156", 5000));
+                            //new BackendService(new Socket("49.12.101.156", 5000));
+                            new BackendService(new Socket("localhost", 5000));
                             BackendService.getInstance().send("init;" + Minecraft.getMinecraft().thePlayer.getGameProfile().getName());
                         } catch (IOException e) {
                             throw new RuntimeException(e);
