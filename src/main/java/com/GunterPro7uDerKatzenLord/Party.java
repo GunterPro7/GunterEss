@@ -121,8 +121,10 @@ public class Party {
         String[] parts = message.split(";");
         Party party = getPartyByName(parts[0]);
         if (party == null) {
-            System.out.println("GunterEss -> Invalid Server Packet: Party not found + " + parts[0]);
-            return;
+            if (!parts[1].equals("invited")) {
+                System.out.println("GunterEss -> Invalid Server Packet: Party not found + " + parts[0]);
+                return;
+            }
         }
 
         switch (parts[1]) {
@@ -132,7 +134,7 @@ public class Party {
                 AdvancedChat.sendPrivateMessage(parts[0] + " > " + playerName + ": " + messageSent);
                 break;
             case "log":
-                AdvancedChat.sendPrivateMessage(parts[2]);
+                AdvancedChat.sendPrivateMessage(parts[0] + " > " + parts[2]);
                 break;
             case "remove":
                 party.removePlayer(parts[2]);
@@ -144,6 +146,17 @@ public class Party {
                 parties.remove(party);
                 AdvancedChat.sendPrivateMessage("You got kicked from the Party " + parts[0] + "!");
                 break;
+            case "playerkick":
+            case "playerleave":
+                String playerToKick = parts[2];
+                party.removePlayer(playerToKick);
+                AdvancedChat.sendPrivateMessage(party.getName() + " > " + playerToKick + " has " + (parts[1].equals("playerkick") ? "been kicked from" : "left") + " the party!");
+                break;
+            case "partydisband":
+                String playerThatDisbanded = parts[2];
+                parties.remove(party);
+                AdvancedChat.sendPrivateMessage("The Party " + parts[0] + " has been disbanded by " + playerThatDisbanded);
+                break;
             case "invited":
                 String owner = parts[2];
                 IChatComponent iChatComponent = new ChatComponentText(owner + " has invited you to party " + parts[0] + ".");
@@ -151,6 +164,7 @@ public class Party {
                 ChatStyle partChatStyle = new ChatStyle();
                 partChatStyle.setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/GunterEss party join " + parts[0] + " " + owner));
                 partChatStyle.setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText("This command will add you to the party " + parts[0] + "!")));
+                part.setChatStyle(partChatStyle);
                 AdvancedChat.sendPrivateMessage(iChatComponent.appendSibling(part).appendText(" to accept!"));
                 break;
             case "joinedInit":
@@ -197,7 +211,9 @@ public class Party {
             }
 
             if (party != null) {
-                party.sendMessage(String.join(" ", Arrays.copyOfRange(command, 2, command.length)));
+                String message = String.join(" ", Arrays.copyOfRange(command, 2, command.length));
+                party.sendMessage(message);
+                AdvancedChat.sendPrivateMessage(party.getName() + " > " + Minecraft.getMinecraft().thePlayer.getGameProfile().getName() + ": " + message);
             } else {
                 AdvancedChat.sendPrivateMessage("Chat §3" + command[1] + " §rnot found!");
             }
@@ -213,6 +229,8 @@ public class Party {
             if (party != null) {
                 if (!party.disband()) {
                     AdvancedChat.sendPrivateMessage("You are not the owner of the party " + command[1]);
+                } else {
+                    AdvancedChat.sendPrivateMessage("You disbanded the party " + command[1]);
                 }
             } else {
                 AdvancedChat.sendPrivateMessage("Party " + command[1] + " not found!");

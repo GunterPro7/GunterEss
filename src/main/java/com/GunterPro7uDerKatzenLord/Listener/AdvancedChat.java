@@ -295,7 +295,6 @@ public class AdvancedChat {
     public void backendRecieved(BackendRecievedEvent event) {
         String text = event.getText();
         System.out.println(text);
-        AdvancedChat.sendPrivateMessage(text);
 
         if (text.startsWith("msg")) {
             String[] parts = text.split(";");
@@ -348,7 +347,7 @@ public class AdvancedChat {
     }
 
     public static void sendPrivateMessage(IChatComponent iChatComponent) {
-        String string = "§a§lGunterEss > §r" + iChatComponent.getFormattedText();
+        String string = "§a§lGunterEss > §r" + iChatComponent.getFormattedText(); // TODO this shit here will not work lmfao
         Minecraft.getMinecraft().thePlayer.addChatMessage(AdvancedChat.formatChatComponentForCopy(new ChatComponentText(string), AdvancedChat.clearChatComponent(string), false));
     }
 
