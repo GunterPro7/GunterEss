@@ -34,7 +34,7 @@ GunterEss brings the following features to your Minecraft world:
 
 To install GunterEss, follow these simple steps:
 
-1. Download the latest version of the mod from the [Releases](https://github.com/[your-mod-repo]/releases) section.
+1. Download the latest version of the mod from the [Releases](https://github.com/GunterPro7/GunterEss/tree/master/build/libs) section.
 
 2. Make sure you have [Minecraft Forge](https://files.minecraftforge.net/) installed.
 
