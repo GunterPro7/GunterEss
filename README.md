@@ -24,7 +24,7 @@ GunterEss brings the following features to your Minecraft world:
 
 ### Party System
 
-- **Party Commands:** GunterEss includes a party system. Use the command `GunterEss party create <party-name>` to create a party, and `GunterEss party invite <player>` to invite players to your party.
+- **Party Commands:** GunterEss includes a party system. Use the command `GunterEss party create <party-name>` to create a party, and `GunterEss party invite <party-name> <player>` to invite players to your party.
 
 - **Party Chat:** Once in a party, use `GunterEss party chat <party-name> <message>` to communicate exclusively with your party members.
 
