@@ -38,6 +38,10 @@ public class Command extends CommandBase {
             if (Objects.equals(args[0], "copy")) {
                 Utils.copyToClipBoard(AdvancedChat.clearChatComponent(String.join(" ", Arrays.copyOfRange(args, 1, args.length))));
             }
+            if (args[0].equalsIgnoreCase("mcchat")) {
+                String message = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
+                AdvancedChat.sendChatMessageAsPlayer(message);
+            }
             if (Objects.equals(args[0], "ignore")) {
                 GunterAutoKickOverlay.addIgnoredPlayer(args[1]);
             }

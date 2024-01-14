@@ -8,11 +8,13 @@ import net.minecraft.event.HoverEvent;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.IChatComponent;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class Party {
     public static final List<Party> parties = new ArrayList<>();
@@ -20,7 +22,7 @@ public class Party {
     private static Party defaultParty;
     private static Party toggledParty;
     private final String name;
-    private final String owner;
+    private String owner;
     private final List<String> players = new ArrayList<>();
 
     // TODO implement backend
@@ -35,6 +37,7 @@ public class Party {
 
     public static Party create(String name, String owner) throws IOException {
         Party party = new Party(name, owner);
+        party.addPlayer(owner);
         BackendService.getInstance().send("party;" + name + ";create;" + owner);
         AdvancedChat.sendPrivateMessage("Successfully created the Party " + name);
         return party;
@@ -86,12 +89,25 @@ public class Party {
         return name;
     }
 
+    public String getOwner() {
+        return owner;
+    }
+
+    public void transfer(String newOwner) {
+        this.owner = newOwner;
+    }
+
+    public List<String> getPlayers() {
+        return players;
+    }
+
     public boolean isOwner() {
         return Minecraft.getMinecraft().thePlayer.getGameProfile().getName().equals(owner);
     }
 
     public void sendMessage(String message) throws IOException {
         BackendService.getInstance().send("party;" + getName() + ";msg;" + message);
+        AdvancedChat.sendPrivateMessage(getName() + " > " + Minecraft.getMinecraft().thePlayer.getGameProfile().getName() + ": " + message);
     }
 
     public void leave() throws IOException {
@@ -119,7 +135,8 @@ public class Party {
     public static void processServerMessage(String message) {
         // so basically I sort by the start of the string, splittet by ;
         String[] parts = message.split(";");
-        Party party = getPartyByName(parts[0]);
+        String partyName = parts[0];
+        Party party = getPartyByName(partyName);
         if (party == null) {
             if (!parts[1].equals("invited")) {
                 System.out.println("GunterEss -> Invalid Server Packet: Party not found + " + parts[0]);
@@ -131,10 +148,10 @@ public class Party {
             case "message":
                 String playerName = parts[3];
                 String messageSent = parts[4];
-                AdvancedChat.sendPrivateMessage(parts[0] + " > " + playerName + ": " + messageSent);
+                AdvancedChat.sendPrivateMessage(partyName + " > " + playerName + ": " + messageSent);
                 break;
             case "log":
-                AdvancedChat.sendPrivateMessage(parts[0] + " > " + parts[2]);
+                AdvancedChat.sendPrivateMessage(partyName + " > " + parts[2]);
                 break;
             case "remove":
                 party.removePlayer(parts[2]);
@@ -144,7 +161,12 @@ public class Party {
                 break;
             case "kick":
                 parties.remove(party);
-                AdvancedChat.sendPrivateMessage("You got kicked from the Party " + parts[0] + "!");
+                AdvancedChat.sendPrivateMessage("You got kicked from the Party " + partyName + "!");
+                break;
+            case "playerjoin":
+                String newPlayer = parts[2]; // TODO check if in the new version Client & Backend work perfect together
+                party.addPlayer(newPlayer);
+                AdvancedChat.sendPrivateMessage(newPlayer + " has joined the party " + party.getName());
                 break;
             case "playerkick":
             case "playerleave":
@@ -155,22 +177,28 @@ public class Party {
             case "partydisband":
                 String playerThatDisbanded = parts[2];
                 parties.remove(party);
-                AdvancedChat.sendPrivateMessage("The Party " + parts[0] + " has been disbanded by " + playerThatDisbanded);
+                AdvancedChat.sendPrivateMessage("The Party " + partyName + " has been disbanded by " + playerThatDisbanded);
                 break;
             case "invited":
                 String owner = parts[2];
-                IChatComponent iChatComponent = new ChatComponentText(owner + " has invited you to party " + parts[0] + ".");
-                IChatComponent part = new ChatComponentText("[CLICK HERE]");
+                IChatComponent iChatComponent = new ChatComponentText(owner + " has invited you to party " + partyName + ".");
+                IChatComponent part = new ChatComponentText("§e§l[CLICK HERE]§r");
                 ChatStyle partChatStyle = new ChatStyle();
-                partChatStyle.setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/GunterEss party join " + parts[0] + " " + owner));
-                partChatStyle.setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText("This command will add you to the party " + parts[0] + "!")));
+                partChatStyle.setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/GunterEss party join " + partyName + " " + owner));
+                partChatStyle.setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText("This command will add you to the party " + partyName + "!")));
                 part.setChatStyle(partChatStyle);
-                AdvancedChat.sendPrivateMessage(iChatComponent.appendSibling(part).appendText(" to accept!"));
+                AdvancedChat.sendPrivateMessage(iChatComponent.appendSibling(part).appendText(" to accept!"), true);
                 break;
             case "joinedInit":
                 for (String curPlayerName : Arrays.copyOfRange(parts, 2, parts.length)) {
                     party.addPlayer(curPlayerName);
                 }
+                break;
+            case "transfer":
+                String playerToTransfer = parts[2];
+                party.transfer(playerToTransfer);
+                AdvancedChat.sendPrivateMessage("The Party " + partyName + " has been transferred to " + playerToTransfer);
+                break;
         }
     }
 
@@ -178,7 +206,11 @@ public class Party {
         String com = command[0];
         if (com.equalsIgnoreCase("create")) {
             Party.create(command[1], Minecraft.getMinecraft().thePlayer.getGameProfile().getName());
-
+            // TODO BACKEND-SIDE: a party can be created with the same name again. that results in messages sent to that party via a "solo" party. Always check this on backend side, and send an error as result to the client if it exists
+        } else if (com.equalsIgnoreCase("help")) {
+            AdvancedChat.sendPrivateMessage("§e§lGunterEss party System!§r Available Commands: \n-> chat <party-name> <message>\n" +
+                    "-> invite <party-name> <player-name>\n-> toggle <party-name>\n-> leave <party-name>\n-> disband <party-name>\n" +
+                    "-> kick <party-name> <player-name>\n-> list\n-> list <party-name>\n\n§eYou can be in multiple parties at once!");
         } else if (com.equalsIgnoreCase("invite")) {
             Party party = getPartyByName(command[1]);
             if (party != null) {
@@ -192,11 +224,16 @@ public class Party {
         } else if (com.equalsIgnoreCase("toggle")) {
             Party chat = getPartyByName(command[1]);
             if (chat != null) {
-                chat.toggle();
+                chat.toggle(); // TODO give feedback and send message imediatly to party chat without the minecraft ingame chat
             } else {
                 AdvancedChat.sendPrivateMessage("Chat §3" + command[1] + " §rnot found!");
             }
         } else if (com.equalsIgnoreCase("join")) {
+            String newPartyName = command[1];
+            if (parties.stream().anyMatch(party -> party.name.equals(newPartyName))) {
+                AdvancedChat.sendPrivateMessage("You are already in the Party " + newPartyName);
+                return;
+            }
             Party.join(command[1], command[2]); // part 1 = name, part 2 = owner
             // TODO backend fetch joined the party
         }
@@ -213,7 +250,6 @@ public class Party {
             if (party != null) {
                 String message = String.join(" ", Arrays.copyOfRange(command, 2, command.length));
                 party.sendMessage(message);
-                AdvancedChat.sendPrivateMessage(party.getName() + " > " + Minecraft.getMinecraft().thePlayer.getGameProfile().getName() + ": " + message);
             } else {
                 AdvancedChat.sendPrivateMessage("Chat §3" + command[1] + " §rnot found!");
             }
@@ -243,6 +279,25 @@ public class Party {
                     AdvancedChat.sendPrivateMessage("You are not the owner of the party " + command[1]);
                 }
             }
+        } else if (com.equalsIgnoreCase("list")) {
+            StringBuilder string;
+            if (command.length > 1) {
+                Party party = getPartyByName(command[1]);
+                if (party == null) {
+                    AdvancedChat.sendPrivateMessage("The Party " + command[1] + " has not been found!");
+                    return;
+                }
+                string = new StringBuilder("§eFollowing Members are in the Party " + party.getName() + ": §r\n");
+                for (String member : party.getPlayers()) {
+                    string.append("- ").append(member).append("\n");
+                }
+            } else {
+                string = new StringBuilder("§eYou are in the following parties: §r\n");
+                for (Party party : parties) {
+                    string.append("- ").append(party.getName()).append("\n");
+                }
+            }
+            AdvancedChat.sendPrivateMessage(string.toString());
         }
     }
 

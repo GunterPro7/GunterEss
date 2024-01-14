@@ -9,6 +9,7 @@ public class Setting {
     public static final Setting REMOVE_BLANK_LINES = new Setting(true);
     public static final Setting DONT_CHECK_USELESS_CHAT_MESSAGES = new Setting(true);
     public static final Setting COPY_WITH_STACK = new Setting(true);
+    public static final Setting SEND_CHECK_FOR_7MESSAGE = new Setting(true);
     private boolean enabled;
     public Setting(boolean enabled) {
         this.enabled = enabled;

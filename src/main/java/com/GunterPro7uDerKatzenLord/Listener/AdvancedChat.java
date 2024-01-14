@@ -5,8 +5,12 @@ import com.GunterPro7uDerKatzenLord.Setting;
 import com.GunterPro7uDerKatzenLord.Utils.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
+import net.minecraft.client.gui.GuiNewChat;
 import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.event.ClickEvent;
+import net.minecraft.event.HoverEvent;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatStyle;
 import net.minecraft.util.IChatComponent;
 import net.minecraftforge.client.event.*;
 import net.minecraftforge.common.MinecraftForge;
@@ -118,11 +122,33 @@ public class AdvancedChat {
     @SubscribeEvent
     public void messageCheck(ClientChatEvent event) throws IOException {
         String text = event.getText();
-        if (Party.isAPartyToggled()) {
+        if (Party.isAPartyToggled() && !text.startsWith("/")) {
             Party.getToggledParty().sendMessage(text);
         }
         if (!text.trim().isEmpty() && Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-            event.setText(text + "|GunterEss");
+            //event.setText(text + "|GunterEss"); // TODO this is annoying
+        }
+        if (Setting.SEND_CHECK_FOR_7MESSAGE.isEnabled()) {
+            if (text.startsWith("7") && text.length() > 1) {
+                char secondChar = text.charAt(1);
+                String command = "/" + text.substring(1);
+
+                if (secondChar != ' ' && !Character.isDigit(secondChar)) {
+                    IChatComponent iChatComponent = new ChatComponentText("§7Wrong Command Detected! ").appendSibling(
+                            new ChatComponentText("§e[Send Anyway] ").setChatStyle(
+                                    new ChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/gunterEss mcchat " + text)).setChatHoverEvent(
+                                            new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText("§7Send the Message §r" + text + "§7 into the chat.")))
+
+                    )).appendSibling(
+                            new ChatComponentText("§6[Send As Command]").setChatStyle(
+                                    new ChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/gunterEss mcchat " + command)).setChatHoverEvent(
+                                            new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                                                    new ChatComponentText("§7Use the Command §r" + command + "§7.")))));
+
+                    sendPrivateMessage(iChatComponent, true);
+                    event.setCanceled(true);
+                }
+            }
         }
     }
 
@@ -220,20 +246,20 @@ public class AdvancedChat {
 
     @SubscribeEvent
     public void beforeMessageSent(ClientChatEvent event) {
-        String text = event.getText();
-        if (!text.endsWith("|GunterEss")) {
-            return;
-        }
-        // Originale Nachricht an backend
-        Map<String, String> args = new HashMap<>();
-        args.put("playerName", Minecraft.getMinecraft().thePlayer.getGameProfile().getName());
-        args.put("text", text);
-        args.put("time", String.valueOf(System.currentTimeMillis()));
-        JsonHelper.fetchToBackend("configuredMessages/addModifiedMessage.php", args);
-
-        // Change message for minecraft chat
-        text = text.replaceAll("\\$[0-9a-zA-Z]", "").replaceAll("\\$y.*\\$y", "");
-        event.setText(text);
+        //String text = event.getText();
+        //if (!text.endsWith("|GunterEss")) {
+        //    return;
+        //}
+        //// Originale Nachricht an backend
+        //Map<String, String> args = new HashMap<>();
+        //args.put("playerName", Minecraft.getMinecraft().thePlayer.getGameProfile().getName());
+        //args.put("text", text);
+        //args.put("time", String.valueOf(System.currentTimeMillis()));
+        //JsonHelper.fetchToBackend("configuredMessages/addModifiedMessage.php", args);
+//
+        //// Change message for minecraft chat
+        //text = text.replaceAll("\\$[0-9a-zA-Z]", "").replaceAll("\\$y.*\\$y", "");
+        //event.setText(text);
 
         // Farbe mit normalen minecraft $.. (muss hier nicht umgeändert werden) // TODO während dem rendern des chat text-field's zu farben ändern
         // Hinterlegt mit z.b $z // TODO während man das schriebt schon hinterlegen
@@ -343,19 +369,14 @@ public class AdvancedChat {
     }
 
     public static void sendPrivateMessage(String text) {
-        sendPrivateMessage(new ChatComponentText(text));
+        sendPrivateMessage(new ChatComponentText(text), true);
     }
 
-    public static void sendPrivateMessage(IChatComponent iChatComponent) {
-        String string = "§a§lGunterEss > §r" + iChatComponent.getFormattedText(); // TODO this shit here will not work lmfao
-        Minecraft.getMinecraft().thePlayer.addChatMessage(AdvancedChat.formatChatComponentForCopy(new ChatComponentText(string), AdvancedChat.clearChatComponent(string), false));
-    }
-
-    public void doBackendLoop() {
-        AdvancedChat.sendPrivateMessage(JsonHelper.fetchToBackend("configuredMessages/loopForMessages.php", new HashMap<>(), () -> {
-
-        }));
-
+    public static void sendPrivateMessage(IChatComponent iChatComponent, boolean geMark) {
+        if (geMark) {
+            iChatComponent = new ChatComponentText("§a§lGunterEss > §r").appendSibling(iChatComponent);
+        }
+        Minecraft.getMinecraft().thePlayer.addChatMessage(AdvancedChat.formatChatComponentForCopy(iChatComponent, AdvancedChat.clearChatComponent(iChatComponent.getUnformattedText()), false));
     }
 
     public static class ChatCondition {
