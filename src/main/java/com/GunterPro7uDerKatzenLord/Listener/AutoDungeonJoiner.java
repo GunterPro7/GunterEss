@@ -10,9 +10,11 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static com.GunterPro7uDerKatzenLord.Main.mc;
+
 public class AutoDungeonJoiner extends ContainerInformation {
     public AutoDungeonJoiner() {
-        Container container = Minecraft.getMinecraft().thePlayer.openContainer;
+        Container container = mc.thePlayer.openContainer;
         List<DungeonInformation> list = getDungeonPageInformation(container);
 
         System.out.println(list.size());

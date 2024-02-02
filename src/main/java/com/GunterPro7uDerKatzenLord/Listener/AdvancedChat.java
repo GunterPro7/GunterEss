@@ -26,6 +26,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.GunterPro7uDerKatzenLord.Main.mc;
+
 public class AdvancedChat {
     public static int current_id = 1;
     public static String lastJson;
@@ -111,7 +113,7 @@ public class AdvancedChat {
                     iChatComponent.appendSibling(formatChatComponentForCopy(new ChatComponentText(" §7(" + messageInformation.getCount() + ")"), text, checkColors));
                 }
             }
-            Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(iChatComponent, messageInformation.getId());
+            mc.ingameGUI.getChatGUI().printChatMessageWithOptionalDeletion(iChatComponent, messageInformation.getId());
         } else {
             event.message = iChatComponent;
         }
@@ -139,7 +141,7 @@ public class AdvancedChat {
                                     new ChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/gunterEss mcchat " + text)).setChatHoverEvent(
                                             new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText("§7Send the Message §r" + text + "§7 into the chat.")))
 
-                    )).appendSibling(
+                            )).appendSibling(
                             new ChatComponentText("§6[Send As Command]").setChatStyle(
                                     new ChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/gunterEss mcchat " + command)).setChatHoverEvent(
                                             new HoverEvent(HoverEvent.Action.SHOW_TEXT,
@@ -155,18 +157,18 @@ public class AdvancedChat {
     @SubscribeEvent
     public void onChatTooltipRenderer(final RenderGameOverlayEvent.Post event) {
         if (event.type == RenderGameOverlayEvent.ElementType.CHAT) {
-            if (Minecraft.getMinecraft().currentScreen instanceof GuiChat) {
+            if (mc.currentScreen instanceof GuiChat) {
                 IChatComponent chatComponent = getHoveredChatComponent();
                 if (chatComponent != null) {
                     MessageInformation messageInformation = getMessageInformation(chatComponent);
                     if (messageInformation == null) {
                         return;
                     }
-                    int scaling = Minecraft.getMinecraft().gameSettings.guiScale == 0 ? 4 : Minecraft.getMinecraft().gameSettings.guiScale;
-                    int height = Minecraft.getMinecraft().fontRendererObj.FONT_HEIGHT;
+                    int scaling = mc.gameSettings.guiScale == 0 ? 4 : mc.gameSettings.guiScale;
+                    int height = mc.fontRendererObj.FONT_HEIGHT;
 
-                    int x = Minecraft.getMinecraft().ingameGUI.getChatGUI().getChatWidth() + 5;
-                    int y = (Minecraft.getMinecraft().displayHeight - Mouse.getY()) / scaling;
+                    int x = mc.ingameGUI.getChatGUI().getChatWidth() + 5;
+                    int y = (mc.displayHeight - Mouse.getY()) / scaling;
                     y -= y % height + height;
 
                     messageInformation.drawTimeInfoBox(x, y, false);
@@ -206,7 +208,7 @@ public class AdvancedChat {
                             Class<?> clazz = GuiChat.class;
                             Field privateField = clazz.getDeclaredField("field_146415_a");
                             privateField.setAccessible(true);
-                            GuiTextField guiTextField = (GuiTextField) privateField.get(Minecraft.getMinecraft().currentScreen);
+                            GuiTextField guiTextField = (GuiTextField) privateField.get(mc.currentScreen);
 
                             if (messageInformation != null && Setting.COPY_WITH_STACK.isEnabled()) {
                                 // Check if it got copied already
@@ -236,7 +238,7 @@ public class AdvancedChat {
     @SubscribeEvent
     public void onMessageSending(GuiScreenEvent.KeyboardInputEvent event) throws NoSuchFieldException, IllegalAccessException {
         if (Keyboard.isKeyDown(Keyboard.KEY_RETURN) || Keyboard.isKeyDown(Keyboard.KEY_NUMPADENTER)) {
-            if (Minecraft.getMinecraft().currentScreen instanceof GuiChat) {
+            if (mc.currentScreen instanceof GuiChat) {
                 MinecraftForge.EVENT_BUS.post(new ClientChatEvent(getTextField()));
             }
         } else if (Keyboard.isKeyDown(Keyboard.KEY_SECTION)) {
@@ -252,7 +254,7 @@ public class AdvancedChat {
         //}
         //// Originale Nachricht an backend
         //Map<String, String> args = new HashMap<>();
-        //args.put("playerName", Minecraft.getMinecraft().thePlayer.getGameProfile().getName());
+        //args.put("playerName", mc.thePlayer.getGameProfile().getName());
         //args.put("text", text);
         //args.put("time", String.valueOf(System.currentTimeMillis()));
         //JsonHelper.fetchToBackend("configuredMessages/addModifiedMessage.php", args);
@@ -274,11 +276,11 @@ public class AdvancedChat {
     }
 
     public GuiTextField getTextField() throws NoSuchFieldException, IllegalAccessException {
-        if (Minecraft.getMinecraft().currentScreen instanceof GuiChat) {
+        if (mc.currentScreen instanceof GuiChat) {
             Class<?> clazz = GuiChat.class;
             Field privateField = clazz.getDeclaredField("field_146415_a");
             privateField.setAccessible(true);
-            return (GuiTextField) privateField.get(Minecraft.getMinecraft().currentScreen);
+            return (GuiTextField) privateField.get(mc.currentScreen);
         }
         return null;
     }
@@ -296,7 +298,7 @@ public class AdvancedChat {
     public static IChatComponent getHoveredChatComponent() {
         if (Listeners.searchChat.getChatOpen())
             return Listeners.searchChat.getChatComponent(Mouse.getX(), Mouse.getY());
-        return Minecraft.getMinecraft().ingameGUI.getChatGUI().getChatComponent(Mouse.getX(), Mouse.getY());
+        return mc.ingameGUI.getChatGUI().getChatComponent(Mouse.getX(), Mouse.getY());
     }
 
     public static IChatComponent formatChatComponentForCopy(IChatComponent message, String insertion, boolean updateColors) {
@@ -333,7 +335,7 @@ public class AdvancedChat {
     }
 
     // TODO change this #1
-    private boolean alej;
+    private boolean backendOffline;
 
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) throws IOException {
@@ -341,27 +343,22 @@ public class AdvancedChat {
         if (backendService != null) {
             backendService.run();
         }
-        if (Minecraft.getMinecraft().isIntegratedServerRunning()) {
-            if (backendService == null) {
-                // TODO change this #1
-                if (!alej) {
-                    alej = true;
-                    Utils.execute(() -> {
-                        try {
-                            new BackendService(new Socket("49.12.101.156", 5000));
-                            //new BackendService(new Socket("localhost", 5000));    // Testing
-                            BackendService.getInstance().send("init;" + Minecraft.getMinecraft().thePlayer.getGameProfile().getName());
-                        } catch (IOException e) {
-                            System.out.println("Backend Offline! It hopefully will be back soon!");
-                        }
-                    }, 2000);
+        if (backendService == null && !backendOffline) {
+            if (mc.thePlayer != null) {
+                try {
+                    new BackendService(new Socket("49.12.101.156", 5000));
+                    //new BackendService(new Socket("localhost", 5000));    // Testing
+                    BackendService.getInstance().send("init;" + mc.thePlayer.getGameProfile().getName());
+                } catch (IOException e) {
+                    backendOffline = true;
+                    System.out.println("Backend Offline! It hopefully will be back soon! (It will be checked again next restart)");
                 }
-            } // TODO erkennen falls verbindung zum server verloren geht, dann entsprechend reagieren und schließen und in x sekunden neue verbindung aufbauen
-        }
+            }
+        } // TODO erkennen falls verbindung zum server verloren geht, dann entsprechend reagieren und schließen und in x sekunden neue verbindung aufbauen
     }
 
     public static void sendChatMessageAsPlayer(String text) {
-        Minecraft.getMinecraft().thePlayer.sendChatMessage(text);
+        mc.thePlayer.sendChatMessage(text);
     }
 
     public static String clearChatComponent(String text) {
@@ -376,7 +373,7 @@ public class AdvancedChat {
         if (geMark) {
             iChatComponent = new ChatComponentText("§a§lGunterEss > §r").appendSibling(iChatComponent);
         }
-        Minecraft.getMinecraft().thePlayer.addChatMessage(AdvancedChat.formatChatComponentForCopy(iChatComponent, AdvancedChat.clearChatComponent(iChatComponent.getUnformattedText()), false));
+        mc.thePlayer.addChatMessage(AdvancedChat.formatChatComponentForCopy(iChatComponent, AdvancedChat.clearChatComponent(iChatComponent.getUnformattedText()), false));
     }
 
     public static class ChatCondition {

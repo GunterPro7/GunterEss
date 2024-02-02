@@ -13,6 +13,8 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.GunterPro7uDerKatzenLord.Main.mc;
+
 public class FishingEvent extends Event {
     private final Entity entity;
 
@@ -38,8 +40,8 @@ public class FishingEvent extends Event {
 
     @SubscribeEvent
     public void listenForFishingEvent(TickEvent.ClientTickEvent event) {
-        if (Minecraft.getMinecraft().thePlayer != null) {
-            EntityFishHook hook = Minecraft.getMinecraft().thePlayer.fishEntity;
+        if (mc.thePlayer != null) {
+            EntityFishHook hook = mc.thePlayer.fishEntity;
             if (hook != null) {
                 entities.removeIf(entity -> {
                     if (hook.getDistance(entity.posX, entity.posY, entity.posZ) < 12.5) {
