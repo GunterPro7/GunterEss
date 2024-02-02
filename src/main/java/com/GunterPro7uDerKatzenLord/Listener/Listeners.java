@@ -231,6 +231,16 @@ public class Listeners {
         }
     }
 
+    @SubscribeEvent
+    public void onFishSwimming(FishingEvent.FishMovingToHookEvent event) {
+        AdvancedChat.sendPrivateMessage("swimming");
+    }
+
+    @SubscribeEvent
+    public void onFishEnter(FishingEvent.FishOnHookEvent event) {
+        AdvancedChat.sendPrivateMessage("on hook");
+    }
+
     //public static String lastTitle;
 //
     //@SubscribeEvent
