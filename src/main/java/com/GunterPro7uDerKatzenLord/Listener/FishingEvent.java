@@ -1,5 +1,6 @@
 package com.GunterPro7uDerKatzenLord.Listener;
 
+import com.GunterPro7uDerKatzenLord.Setting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityArmorStand;
@@ -40,7 +41,7 @@ public class FishingEvent extends Event {
 
     @SubscribeEvent
     public void listenForFishingEvent(TickEvent.ClientTickEvent event) {
-        if (mc.thePlayer != null) {
+        if (Setting.AUTO_FISHING.isEnabled() && mc.thePlayer != null) {
             EntityFishHook hook = mc.thePlayer.fishEntity;
             if (hook != null) {
                 entities.removeIf(entity -> {
@@ -64,7 +65,9 @@ public class FishingEvent extends Event {
 
     @SubscribeEvent
     public void onEntitySpawn(EntityEvent.EntityConstructing event) {
-        Entity entity = event.entity;
-        entities.add(entity);
+        if (Setting.AUTO_FISHING.isEnabled() && mc.thePlayer.fishEntity != null) {
+            Entity entity = event.entity;
+            entities.add(entity);
+        }
     }
 }
