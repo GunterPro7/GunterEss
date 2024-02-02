@@ -232,8 +232,7 @@ public class Listeners {
 
     @SubscribeEvent
     public void onFishEnter(FishingEvent.FishOnHookEvent event) {
-        if (false) {
-            AdvancedChat.sendPrivateMessage("on hook");
+        if (Setting.AUTO_FISHING.isEnabled()) {
             fishingRCDuration = new Random().nextInt(5) + 3;
             TimeUtils.addToQueue(new Random().nextInt(250) + 600, () -> fishingRCDuration = new Random().nextInt(5) + 3);
         }

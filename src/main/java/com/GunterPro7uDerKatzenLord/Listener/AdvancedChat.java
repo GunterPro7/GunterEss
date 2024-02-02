@@ -348,8 +348,8 @@ public class AdvancedChat {
                     alej = true;
                     Utils.execute(() -> {
                         try {
-                            //new BackendService(new Socket("49.12.101.156", 5000));
-                            new BackendService(new Socket("localhost", 5000));
+                            new BackendService(new Socket("49.12.101.156", 5000));
+                            //new BackendService(new Socket("localhost", 5000));    // Testing
                             BackendService.getInstance().send("init;" + Minecraft.getMinecraft().thePlayer.getGameProfile().getName());
                         } catch (IOException e) {
                             System.out.println("Backend Offline! It hopefully will be back soon!");

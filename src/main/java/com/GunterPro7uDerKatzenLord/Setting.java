@@ -10,6 +10,7 @@ public class Setting {
     public static final Setting DONT_CHECK_USELESS_CHAT_MESSAGES = new Setting(true);
     public static final Setting COPY_WITH_STACK = new Setting(true);
     public static final Setting SEND_CHECK_FOR_7MESSAGE = new Setting(true);
+    public static final Setting AUTO_FISHING = new Setting(false);
     private boolean enabled;
     public Setting(boolean enabled) {
         this.enabled = enabled;

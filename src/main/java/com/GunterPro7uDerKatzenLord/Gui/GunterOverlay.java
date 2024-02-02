@@ -1,5 +1,6 @@
 package com.GunterPro7uDerKatzenLord.Gui;
 
+import com.GunterPro7uDerKatzenLord.Setting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -14,6 +15,7 @@ public class GunterOverlay extends GuiScreen {
     private GuiButton button2;
     private GuiButton button3;
     private GuiButton button4;
+    private GuiButton button5;
     private GuiTextField textField0;
     private GuiTextField textField1;
     private GuiSlider guiSlider;
@@ -41,11 +43,13 @@ public class GunterOverlay extends GuiScreen {
         button2 = new GuiButton(0, width / 2 - 100, height / 2 + 24, "Collection Tracker");
         button3 = new GuiButton(0, width / 2 - 100, height / 2 + 48, "Money Tracker");
         button4 = new GuiButton(0, width / 2 - 100, height / 2 + 72, "Auto Kicker");
+        button5 = new GuiButton(0, width / 2 - 100, height / 2 + 96, "Auto Fisher: " + (Setting.AUTO_FISHING.isEnabled() ? "§a§lEnabled" : "§c§lDisabled"));
 
         buttonList.add(button0);
         buttonList.add(button2);
         buttonList.add(button3);
         buttonList.add(button4);
+        buttonList.add(button5);
 
         //textField0 = new GuiTextField(0, fontRendererObj, width / 2 - 100, height / 2 + 24, 100, 20);
         //textField0.setMaxStringLength(100);
@@ -87,13 +91,16 @@ public class GunterOverlay extends GuiScreen {
     @Override
     protected void actionPerformed(GuiButton button) {
         if (button == button0) {
-            Minecraft.getMinecraft().displayGuiScreen(new GunterChatOverlay(this));
+            mc.displayGuiScreen(new GunterChatOverlay(this));
         } else if (button == button2) {
-            Minecraft.getMinecraft().displayGuiScreen(new GunterCollectionOverlay(this));
+            //mc.displayGuiScreen(new GunterCollectionOverlay(this));
         } else if (button == button3) {
-            Minecraft.getMinecraft().displayGuiScreen(new GunterMoneyOverlay(this));
+            //mc.displayGuiScreen(new GunterMoneyOverlay(this));
         } else if (button == button4) {
-            Minecraft.getMinecraft().displayGuiScreen(new GunterAutoKickOverlay(this));
+            mc.displayGuiScreen(new GunterAutoKickOverlay(this));
+        } else if (button == button5) {
+            Setting.AUTO_FISHING.switchEnabled();
+            button5.displayString = "Auto Fisher: " + (Setting.AUTO_FISHING.isEnabled() ? "§a§lEnabled" : "§c§lDisabled");
         }
     }
 
