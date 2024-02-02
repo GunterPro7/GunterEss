@@ -10,11 +10,9 @@ import com.GunterPro7uDerKatzenLord.Utils.Collections;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.GuiChat;
-import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.network.NetworkPlayerInfo;
+import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.client.event.GuiScreenEvent;
@@ -22,7 +20,6 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import org.lwjgl.input.Keyboard;
 
 import java.util.*;
@@ -231,14 +228,24 @@ public class Listeners {
         }
     }
 
-    @SubscribeEvent
-    public void onFishSwimming(FishingEvent.FishMovingToHookEvent event) {
-        AdvancedChat.sendPrivateMessage("swimming");
-    }
+    private static int fishingRCDuration;
 
     @SubscribeEvent
     public void onFishEnter(FishingEvent.FishOnHookEvent event) {
-        AdvancedChat.sendPrivateMessage("on hook");
+        if (false) {
+            AdvancedChat.sendPrivateMessage("on hook");
+            fishingRCDuration = new Random().nextInt(5) + 3;
+            TimeUtils.addToQueue(new Random().nextInt(250) + 600, () -> fishingRCDuration = new Random().nextInt(5) + 3);
+        }
+    }
+
+    @SubscribeEvent
+    public void fishingTick(TickEvent.ClientTickEvent event) {
+        if (fishingRCDuration > 0) {
+            KeyBinding.setKeyBindState(Minecraft.getMinecraft().gameSettings.keyBindUseItem.getKeyCode(), fishingRCDuration != 1);
+
+            fishingRCDuration--;
+        }
     }
 
     //public static String lastTitle;

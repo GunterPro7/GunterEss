@@ -352,7 +352,7 @@ public class AdvancedChat {
                             new BackendService(new Socket("localhost", 5000));
                             BackendService.getInstance().send("init;" + Minecraft.getMinecraft().thePlayer.getGameProfile().getName());
                         } catch (IOException e) {
-                            throw new RuntimeException(e);
+                            System.out.println("Backend Offline! It hopefully will be back soon!");
                         }
                     }, 2000);
                 }
