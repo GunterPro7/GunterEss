@@ -19,6 +19,7 @@ import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
 
 public class JsonHelper {
     public static final String PLAYER_UUID = "ca9cc012-83cd-4570-ab57-48b36596ab5d";
@@ -32,6 +33,18 @@ public class JsonHelper {
         HttpResponse httpResponse = httpClient.execute(httpGet);
 
         return EntityUtils.toString(httpResponse.getEntity());
+    }
+
+    public static void fetch(String url, Consumer<String> callback) {
+        POOL.execute(() -> {
+            try {
+                String fetch = fetch(url);
+
+                callback.accept(fetch);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     @Deprecated

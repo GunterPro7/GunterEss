@@ -1,5 +1,8 @@
 package com.GunterPro7uDerKatzenLord.Utils;
 
+import com.GunterPro7uDerKatzenLord.Listener.AdvancedChat;
+import net.minecraft.client.Minecraft;
+import net.minecraft.util.IChatComponent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
@@ -10,9 +13,14 @@ import java.util.Map;
 
 public class TimeUtils {
     private static final Map<Long, List<Runnable>> map = new HashMap<>();
+    private static final List<IChatComponent> messagesToChat = new ArrayList<>();
 
     public TimeUtils() {
 
+    }
+
+    public static void addToQueue(IChatComponent message) {
+        messagesToChat.add(message);
     }
 
     public static void addToQueue(long millisecondsLeft, Runnable f) {
@@ -44,6 +52,13 @@ public class TimeUtils {
 
         for (Long key : keysToRemove) {
             map.remove(key);
+        }
+
+        if (messagesToChat.size() > 0 && Minecraft.getMinecraft().thePlayer != null) {
+            for (IChatComponent iChatComponent : messagesToChat) {
+                AdvancedChat.sendPrivateMessage(iChatComponent, true);
+            }
+            messagesToChat.clear();
         }
     }
 }
