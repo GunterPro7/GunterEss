@@ -1,10 +1,7 @@
 package com.GunterPro7uDerKatzenLord;
 
 import com.GunterPro7uDerKatzenLord.Gui.TextureLoader;
-import com.GunterPro7uDerKatzenLord.Listener.AdvancedChat;
-import com.GunterPro7uDerKatzenLord.Listener.ClientBlockListener;
-import com.GunterPro7uDerKatzenLord.Listener.FishingEvent;
-import com.GunterPro7uDerKatzenLord.Listener.Listeners;
+import com.GunterPro7uDerKatzenLord.Listener.*;
 import com.GunterPro7uDerKatzenLord.Utils.JsonHelper;
 import com.GunterPro7uDerKatzenLord.Utils.TimeUtils;
 import com.google.gson.Gson;
@@ -54,6 +51,7 @@ public class Main {
         MinecraftForge.EVENT_BUS.register(new TextureLoader());
         MinecraftForge.EVENT_BUS.register(new FishingEvent(null));
         MinecraftForge.EVENT_BUS.register(AdvancedChat.getInstance());
+        MinecraftForge.EVENT_BUS.register(QuiverEmptyChecker.getInstance());
         ClientCommandHandler.instance.registerCommand(new Command());
         if (Setting.COLLECTION_OVERLAY.isEnabled()) {
             JsonHelper.fetch("https://api.hypixel.net/resources/skyblock/collections", response -> {

@@ -59,6 +59,9 @@ public class AdvancedChat {
                     long time = System.currentTimeMillis() - jsonList.get(unformattedText);
                     sendPrivateMessage("You already joined this server " + Utils.formatTime(time, "H'h' m'm' s's'") + " ago!");
                 }
+                if (jsonList.size() == 0) {
+                    MinecraftForge.EVENT_BUS.post(new EnteredSkyblockEvent());
+                }
                 jsonList.put(lastJson, System.currentTimeMillis());
             }
             lastJson = unformattedText;
