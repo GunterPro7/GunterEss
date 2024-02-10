@@ -1,23 +1,22 @@
 package com.GunterPro7uDerKatzenLord.Listener;
 
 import com.GunterPro7uDerKatzenLord.Gui.CustomIngameUI;
+import com.GunterPro7uDerKatzenLord.Utils.Utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
+import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ContainerChest;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IChatComponent;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.client.event.MouseEvent;
-import net.minecraftforge.event.entity.player.PlayerOpenContainerEvent;
+import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.relauncher.Side;
 
 import java.util.Random;
 
@@ -25,6 +24,7 @@ public class QuiverEmptyChecker {
     private static final QuiverEmptyChecker INSTANCE = new QuiverEmptyChecker();
 
     private int arrows;
+    private static final int maxArrows = 64 * 45;
     private boolean loadedArrows;
     private static final Random random = new Random();
 
@@ -46,13 +46,23 @@ public class QuiverEmptyChecker {
         arrows = 0;
         loadedArrows = true;
 
-        container.inventorySlots.forEach(slot -> arrows += slot.getStack().stackSize);
+        container.inventorySlots.forEach(slot -> {
+            if (slot != null && slot.getStack() != null) {
+                arrows += slot.getStack().stackSize;
+            }
+
+        });
     }
 
     @SubscribeEvent
     public void onChatMessage(ClientChatReceivedEvent event) {
-        // TODO if matches with something like this: You filled your quiver with 2,816 extra arrows!
-        // TODO aktuellisieren des quiver coints
+        String message = AdvancedChat.clearChatComponent(event.message.getUnformattedText());
+        if (message.matches("You filled your quiver with .* extra arrows!")) {
+            arrows += Utils.parseInt(message.substring("You filled your quiver with ".length()).split(" ")[0]);
+            if (arrows > maxArrows) {
+                arrows = maxArrows;
+            }
+        }
     }
 
     @SubscribeEvent
@@ -63,11 +73,20 @@ public class QuiverEmptyChecker {
 
                 if (container instanceof ContainerChest) {
                     IChatComponent displayName = ((ContainerChest) container).getLowerChestInventory().getDisplayName();
-                    if (displayName.getFormattedText().equals("Quiver")) {
+                    if (AdvancedChat.clearChatComponent(displayName.getFormattedText()).equals("Quiver")) {
                         reload(container);
                     }
                 }
             }
+        }
+    }
+
+    @SubscribeEvent
+    public void onEntitySpawn(EntityEvent.EntityConstructing event) {
+        System.out.println(event.entity.getClass());
+        if (event.entity instanceof EntityArrow) {
+            if (((EntityArrow) event.entity).shootingEntity != null)
+                AdvancedChat.sendPrivateMessage(((EntityArrow) event.entity).shootingEntity.getDisplayName().getFormattedText());
         }
     }
 
@@ -92,7 +111,8 @@ public class QuiverEmptyChecker {
 
                             if (loreString.toLowerCase().contains("infinite quiver")) {
                                 try {
-                                    infiniteQuiverLvl = Integer.parseInt(loreString.toLowerCase().split("infinite quiver")[1].split(" ")[1]);
+                                    infiniteQuiverLvl = Utils.convertToNumberFromRomNumber(AdvancedChat.clearChatComponent(loreString.toLowerCase().split("infinite quiver")[1].split(" ")[1].replaceAll(",", ""))); // This is temporary
+                                    //AdvancedChat.sendPrivateMessage(String.valueOf(infiniteQuiverLvl));
                                 } catch (NumberFormatException e) {
                                     e.printStackTrace();
                                 }
@@ -111,6 +131,6 @@ public class QuiverEmptyChecker {
     private void arrowUse() {
         arrows--;
 
-        AdvancedChat.sendPrivateMessage("Only " + arrows + " Arrows Left!");
+        //AdvancedChat.sendPrivateMessage("Only " + arrows + " Arrows Left!");
     }
 }

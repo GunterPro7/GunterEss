@@ -117,4 +117,38 @@ public class Utils {
         }
         return java;
     }
+
+    public static int convertToNumberFromRomNumber(String romNumberString) {
+        romNumberString = romNumberString.toUpperCase();
+
+        Map<Character, Integer> romanValues = new HashMap<>();
+        romanValues.put('I', 1);
+        romanValues.put('V', 5);
+        romanValues.put('X', 10);
+        romanValues.put('L', 50);
+        romanValues.put('C', 100);
+        romanValues.put('D', 500);
+        romanValues.put('M', 1000);
+
+        int value = 0;
+        int prevValue = 0;
+
+        for (int i = romNumberString.length() - 1; i >= 0; i--) {
+            char currentChar = romNumberString.charAt(i);
+            if (!romanValues.containsKey(currentChar)) {
+                // TODO implement if number still add (mods prop. changed the "x" to "10" for example)
+            }
+            int currentValue = romanValues.get(currentChar);
+
+            if (currentValue < prevValue) {
+                value -= currentValue;
+            } else {
+                value += currentValue;
+            }
+
+            prevValue = currentValue;
+        }
+
+        return value;
+    }
 }

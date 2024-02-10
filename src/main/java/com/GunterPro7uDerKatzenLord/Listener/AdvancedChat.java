@@ -130,8 +130,8 @@ public class AdvancedChat {
         if (Party.isAPartyToggled() && !text.startsWith("/")) {
             Party.getToggledParty().sendMessage(text);
         }
-        if (!text.trim().isEmpty() && Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-            //event.setText(text + "|GunterEss"); // TODO this is annoying
+        if (!text.trim().isEmpty() && Keyboard.isKeyDown(Keyboard.KEY_LMENU)) {
+            event.setText(text + "|GunterEss");
         }
         if (Setting.SEND_CHECK_FOR_7MESSAGE.isEnabled()) {
             if (text.startsWith("7") && text.length() > 1) {
@@ -196,7 +196,7 @@ public class AdvancedChat {
                                 messageToCopy = messageInformation.getMessage();
                             }
                             if (Setting.COPY_WITH_STACK.isEnabled() && messageInformation.getCount() != 1) {
-                                messageToCopy += " (" + ((Keyboard.isKeyDown(29) || Keyboard.isKeyDown(157)) && Mouse.isButtonDown(1) ? "&7" : "") + messageInformation.getCount() + ")";
+                                messageToCopy += " (" + ((Keyboard.isKeyDown(29) || Keyboard.isKeyDown(157)) && Mouse.isButtonDown(1) ? "$7" : "") + messageInformation.getCount() + ")";
                             }
                         } else {
                             messageToCopy = AdvancedChat.clearChatComponent(chatComponent.getUnformattedText());
