@@ -25,8 +25,6 @@ public class Party {
     private String owner;
     private final List<String> players = new ArrayList<>();
 
-    // TODO implement backend
-
     private Party(String name, String owner) {
         this.name = name;
         this.owner = owner;
@@ -47,7 +45,7 @@ public class Party {
         Party party = new Party(name, owner);
         BackendService.getInstance().send("party;" + name + ";join");
         AdvancedChat.sendPrivateMessage("You joined the party " + name);
-        AdvancedChat.sendPrivateMessage("Do /GunterEss party " + name + " list to view all Players"); // TODO make to a clickbar element
+        AdvancedChat.sendPrivateMessage("Do /GunterEss party " + name + " list to view all Players");
         return party;
     }
 

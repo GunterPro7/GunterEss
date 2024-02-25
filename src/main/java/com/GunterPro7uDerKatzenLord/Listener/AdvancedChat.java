@@ -132,6 +132,10 @@ public class AdvancedChat {
         }
         if (!text.trim().isEmpty() && Keyboard.isKeyDown(Keyboard.KEY_LMENU)) {
             event.setText(text + "|GunterEss");
+
+            //String playerName = Minecraft.getMinecraft().thePlayer.getGameProfile().getName();
+            //BackendService.getInstance().send(String.format("gmsg;%s;%s;%s" , playerName, System.currentTimeMillis(), text));
+            // Syntax: gmsg | playername | timestamp | message
         }
         if (Setting.SEND_CHECK_FOR_7MESSAGE.isEnabled()) {
             if (text.startsWith("7") && text.length() > 1) {
@@ -247,6 +251,7 @@ public class AdvancedChat {
         } else if (Keyboard.isKeyDown(Keyboard.KEY_SECTION)) {
             sendPrivateMessage("now!");
         }
+
     }
 
     @SubscribeEvent

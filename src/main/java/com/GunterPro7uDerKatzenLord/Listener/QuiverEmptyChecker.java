@@ -91,39 +91,40 @@ public class QuiverEmptyChecker {
     }
 
     @SubscribeEvent
-    public void onMouseEvent(MouseEvent event) {
-        if (event.button == 0) {
-            EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-            ItemStack item = player.getHeldItem();
+    public void onMouseEvent(ClientMouseEvent.Press event) {
+        bowUse(); // TODO only call if bow is shooting (1: check time via bonus attack speed, 2: check if arrow is "shooting" away...
+    }
 
-            if (item != null && item.getItem() instanceof ItemBow) {
-                NBTTagCompound nbt = item.getTagCompound();
-                int infiniteQuiverLvl = 0;
+    private void bowUse() {
+        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+        ItemStack item = player.getHeldItem();
 
-                if (nbt != null && nbt.hasKey("display", 10)) {
-                    NBTTagCompound display = nbt.getCompoundTag("display");
+        if (item != null && item.getItem() instanceof ItemBow) {
+            NBTTagCompound nbt = item.getTagCompound();
+            int infiniteQuiverLvl = 0;
 
-                    if (display.hasKey("Lore", 9)) {
-                        NBTTagList lore = display.getTagList("Lore", 8);
+            if (nbt != null && nbt.hasKey("display", 10)) {
+                NBTTagCompound display = nbt.getCompoundTag("display");
 
-                        for (int i = 0; i < lore.tagCount(); i++) { // TODO nur wenn man einen pfeil weggschießt
-                            String loreString = lore.getStringTagAt(i);
+                if (display.hasKey("Lore", 9)) {
+                    NBTTagList lore = display.getTagList("Lore", 8);
 
-                            if (loreString.toLowerCase().contains("infinite quiver")) {
-                                try {
-                                    infiniteQuiverLvl = Utils.convertToNumberFromRomNumber(AdvancedChat.clearChatComponent(loreString.toLowerCase().split("infinite quiver")[1].split(" ")[1].replaceAll(",", ""))); // This is temporary
-                                    //AdvancedChat.sendPrivateMessage(String.valueOf(infiniteQuiverLvl));
-                                } catch (NumberFormatException e) {
-                                    e.printStackTrace();
-                                }
+                    for (int i = 0; i < lore.tagCount(); i++) { // TODO nur wenn man einen pfeil weggschießt
+                        String loreString = lore.getStringTagAt(i);
+
+                        if (loreString.toLowerCase().contains("infinite quiver")) {
+                            try {
+                                infiniteQuiverLvl = Utils.convertToNumberFromRomNumber(AdvancedChat.clearChatComponent(loreString.toLowerCase().split("infinite quiver")[1].split(" ")[1].replaceAll(",", ""))); // This is temporary
+                            } catch (NumberFormatException e) {
+                                e.printStackTrace();
                             }
                         }
                     }
                 }
+            }
 
-                if (random.nextInt(100) > infiniteQuiverLvl * 3) {
-                    arrowUse();
-                }
+            if (random.nextInt(100) > infiniteQuiverLvl * 3) {
+                arrowUse();
             }
         }
     }

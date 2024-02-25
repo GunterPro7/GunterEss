@@ -21,7 +21,6 @@ import org.spongepowered.asm.launch.MixinBootstrap;
 import org.spongepowered.asm.mixin.Mixins;
 
 import java.io.File;
-import java.io.IOException;
 
 import static com.GunterPro7uDerKatzenLord.Listener.Listeners.collectionJson;
 
@@ -48,10 +47,13 @@ public class Main {
         MinecraftForge.EVENT_BUS.register(new ClientBlockListener());
         MinecraftForge.EVENT_BUS.register(new Listeners());
         MinecraftForge.EVENT_BUS.register(new TimeUtils());
+        //MinecraftForge.EVENT_BUS.register(new ItemLock());
         MinecraftForge.EVENT_BUS.register(new TextureLoader());
+        MinecraftForge.EVENT_BUS.register(PreventLabymodUpdater.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(new ClientMouseEvent(0));
         MinecraftForge.EVENT_BUS.register(new FishingEvent(null));
         MinecraftForge.EVENT_BUS.register(AdvancedChat.getInstance());
-        MinecraftForge.EVENT_BUS.register(QuiverEmptyChecker.getInstance());
+        //MinecraftForge.EVENT_BUS.register(QuiverEmptyChecker.getInstance());
         ClientCommandHandler.instance.registerCommand(new Command());
         if (Setting.COLLECTION_OVERLAY.isEnabled()) {
             JsonHelper.fetch("https://api.hypixel.net/resources/skyblock/collections", response -> {

@@ -115,7 +115,7 @@ public class SearchChatGui extends Gui {
     public void sortChatLines(String s) {
         this.sortValue = s;
         this.drawnChatLines.clear();
-        int i = MathHelper.floor_float((float) this.getChatWidth() / this.getChatScale()) + 1; // TODO check ob das hier geht, ob der text noch immer in die nmächste zeile springt
+        int i = MathHelper.floor_float((float) this.getChatWidth() / this.getChatScale()) + 1;
 
         this.chatLines.forEach((chatLine) -> sortChatLine(chatLine, s, i));
     }
