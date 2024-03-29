@@ -1,7 +1,9 @@
 package com.GunterPro7uDerKatzenLord;
 
+import com.GunterPro7uDerKatzenLord.Gui.ItemLoreScroller;
 import com.GunterPro7uDerKatzenLord.Gui.TextureLoader;
 import com.GunterPro7uDerKatzenLord.Listener.*;
+import com.GunterPro7uDerKatzenLord.Utils.GemstoneDisplay;
 import com.GunterPro7uDerKatzenLord.Utils.JsonHelper;
 import com.GunterPro7uDerKatzenLord.Utils.TimeUtils;
 import com.google.gson.Gson;
@@ -26,9 +28,10 @@ import static com.GunterPro7uDerKatzenLord.Listener.Listeners.collectionJson;
 
 @Mod(modid = "GunterEss", useMetadata = true)
 public class Main {
+    public static final String MOD_ID = "GunterEss";
     public static final Minecraft mc = Minecraft.getMinecraft();
     public static boolean starting = true;
-    public static final String VERSION = "1.2.2";
+    public static final String VERSION = "1.2.3";
     public static final boolean DEV = false;
     public static File configDirectory;
     public static File gunterEssDelFile;
@@ -47,12 +50,14 @@ public class Main {
         MinecraftForge.EVENT_BUS.register(new ClientBlockListener());
         MinecraftForge.EVENT_BUS.register(new Listeners());
         MinecraftForge.EVENT_BUS.register(new TimeUtils());
+        MinecraftForge.EVENT_BUS.register(new GemstoneDisplay());
         //MinecraftForge.EVENT_BUS.register(new ItemLock());
         MinecraftForge.EVENT_BUS.register(new TextureLoader());
         MinecraftForge.EVENT_BUS.register(PreventLabymodUpdater.INSTANCE);
         MinecraftForge.EVENT_BUS.register(new ClientMouseEvent(0));
         MinecraftForge.EVENT_BUS.register(new FishingEvent(null));
         MinecraftForge.EVENT_BUS.register(AdvancedChat.getInstance());
+        MinecraftForge.EVENT_BUS.register(new ItemLoreScroller());
         //MinecraftForge.EVENT_BUS.register(QuiverEmptyChecker.getInstance());
         ClientCommandHandler.instance.registerCommand(new Command());
         if (Setting.COLLECTION_OVERLAY.isEnabled()) {

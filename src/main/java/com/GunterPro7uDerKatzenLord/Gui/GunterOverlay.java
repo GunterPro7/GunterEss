@@ -1,5 +1,6 @@
 package com.GunterPro7uDerKatzenLord.Gui;
 
+import com.GunterPro7uDerKatzenLord.Main;
 import com.GunterPro7uDerKatzenLord.Setting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -16,6 +17,7 @@ public class GunterOverlay extends GuiScreen {
     private GuiButton button3;
     private GuiButton button4;
     private GuiButton button5;
+    private GuiButton button6;
     private GuiTextField textField0;
     private GuiTextField textField1;
     private GuiSlider guiSlider;
@@ -39,6 +41,7 @@ public class GunterOverlay extends GuiScreen {
     @Override
     public void initGui() {
         buttonList.clear();
+        button6 = new GuiButton(0, width / 2 - 100, height / 2 - 24, "Gemstone Tracker");
         button0 = new GuiButton(0, width / 2 - 100, height / 2 + 0, "Chat Features");
         button2 = new GuiButton(0, width / 2 - 100, height / 2 + 24, "Collection Tracker");
         button3 = new GuiButton(0, width / 2 - 100, height / 2 + 48, "Money Tracker");
@@ -50,6 +53,7 @@ public class GunterOverlay extends GuiScreen {
         buttonList.add(button3);
         buttonList.add(button4);
         buttonList.add(button5);
+        buttonList.add(button6);
 
         //textField0 = new GuiTextField(0, fontRendererObj, width / 2 - 100, height / 2 + 24, 100, 20);
         //textField0.setMaxStringLength(100);
@@ -68,7 +72,7 @@ public class GunterOverlay extends GuiScreen {
         //textField1.drawTextBox();
         drawCenteredString(fontRendererObj, "GunterPro7 f. DerKatzenLord", width / 2, 60, 0xFFFFFF);
         super.drawScreen(mouseX, mouseY, partialTicks);
-        ResourceLocation resourceLocation = new ResourceLocation("GunterEss:textures/items/wheat.png");
+        ResourceLocation resourceLocation = new ResourceLocation(Main.MOD_ID, "textures/items/wheat.png");
         mc.getTextureManager().bindTexture(resourceLocation); // Set the texture (item's texture).
         drawTexturedModalRect(2, 2, 0, 0, 16, 16);
 
@@ -101,6 +105,8 @@ public class GunterOverlay extends GuiScreen {
         } else if (button == button5) {
             Setting.AUTO_FISHING.switchEnabled();
             button5.displayString = "Auto Fisher: " + (Setting.AUTO_FISHING.isEnabled() ? "§a§lEnabled" : "§c§lDisabled");
+        } else if (button == button6) {
+            mc.displayGuiScreen(new GunterGemstoneTrackerOverlay(this));
         }
     }
 

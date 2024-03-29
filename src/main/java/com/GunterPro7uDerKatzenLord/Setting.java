@@ -11,6 +11,9 @@ public class Setting {
     public static final Setting COPY_WITH_STACK = new Setting(true);
     public static final Setting SEND_CHECK_FOR_7MESSAGE = new Setting(true);
     public static final Setting AUTO_FISHING = new Setting(false);
+    public static final Setting ITEM_LORE_SCROLL = new Setting(true);
+    public static final Position GEMSTONE_DISPLAY_POSITION = new Position(true, 50, 200);
+
     private boolean enabled;
     public Setting(boolean enabled) {
         this.enabled = enabled;

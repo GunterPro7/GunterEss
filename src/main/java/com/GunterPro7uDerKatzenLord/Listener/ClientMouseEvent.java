@@ -16,15 +16,24 @@ public class ClientMouseEvent extends Event {
         this.key = key;
     }
 
-    static class Press extends ClientMouseEvent {
+    public static class Press extends ClientMouseEvent {
         public Press(int key) {
             super(key);
         }
     }
 
-    static class Release extends ClientMouseEvent {
+    public static class Release extends ClientMouseEvent {
         public Release(int key) {
             super(key);
+        }
+    }
+
+     /***
+     * @params key: -1 = Down, +1 = Up
+     * **/
+    public static class Scroll extends ClientMouseEvent {
+        public Scroll(int direction) {
+            super(direction);
         }
     }
 
@@ -47,6 +56,11 @@ public class ClientMouseEvent extends Event {
                     MinecraftForge.EVENT_BUS.post(new ClientMouseEvent.Release(i));
                 }
             }
+        }
+
+        int dWheel = Mouse.getDWheel();
+        if (dWheel != 0) {
+            MinecraftForge.EVENT_BUS.post(new ClientMouseEvent.Scroll(dWheel));
         }
     }
 }

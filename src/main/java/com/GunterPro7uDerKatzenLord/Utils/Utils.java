@@ -2,6 +2,9 @@ package com.GunterPro7uDerKatzenLord.Utils;
 
 import com.GunterPro7uDerKatzenLord.Listener.AdvancedChat;
 import net.minecraft.client.Minecraft;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
@@ -150,5 +153,23 @@ public class Utils {
         }
 
         return value;
+    }
+
+    public static NBTTagList getItemLore(ItemStack itemStack) {
+        NBTTagCompound nbt = itemStack.getTagCompound();
+
+        if (nbt != null && nbt.hasKey("display", 10)) {
+            NBTTagCompound display = nbt.getCompoundTag("display");
+
+            if (display.hasKey("Lore", 9)) {
+                return display.getTagList("Lore", 8);
+            }
+        }
+
+        return null;
+    }
+
+    public static boolean mcLoaded() {
+        return Minecraft.getMinecraft().thePlayer != null;
     }
 }

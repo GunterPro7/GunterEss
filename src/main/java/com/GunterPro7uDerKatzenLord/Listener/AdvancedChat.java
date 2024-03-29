@@ -79,16 +79,14 @@ public class AdvancedChat {
 
         // Do Chat Actions if specific message
 
-        System.out.println(actionMap);
-
-        for (Map.Entry<ChatCondition, Function> entry : actionMap.entrySet()) {
-            ChatCondition key = entry.getKey();
-
-            if (key.getCondition().check(key.getText(), text)) {
-                entry.getValue().action(event.message);
-                break;
-            }
-        }
+        //for (Map.Entry<ChatCondition, Function> entry : actionMap.entrySet()) {
+        //    ChatCondition key = entry.getKey();
+//
+        //    if (key.getCondition().check(key.getText(), text)) {
+        //        entry.getValue().action(event.message);
+        //        break;
+        //    }
+        //}
 
         // Change message to color if GunterEss configed
         boolean checkColors = text.endsWith("|GunterEss");
@@ -130,7 +128,7 @@ public class AdvancedChat {
         if (Party.isAPartyToggled() && !text.startsWith("/")) {
             Party.getToggledParty().sendMessage(text);
         }
-        if (!text.trim().isEmpty() && Keyboard.isKeyDown(Keyboard.KEY_LMENU)) {
+        if (!text.trim().isEmpty() && false) {
             event.setText(text + "|GunterEss");
 
             //String playerName = Minecraft.getMinecraft().thePlayer.getGameProfile().getName();
