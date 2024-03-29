@@ -54,7 +54,7 @@ public class GunterGemstoneTrackerOverlay extends GuiScreen {
             Setting.GEMSTONE_DISPLAY_POSITION.switchEnabled();
             button.displayString = Setting.GEMSTONE_DISPLAY_POSITION.isEnabled() ? "§a§lEnabled" : "§c§lDisabled";
         } else if (button == moveObjectButton) {
-            mc.displayGuiScreen(new MoveObjectOverlay(new CustomIngameUI(0x00000000, 0x80000000, "§b1 §1Fine§f, §b1 §aFlawed §3✧ Topaz Gemstone"), Setting.GEMSTONE_DISPLAY_POSITION, this));
+            mc.displayGuiScreen(new MoveObjectOverlay(new CustomIngameUI(0x00000000, 0x80000000, "§b1 §1Fine§f, §b1 §aFlawed §e✧ Topaz Gemstone"), Setting.GEMSTONE_DISPLAY_POSITION, this));
         }
     }
 

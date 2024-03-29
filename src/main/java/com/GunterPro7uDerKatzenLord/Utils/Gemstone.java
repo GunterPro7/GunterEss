@@ -9,7 +9,7 @@ public enum Gemstone {
     SAPPHIRE("✎", 'b'),
     AMETHYST("❈", '5'),
     AMBER("⸕", '6'),
-    TOPAZ("✧", '3'),
+    TOPAZ("✧", 'e'),
     JASPER("❁", 'd'),
 
     ;
