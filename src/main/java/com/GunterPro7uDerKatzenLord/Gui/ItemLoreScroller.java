@@ -35,11 +35,7 @@ public class ItemLoreScroller {
                         int tooltipLength = ITEM_TOOLTIP_LENGTH.get(item);
                         int scrollOffset = TOOLTIP_SCROLLS.get(item) - event.key / 120;
 
-                        if (tooltipLength - maxLines <= scrollOffset) { // TODO manchmal ist hier der neue offset 2, sogar 3 weiter, dann soll man nur 1 weitergehen, nicht 2 oder 3... sonst föllkt man hier in diesen check zurpck
-                            return;
-                        }
-
-                        TOOLTIP_SCROLLS.put(item, Math.max(scrollOffset, 1));
+                        TOOLTIP_SCROLLS.put(item, Math.min(Math.max(scrollOffset, 1), tooltipLength - maxLines - 1));
                     }
                 }
             }
