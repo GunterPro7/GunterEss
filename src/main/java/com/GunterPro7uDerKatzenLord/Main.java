@@ -31,7 +31,7 @@ public class Main {
     public static final String MOD_ID = "GunterEss";
     public static final Minecraft mc = Minecraft.getMinecraft();
     public static boolean starting = true;
-    public static final String VERSION = "1.2.3";
+    public static final String VERSION = "1.2.4";
     public static final boolean DEV = false;
     public static File configDirectory;
     public static File gunterEssDelFile;
