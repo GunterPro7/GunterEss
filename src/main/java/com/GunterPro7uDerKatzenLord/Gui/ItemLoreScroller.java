@@ -7,20 +7,21 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.GunterPro7uDerKatzenLord.Main.mc;
 
 public class ItemLoreScroller {
-    private static final Map<ItemStack, Integer> ITEM_SCROLLS = new HashMap<>();
-
-    public static boolean ITEM_LORE_SCROLL_ENABLED = true;
-    public static int SHOWN_LORE_ROWS = 15;
-
+    private static final Map<ItemStack, Integer> TOOLTIP_SCROLLS = new HashMap<>();
+    private static final Map<ItemStack, Integer> ITEM_TOOLTIP_LENGTH = new HashMap<>();
+    private static int lastGuiScale = mc.gameSettings.guiScale;
+    private static int lastWidth = mc.displayWidth;
+    private static int lastHeight = mc.displayHeight;
 
     @SubscribeEvent
     public void onScroll(ClientMouseEvent.Scroll event) {
@@ -29,54 +30,72 @@ public class ItemLoreScroller {
                 Slot slot = ((GuiContainer) Minecraft.getMinecraft().currentScreen).getSlotUnderMouse();
                 if (slot != null) {
                     ItemStack item = slot.getStack();
-                    if (item != null) {
-                        if (!ITEM_SCROLLS.containsKey(item)) {
-                            ITEM_SCROLLS.put(item, 0);
+                    if (item != null && TOOLTIP_SCROLLS.containsKey(item) && ITEM_TOOLTIP_LENGTH.containsKey(item)) {
+                        int maxLines = getMaxLines();
+                        int tooltipLength = ITEM_TOOLTIP_LENGTH.get(item);
+                        int scrollOffset = TOOLTIP_SCROLLS.get(item) - event.key / 120;
+
+                        if (tooltipLength - maxLines <= scrollOffset) { // TODO manchmal ist hier der neue offset 2, sogar 3 weiter, dann soll man nur 1 weitergehen, nicht 2 oder 3... sonst föllkt man hier in diesen check zurpck
+                            return;
                         }
 
-                        ITEM_SCROLLS.put(item, Math.max(ITEM_SCROLLS.get(item) - event.key / 120, 0));
+                        TOOLTIP_SCROLLS.put(item, Math.max(scrollOffset, 1));
                     }
                 }
             }
         }
     }
 
-    @SubscribeEvent
+    public static void onScalingChange() {
+        TOOLTIP_SCROLLS.clear();
+        ITEM_TOOLTIP_LENGTH.clear();
+    }
+
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onRenderTooltip(ItemTooltipEvent event) {
-        if (ITEM_SCROLLS.containsKey(event.itemStack)) {
-            int scaling = mc.gameSettings.guiScale == 0 ? 4 : mc.gameSettings.guiScale;
-            int fontHeight = mc.fontRendererObj.FONT_HEIGHT;
+        int curScale = mc.gameSettings.guiScale;
+        int curHeight = mc.displayHeight;
+        int curWidth = mc.displayWidth;
 
-            int height = mc.displayHeight == -1 ? 2 : 200;
-
-            int maxLines = height / fontHeight;
-
-            AdvancedChat.sendPrivateMessage("height: " + height + ", maxLines: " + maxLines);
-
-
-            int scroll = ITEM_SCROLLS.get(event.itemStack);
-
-            String title = event.toolTip.remove(0);
-
-            List<String> lore = new ArrayList<>(event.toolTip);
-
-
-            if (lore.size() > maxLines) {
-                int newIndex = 0;
-                for (int i = scroll; i < scroll + maxLines; i++) {
-                    event.toolTip.set(newIndex++, lore.get(i));
-                }
-//
-                for (int i = newIndex; i < event.toolTip.size(); i++) {
-                    event.toolTip.set(newIndex++, ""); // Dieser Code funktioniert, es wird erfolgreich auf "" umgeschrieben
-                    // event.toolTip.remove(newIndex); // Dieser Code funktioniert NICHT! Warum? Bitte um hilfe
-                }
-//
-                event.toolTip.add(0, title);
-            }
-
+        if (lastGuiScale != curScale || lastHeight != curHeight || lastWidth != curWidth) {
+            onScalingChange();
+            lastGuiScale = curScale;
+            lastHeight = curHeight;
+            lastWidth = curWidth;
         }
 
+        ITEM_TOOLTIP_LENGTH.put(event.itemStack, event.toolTip.size());
+        int maxLines = getMaxLines();
+
+        if (maxLines < event.toolTip.size()) {
+            int scrollOffset;
+            if (TOOLTIP_SCROLLS.containsKey(event.itemStack)) {
+                scrollOffset = TOOLTIP_SCROLLS.get(event.itemStack);
+            } else {
+                scrollOffset = event.toolTip.size() - maxLines - 1;
+                TOOLTIP_SCROLLS.put(event.itemStack, scrollOffset);
+            }
+
+            AtomicInteger atomic = new AtomicInteger(-scrollOffset);
+
+            int tooltipSize = event.toolTip.size();
+            String title = event.toolTip.remove(0);
+
+            event.toolTip.removeIf(line -> {
+                int curValue = atomic.addAndGet(1);
+                return curValue < 0 || curValue > maxLines;
+            });
+
+            event.toolTip.add(0, title);
+        }
+
+    }
+
+    private static int getMaxLines() {
+        int scaling = mc.gameSettings.guiScale == 0 ? Utils.getMaxGuiScale() : mc.gameSettings.guiScale;
+        int fontHeight = mc.fontRendererObj.FONT_HEIGHT + 1;
+
+        return mc.displayHeight / scaling / fontHeight - 3;
     }
 
 }

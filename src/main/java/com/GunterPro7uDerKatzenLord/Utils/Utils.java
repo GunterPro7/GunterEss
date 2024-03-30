@@ -172,4 +172,16 @@ public class Utils {
     public static boolean mcLoaded() {
         return Minecraft.getMinecraft().thePlayer != null;
     }
+
+    public static int getMaxGuiScale() {
+        Minecraft mc = Minecraft.getMinecraft();
+        int scaleFactor = 1;
+
+        while (mc.displayWidth / (scaleFactor + 1) >= 320 && mc.displayHeight / (scaleFactor + 1) >= 240) {
+            scaleFactor++;
+        }
+
+        return scaleFactor;
+    }
+
 }
