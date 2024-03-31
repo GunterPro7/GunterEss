@@ -2,9 +2,6 @@ package com.GunterPro7uDerKatzenLord.Utils;
 
 import com.GunterPro7uDerKatzenLord.Gui.CustomIngameUI;
 import com.GunterPro7uDerKatzenLord.Setting;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatStyle;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -16,7 +13,7 @@ public class GemstoneDisplay {
 
     @SubscribeEvent
     public void onRender(RenderGameOverlayEvent.Text event) {
-        if (Setting.GEMSTONE_DISPLAY_POSITION.isEnabled()) {
+        if (Setting.GEMSTONE_DISPLAY.isEnabled()) {
             List<String> lines = new ArrayList<>();
             gemstoneIntMap.forEach((gemstone, count) -> {
                 String line = "";
@@ -39,7 +36,7 @@ public class GemstoneDisplay {
             });
 
             if (lines.size() > 0) {
-                Setting.Position pos = Setting.GEMSTONE_DISPLAY_POSITION;
+                Setting.Position pos = Setting.GEMSTONE_DISPLAY;
                 CustomIngameUI ingameUI = new CustomIngameUI(0x00000000, 0xFF000000, lines);
                 ingameUI.drawInfoBox(pos.getOffsetX(), pos.getOffsetY(), false);
             }

@@ -155,7 +155,7 @@ public class Listeners {
 
     @SubscribeEvent
     public void onClientChatReceive(ClientChatReceivedEvent event) {
-        if (Setting.AUTO_KICKER_ENABLED.isEnabled()) {
+        if (Setting.AUTO_KICKER.isEnabled()) {
             String message = AdvancedChat.clearChatComponent(event.message.getUnformattedText());
             if (message.matches("Party Finder > .* joined the dungeon group! \\(.* Level \\d+\\)")) {
                 System.out.println(message.indexOf("Level"));

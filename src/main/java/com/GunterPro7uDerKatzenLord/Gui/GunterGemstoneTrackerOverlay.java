@@ -1,15 +1,9 @@
 package com.GunterPro7uDerKatzenLord.Gui;
 
-import com.GunterPro7uDerKatzenLord.Listener.AdvancedChat;
 import com.GunterPro7uDerKatzenLord.Setting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class GunterGemstoneTrackerOverlay extends GuiScreen {
     private final GuiScreen lastScreen;
@@ -32,7 +26,7 @@ public class GunterGemstoneTrackerOverlay extends GuiScreen {
     @Override
     public void initGui() {
         buttonList.clear();
-        activeButton = new GuiButton(0, width / 2 - 100, height / 2 + 0, Setting.GEMSTONE_DISPLAY_POSITION.isEnabled() ? "§a§lEnabled" : "§c§lDisabled");
+        activeButton = new GuiButton(0, width / 2 - 100, height / 2 + 0, Setting.GEMSTONE_DISPLAY.isEnabled() ? "§a§lEnabled" : "§c§lDisabled");
         moveObjectButton = new GuiButton(0, width / 2 - 100, height / 2 + 24, "Move Object");
         buttonList.add(activeButton);
         buttonList.add(moveObjectButton);
@@ -51,10 +45,10 @@ public class GunterGemstoneTrackerOverlay extends GuiScreen {
     @Override
     protected void actionPerformed(GuiButton button) {
         if (button == activeButton) {
-            Setting.GEMSTONE_DISPLAY_POSITION.switchEnabled();
-            button.displayString = Setting.GEMSTONE_DISPLAY_POSITION.isEnabled() ? "§a§lEnabled" : "§c§lDisabled";
+            Setting.GEMSTONE_DISPLAY.switchEnabled();
+            button.displayString = Setting.GEMSTONE_DISPLAY.isEnabled() ? "§a§lEnabled" : "§c§lDisabled";
         } else if (button == moveObjectButton) {
-            mc.displayGuiScreen(new MoveObjectOverlay(new CustomIngameUI(0x00000000, 0x80000000, "§b1 §1Fine§f, §b1 §aFlawed §e✧ Topaz Gemstone"), Setting.GEMSTONE_DISPLAY_POSITION, this));
+            mc.displayGuiScreen(new MoveObjectOverlay(new CustomIngameUI(0x00000000, 0x80000000, "§b1 §1Fine§f, §b1 §aFlawed §e✧ Topaz Gemstone"), Setting.GEMSTONE_DISPLAY, this));
         }
     }
 

@@ -18,6 +18,7 @@ public class GunterOverlay extends GuiScreen {
     private GuiButton button4;
     private GuiButton button5;
     private GuiButton button6;
+    private GuiButton button7;
     private GuiTextField textField0;
     private GuiTextField textField1;
     private GuiSlider guiSlider;
@@ -47,6 +48,7 @@ public class GunterOverlay extends GuiScreen {
         button3 = new GuiButton(0, width / 2 - 100, height / 2 + 48, "Money Tracker");
         button4 = new GuiButton(0, width / 2 - 100, height / 2 + 72, "Auto Kicker");
         button5 = new GuiButton(0, width / 2 - 100, height / 2 + 96, "Auto Fisher: " + (Setting.AUTO_FISHING.isEnabled() ? "§a§lEnabled" : "§c§lDisabled"));
+        button7 = new GuiButton(0, width / 2 - 100, height / 2 + 120, "Auto Updates: " + (Setting.AUTO_UPDATES.isEnabled() ? "§a§lEnabled" : "§c§lDisabled"));
 
         buttonList.add(button0);
         buttonList.add(button2);
@@ -54,6 +56,7 @@ public class GunterOverlay extends GuiScreen {
         buttonList.add(button4);
         buttonList.add(button5);
         buttonList.add(button6);
+        buttonList.add(button7);
 
         //textField0 = new GuiTextField(0, fontRendererObj, width / 2 - 100, height / 2 + 24, 100, 20);
         //textField0.setMaxStringLength(100);
@@ -107,6 +110,9 @@ public class GunterOverlay extends GuiScreen {
             button5.displayString = "Auto Fisher: " + (Setting.AUTO_FISHING.isEnabled() ? "§a§lEnabled" : "§c§lDisabled");
         } else if (button == button6) {
             mc.displayGuiScreen(new GunterGemstoneTrackerOverlay(this));
+        } else if (button == button7) {
+            Setting.AUTO_UPDATES.switchEnabled();
+            button7.displayString = "Auto Updates: " + (Setting.AUTO_UPDATES.isEnabled() ? "§a§lEnabled" : "§c§lDisabled");
         }
     }
 

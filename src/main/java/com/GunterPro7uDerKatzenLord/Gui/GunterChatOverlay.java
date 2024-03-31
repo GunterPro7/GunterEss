@@ -29,7 +29,7 @@ public class GunterChatOverlay extends GuiScreen {
     @Override
     public void initGui() {
         buttonList.clear();
-        button0 = new GuiButton(0, width / 2 - 100, height / 2 - 0, "Copy Chat: " + (Setting.COPY_CHAT_ENABLED.isEnabled() ? "§a§lEnabled" : "§c§lDisabled"));
+        button0 = new GuiButton(0, width / 2 - 100, height / 2 - 0, "Copy Chat: " + (Setting.COPY_CHAT.isEnabled() ? "§a§lEnabled" : "§c§lDisabled"));
         button1 = new GuiButton(0, width / 2 - 100, height / 2 + 24, "Copy with Stack: " + (Setting.COPY_WITH_STACK.isEnabled() ? "§a§lEnabled" : "§c§lDisabled"));
         button2 = new GuiButton(0, width / 2 - 100, height / 2 + 48, "Stack Chat Messages: " + (Setting.STACK_CHAT_MESSAGES.isEnabled() ? "§a§lEnabled" : "§c§lDisabled"));
         button3 = new GuiButton(0, width / 2 - 100, height / 2 + 72, "Remove Blank Lines: " + (Setting.REMOVE_BLANK_LINES.isEnabled() ? "§a§lEnabled" : "§c§lDisabled"));
@@ -59,8 +59,8 @@ public class GunterChatOverlay extends GuiScreen {
     @Override
     protected void actionPerformed(GuiButton button) {
         if (button == button0) {
-            Setting.COPY_CHAT_ENABLED.switchEnabled();
-            button0.displayString = "Copy Chat: " + (Setting.COPY_CHAT_ENABLED.isEnabled() ? "§a§lEnabled" : "§c§lDisabled");
+            Setting.COPY_CHAT.switchEnabled();
+            button0.displayString = "Copy Chat: " + (Setting.COPY_CHAT.isEnabled() ? "§a§lEnabled" : "§c§lDisabled");
         } else if (button == button1) {
             Setting.COPY_WITH_STACK.switchEnabled();
             button1.displayString = "Copy with Stack: " + (Setting.COPY_WITH_STACK.isEnabled() ? "§a§lEnabled" : "§c§lDisabled");

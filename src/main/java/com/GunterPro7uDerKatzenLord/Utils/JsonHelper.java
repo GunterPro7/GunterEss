@@ -76,17 +76,20 @@ public class JsonHelper {
         }
     }
 
-    public static void downloadFile(String url, String fileName) {
+    public static boolean downloadFile(String url, File file) {
         try (BufferedInputStream in = new BufferedInputStream(new URL(url).openStream());
-             FileOutputStream fileOutputStream = new FileOutputStream(fileName)) {
+             FileOutputStream fileOutputStream = new FileOutputStream(file)) {
             byte dataBuffer[] = new byte[1024];
             int bytesRead;
             while ((bytesRead = in.read(dataBuffer, 0, 1024)) != -1) {
                 fileOutputStream.write(dataBuffer, 0, bytesRead);
             }
         } catch (IOException e) {
-            // handle exception
+            System.err.println("Unable to Download newest Version of GunterEss! Err: ");
+            e.printStackTrace();
+            return false;
         }
+        return true;
     }
 
     public static void collectionApiFetch() throws IOException {

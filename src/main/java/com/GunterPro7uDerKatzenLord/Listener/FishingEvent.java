@@ -65,7 +65,7 @@ public class FishingEvent extends Event {
 
     @SubscribeEvent
     public void onEntitySpawn(EntityEvent.EntityConstructing event) {
-        if (Setting.AUTO_FISHING.isEnabled() && mc.thePlayer.fishEntity != null) {
+        if (Setting.AUTO_FISHING.isEnabled() && mc.thePlayer != null && mc.thePlayer.fishEntity != null) {
             Entity entity = event.entity;
             entities.add(entity);
         }

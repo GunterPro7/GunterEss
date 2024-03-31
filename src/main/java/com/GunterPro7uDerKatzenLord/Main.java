@@ -23,6 +23,7 @@ import org.spongepowered.asm.launch.MixinBootstrap;
 import org.spongepowered.asm.mixin.Mixins;
 
 import java.io.File;
+import java.io.IOException;
 
 import static com.GunterPro7uDerKatzenLord.Listener.Listeners.collectionJson;
 
@@ -31,21 +32,24 @@ public class Main {
     public static final String MOD_ID = "GunterEss";
     public static final Minecraft mc = Minecraft.getMinecraft();
     public static boolean starting = true;
-    public static final String VERSION = "1.2.4";
-    public static final boolean DEV = false;
+    public static final String VERSION = "1.3.0";
+    public static final boolean DEV = true;
     public static File configDirectory;
-    public static File gunterEssDelFile;
+    public boolean updateAvailable;
 
     @Mod.EventHandler
     public void preServerStarting(final FMLPreInitializationEvent event) {
+        configDirectory = new File(event.getModConfigurationDirectory().getAbsolutePath() + "/gunterEss");
         MixinBootstrap.init();
         Mixins.addConfiguration("mixins.GunterEss.json");
     }
 
 
     @Mod.EventHandler
-    public void serverStarting(final FMLInitializationEvent event) {
+    public void serverStarting(final FMLInitializationEvent event) throws IllegalAccessException, IOException {
         System.out.println("INITIALIZING GunterEss :D");
+
+        Setting.initSettings();
 
         MinecraftForge.EVENT_BUS.register(new ClientBlockListener());
         MinecraftForge.EVENT_BUS.register(new Listeners());
@@ -71,14 +75,36 @@ public class Main {
             });
         }
 
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> { // TODO das so umbauen das es die latest bereits am anfang runterlädt und erst jetzt installiert wird.
+            if (Setting.AUTO_UPDATES.isEnabled() && updateAvailable) {
+                File[] files = new File("mods").listFiles();
+                boolean installed = false;
+
+                if (files != null) {
+                    for (File file : files) {
+                        if (file.getName().toLowerCase().startsWith("gunteress")) {
+                            installed = JsonHelper.downloadFile("http://49.12.101.156/GunterEss/latest.jar", new File(file.getAbsolutePath()));
+                            break;
+                        }
+                    }
+                }
+
+                System.out.println("Newest Version of GunterEss Downloaded: " + installed);
+            }
+        }));
+
         JsonHelper.fetch("http://49.12.101.156/GunterEss/VersionCheck.php?VERSION=" + VERSION + "&DEV=" + DEV, response -> {
             if (Boolean.parseBoolean(response.split("\"update_available\":")[1].split(",")[0])) {
-                String url = "https://github.com/GunterPro7/GunterEss/releases";
-                IChatComponent chatComponent = new ChatComponentText("§7New Version of §l§3GunterEss §r§7is available!")
-                        .appendSibling(new ChatComponentText("§c§l[Download]").setChatStyle(new ChatStyle()
-                                        .setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, url))
-                                        .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText("§7Download the latest Version of §a§lGunterEss §r§7here!")))));
-                TimeUtils.addToQueue(chatComponent);
+                if (!Setting.AUTO_UPDATES.isEnabled()) {
+                    String url = "https://github.com/GunterPro7/GunterEss/releases";
+                    IChatComponent chatComponent = new ChatComponentText("§7New Version of §l§3GunterEss §r§7is available!")
+                            .appendSibling(new ChatComponentText("§c§l[Download]").setChatStyle(new ChatStyle()
+                                    .setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, url))
+                                    .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText("§7Download the latest Version of §a§lGunterEss §r§7here!")))));
+                    TimeUtils.addToQueue(chatComponent);
+                } else {
+                    updateAvailable = true;
+                }
             }
         });
     }

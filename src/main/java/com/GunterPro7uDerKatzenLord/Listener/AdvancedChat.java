@@ -3,9 +3,7 @@ package com.GunterPro7uDerKatzenLord.Listener;
 import com.GunterPro7uDerKatzenLord.Party;
 import com.GunterPro7uDerKatzenLord.Setting;
 import com.GunterPro7uDerKatzenLord.Utils.*;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
-import net.minecraft.client.gui.GuiNewChat;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
@@ -184,7 +182,7 @@ public class AdvancedChat {
 
     @SubscribeEvent
     public void onMouseInput(final GuiScreenEvent.MouseInputEvent event) throws IllegalAccessException, NoSuchFieldException {
-        if (Setting.COPY_CHAT_ENABLED.isEnabled()) {
+        if (Setting.COPY_CHAT.isEnabled()) {
             IChatComponent chatComponent = getHoveredChatComponent();
             if (chatComponent != null) {
                 if (Mouse.isButtonDown(1) || Mouse.isButtonDown(0)) {
