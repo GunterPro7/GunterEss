@@ -10,8 +10,6 @@ public class MoveObjectOverlay extends GuiScreen {
     private final CustomIngameUI customIngameUI;
     private int offsetX = 50;
     private int offsetY = 50;
-    private int mouseOffsetX;
-    private int mouseOffsetY;
     private boolean allowMove;
     private GuiButton button;
     private final Setting.Position position;
@@ -20,6 +18,9 @@ public class MoveObjectOverlay extends GuiScreen {
         this.customIngameUI = customIngameUI;
         this.position = position;
         this.lastScreen = lastScreen;
+
+        this.offsetX = position.getOffsetX();
+        this.offsetY = position.getOffsetY();
     }
 
     @Override
@@ -32,7 +33,7 @@ public class MoveObjectOverlay extends GuiScreen {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawDefaultBackground();
-        customIngameUI.drawInfoBox(offsetX + mouseOffsetX, offsetY + mouseOffsetY, true);
+        customIngameUI.drawInfoBox(offsetX, offsetY, true);
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 

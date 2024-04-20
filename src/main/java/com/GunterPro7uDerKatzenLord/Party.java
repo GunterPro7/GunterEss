@@ -206,9 +206,9 @@ public class Party {
             Party.create(command[1], Minecraft.getMinecraft().thePlayer.getGameProfile().getName());
             // TODO BACKEND-SIDE: a party can be created with the same name again. that results in messages sent to that party via a "solo" party. Always check this on backend side, and send an error as result to the client if it exists
         } else if (com.equalsIgnoreCase("help")) {
-            AdvancedChat.sendPrivateMessage("§e§lGunterEss party System!§r Available Commands: \n-> chat <party-name> <message>\n" +
-                    "-> invite <party-name> <player-name>\n-> toggle <party-name>\n-> leave <party-name>\n-> disband <party-name>\n" +
-                    "-> kick <party-name> <player-name>\n-> list\n-> list <party-name>\n\n§eYou can be in multiple parties at once!");
+            AdvancedChat.sendPrivateMessage("§e§lGunterEss party System!§r Available Commands: \n-> §a§lchat§r <party-name> <message>\n" +
+                    "-> §a§linvite§r <party-name> <player-name>\n-> §a§ltoggle§r <party-name>\n-> §a§lleave§r <party-name>\n-> §a§ldisband§r <party-name>\n" +
+                    "-> §a§lkick§r <party-name> <player-name>\n-> §a§llist§r\n-> §a§llist§r <party-name>\n\n§eYou can be in multiple parties at once!");
         } else if (com.equalsIgnoreCase("invite")) {
             Party party = getPartyByName(command[1]);
             if (party != null) {

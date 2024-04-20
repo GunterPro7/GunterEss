@@ -19,6 +19,7 @@ public class Setting {
     public static final Setting ITEM_LORE_SCROLL = new Setting(true);
     public static final Position GEMSTONE_DISPLAY = new Position(true, 50, 200);
     public static final Setting AUTO_UPDATES = new Setting(true);
+    public static final Setting HARP_ACTIVE = new Setting(false);
 
     public static File settingsFile;
 

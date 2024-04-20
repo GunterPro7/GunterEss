@@ -8,14 +8,14 @@ import com.GunterPro7uDerKatzenLord.Utils.Utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.util.ChatComponentText;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Objects;
 
 public class Command extends CommandBase {
-    public static boolean TESTSTOP = false;
-    private static final String NAME = "gunterEss";
+    private static final String NAME = "gunteress";
 
     @Override
     public String getCommandName() {
@@ -52,33 +52,24 @@ public class Command extends CommandBase {
                 try {
                     BackendService.getInstance().send("msg;" + playerFrom + ";" + playerTo + ";" + message);
                 } catch (IOException e) {
-                    throw new RuntimeException(e);
+                    AdvancedChat.sendPrivateMessage("§cThere was an error Reaching the GunterEss Backend, try again later.");
+                    e.printStackTrace();
                 }
             }
             if (args[0].equalsIgnoreCase("party")) {
                 try {
                     Party.processCommand(Arrays.copyOfRange(args, 1, args.length));
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
+                } catch (Exception e) {
+                    AdvancedChat.sendPrivateMessage("§cThere was an error Reaching the GunterEss Backend, try again later.");
+                    e.printStackTrace();
                 }
             }
         } else if (args.length > 0) {
             if (Objects.equals(args[0], "help")) {
-                AdvancedChat.sendPrivateMessage("copy <text> - Copies the text to clipboard");
-            } else if (Objects.equals(args[0], "test")) {
-                Utils.execute(() -> {
-                    try {
-                        BackendService.getInstance().send("Test lol");
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                }, 500);
-                //TESTSTOP = !TESTSTOP;
-
-                //int x = Minecraft.getMinecraft().ingameGUI.getChatGUI().getChatWidth() + 10;
-                //int y = Minecraft.getMinecraft().displayHeight - Mouse.getY();
-//
-                //AdvancedChat.sendPrivateMessage("X: " + x + ", Y: " + y);
+                AdvancedChat.sendPrivateMessage("§e§lWelcome To GunterEss!§r Some Commands: " +
+                        "\n§a§lcopy <text> - §rCopies the text to clipboard\n§a§lmcchat <text> - §rWrite text into chat" +
+                        "\n§a§lmsg <Player> <text> - §rSend <Player> a message when there are using GunterEss" +
+                        "\n§a§party <help, ...> - §rCreate Parties with other GunterEss - Users");
             }
         }
     }

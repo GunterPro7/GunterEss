@@ -62,6 +62,7 @@ public class Main {
         MinecraftForge.EVENT_BUS.register(new FishingEvent(null));
         MinecraftForge.EVENT_BUS.register(AdvancedChat.getInstance());
         MinecraftForge.EVENT_BUS.register(new ItemLoreScroller());
+        MinecraftForge.EVENT_BUS.register(new HarpListener());
         //MinecraftForge.EVENT_BUS.register(QuiverEmptyChecker.getInstance());
         ClientCommandHandler.instance.registerCommand(new Command());
         if (Setting.COLLECTION_OVERLAY.isEnabled()) {
