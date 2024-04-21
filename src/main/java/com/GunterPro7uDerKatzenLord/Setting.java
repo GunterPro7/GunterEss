@@ -19,7 +19,7 @@ public class Setting {
     public static final Setting ITEM_LORE_SCROLL = new Setting(true);
     public static final Position GEMSTONE_DISPLAY = new Position(true, 50, 200);
     public static final Setting AUTO_UPDATES = new Setting(true);
-    public static final Setting HARP_ACTIVE = new Setting(false);
+    public static final Value AUTO_HARP = new Value(true, 250);
 
     public static File settingsFile;
 
@@ -86,6 +86,19 @@ public class Setting {
         }
     }
 
+    public static class Value extends Setting {
+        private int value;
+
+        public Value(boolean enabled, int value) {
+            super(enabled);
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
+    }
+
     @Override
     public String toString() {
         return String.valueOf(this.enabled);
@@ -131,6 +144,9 @@ public class Setting {
                                 Position pos = (Position) setting;
                                 pos.offsetX = Integer.parseInt(parts[1]);
                                 pos.offsetX = Integer.parseInt(parts[2]);
+                            } else if (setting instanceof Value) {
+                                Value v = (Value) setting;
+                                v.value = Integer.parseInt(parts[1]);
                             }
                         }
                     });

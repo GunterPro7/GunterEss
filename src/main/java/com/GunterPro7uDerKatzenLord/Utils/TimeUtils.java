@@ -23,15 +23,17 @@ public class TimeUtils {
         messagesToChat.add(message);
     }
 
-    public static void addToQueue(long millisecondsLeft, Runnable f) {
-        long m = System.currentTimeMillis() + millisecondsLeft;
+    public static void addToQueue(int ms, Runnable f) {
+        addToQueue(System.currentTimeMillis() + ms, f);
+    }
 
+    public static void addToQueue(long time, Runnable f) {
         List<Runnable> runnables = new ArrayList<>();
 
-        if (map.containsKey(m)) {
-            runnables = map.get(m);
+        if (map.containsKey(time)) {
+            runnables = map.get(time);
         } else {
-            map.put(m, runnables);
+            map.put(time, runnables);
         }
 
         runnables.add(f);
