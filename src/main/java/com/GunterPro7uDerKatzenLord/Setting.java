@@ -142,11 +142,16 @@ public class Setting {
 
                             if (setting instanceof Position) {
                                 Position pos = (Position) setting;
-                                pos.offsetX = Integer.parseInt(parts[1]);
-                                pos.offsetX = Integer.parseInt(parts[2]);
+                                if (parts.length > 2) {
+                                    pos.offsetX = Integer.parseInt(parts[1]);
+                                    pos.offsetX = Integer.parseInt(parts[2]);
+                                }
+
                             } else if (setting instanceof Value) {
                                 Value v = (Value) setting;
-                                v.value = Integer.parseInt(parts[1]);
+                                if (parts.length > 1) {
+                                    v.value = Integer.parseInt(parts[1]);
+                                }
                             }
                         }
                     });
