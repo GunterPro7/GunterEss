@@ -53,6 +53,7 @@ public class Main {
 
         MinecraftForge.EVENT_BUS.register(new ClientBlockListener());
         MinecraftForge.EVENT_BUS.register(new Listeners());
+        MinecraftForge.EVENT_BUS.register(new InformationListener());
         MinecraftForge.EVENT_BUS.register(new TimeUtils());
         MinecraftForge.EVENT_BUS.register(new GemstoneDisplay());
         //MinecraftForge.EVENT_BUS.register(new ItemLock());

@@ -1,5 +1,7 @@
 package com.GunterPro7uDerKatzenLord;
 
+import com.GunterPro7uDerKatzenLord.Utils.CollectionUtils;
+
 import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -20,6 +22,21 @@ public class Setting {
     public static final Position GEMSTONE_DISPLAY = new Position(true, 50, 200);
     public static final Setting AUTO_UPDATES = new Setting(true);
     public static final Value AUTO_HARP = new Value(true, 250);
+    public static final Map<String, Setting> infoSettings = CollectionUtils.mapOf("Ping", new Setting(false),
+            "Fps", new Setting(false),
+            "Day", new Setting(false),
+            "Time", new Setting(false),
+            "Position", new Setting(false),
+            "Facing", new Setting(false));
+
+    public static final Map<String, Position> infoPositions = CollectionUtils.mapOf("Ping", new Position(false),
+            "Fps", new Position(false),
+            "Day", new Position(false),
+            "Time", new Position(false),
+            "X", new Position(false),
+            "Y", new Position(false),
+            "Z", new Position(false),
+            "Facing", new Position(false));
 
     public static File settingsFile;
 
@@ -59,7 +76,7 @@ public class Setting {
         }
 
         public Position(boolean enabled) {
-            this(enabled, 0, 0);
+            this(enabled, 50, 50);
         }
 
         public int getOffsetX() {
@@ -131,7 +148,7 @@ public class Setting {
         for (Field field : fields) {
             if (Modifier.isStatic(field.getModifiers())) {
                 Object o = field.get(null);
-                if (o instanceof Setting) {
+                if (o instanceof Setting) { // TODO give this in eigene methode, dass ein listenobjekt diese mehrmals ausführen kann, auch bei schreiben anschauen.
                     Setting setting = (Setting) o;
                     String fieldName = field.getName();
 

@@ -1,11 +1,22 @@
 package com.GunterPro7uDerKatzenLord.Utils;
 
 import java.util.*;
+import java.util.function.Supplier;
 
 public class CollectionUtils {
 
     public static <T> List<T> listOf(T... params) {
         return new ArrayList<>(Arrays.asList(params));
+    }
+
+    public static <T> List<T> listOf(Supplier<T> supplier, int times) {
+        List<T> list = new ArrayList<>();
+
+        for (int i = 0; i < 5; i++) {
+            list.add(supplier.get());
+        }
+
+        return list;
     }
 
     public static <T, U> Map<T, U> mapOf(Object... params) {
