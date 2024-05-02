@@ -7,6 +7,8 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiLabel;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
+import net.minecraftforge.client.event.GuiScreenEvent;
+import net.minecraftforge.common.MinecraftForge;
 import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
@@ -17,8 +19,8 @@ public abstract class AbstractOverlay extends GuiScreen {
     private static final int SCROLL_SIZE = 9;
 
     protected final GuiScreen lastScreen;
-    protected int pageContentHeight = 1000;
-    private int scrollOffset;
+    protected int pageContentHeight;
+    protected int scrollOffset;
 
     private final List<GuiTextField> textFieldList = new ArrayList<>();
 
@@ -48,7 +50,7 @@ public abstract class AbstractOverlay extends GuiScreen {
                     scrollOffset = Math.max(scrollOffset - SCROLL_SIZE, 0);
                 }
             } else {
-                if (scrollOffset < pageContentHeight) {
+                if (scrollOffset < pageContentHeight - height + 64) {
                     scrollOffset = Math.min(scrollOffset + SCROLL_SIZE, pageContentHeight);
                 }
             }
@@ -56,36 +58,60 @@ public abstract class AbstractOverlay extends GuiScreen {
     }
 
     @Override
+    public void initGui() {
+        super.initGui();
+        buttonList.clear();
+        labelList.clear();
+        textFieldList.clear();
+        pageContentHeight = 85;
+
+    }
+
+    // LABEL:
+    //    protected int field_146167_a = 200;    <-- width
+    //    protected int field_146161_f = 20;     <-- height
+    //    public int field_146162_g;             <-- x
+    //    public int field_146174_h;             <-- y
+    //    private List<String> field_146173_k;   <-- message
+    //
+    //                                 id,  x,  y, width, height, idk
+    //    new GuiLabel(fontRendererObj, 0, 50, 50,    60,     20,   1)
+
+    @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         int j;
-        for(j = 0; j < this.buttonList.size(); ++j) {
+        for (j = 0; j < this.buttonList.size(); ++j) {
             GuiButton button = this.buttonList.get(j);
-            System.out.println("before check");
-            if (button.yPosition - scrollOffset >= 0) {
-                System.out.println("IN CHECK; SHOULD WORK BUT SAME ERROR AS BEFORE");
-                System.out.println("scrollOffset: " + scrollOffset + ", contentheight: " + pageContentHeight);
+            if (button.yPosition - scrollOffset >= -button.height) {
                 button.yPosition -= scrollOffset;
-                button.drawButton(this.mc, mouseX, button.yPosition - scrollOffset);
+                button.drawButton(this.mc, mouseX, mouseY);
                 button.yPosition += scrollOffset;
             }
         }
 
-        for(j = 0; j < this.labelList.size(); ++j) {
+        for (j = 0; j < this.labelList.size(); ++j) {
             GuiLabel label = this.labelList.get(j);
-            if (label.field_146174_h - scrollOffset >= 0) {
-                this.labelList.get(j).drawLabel(this.mc, mouseX, mouseY - scrollOffset); // TODO wenn geht hier auch
+            if (label.field_146174_h - scrollOffset >= -20 /* Label Height */) {
+                label.field_146174_h -= scrollOffset;
+                label.drawLabel(this.mc, mouseX, mouseY);
+                label.field_146174_h += scrollOffset;
             }
         }
 
-        for(j = 0; j < this.textFieldList.size(); ++j) {
+        for (j = 0; j < this.textFieldList.size(); ++j) {
             GuiTextField guiTextField = this.textFieldList.get(j);
-            if (guiTextField.yPosition - scrollOffset >= 0) {
+            if (guiTextField.yPosition - scrollOffset >= guiTextField.height) {
                 guiTextField.yPosition -= scrollOffset;
                 guiTextField.drawTextBox();
                 guiTextField.yPosition += scrollOffset;
             }
         }
 
+    }
+
+    @Override
+    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+        super.mouseClicked(mouseX, mouseY + scrollOffset, mouseButton);
     }
 
 
