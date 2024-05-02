@@ -77,7 +77,7 @@ public class Listeners {
     @SubscribeEvent
     public void onTick(final TickEvent.ClientTickEvent event) {
         if (setGunterOverlayNextTick) {
-            Minecraft.getMinecraft().displayGuiScreen(new GunterOverlay(Minecraft.getMinecraft().currentScreen));
+            Minecraft.getMinecraft().displayGuiScreen(new GunterOverlay(null));
             setGunterOverlayNextTick = false;
         }
         if (Setting.COLLECTION_OVERLAY.isEnabled() && System.currentTimeMillis() - time > 180000) {

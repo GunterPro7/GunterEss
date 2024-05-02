@@ -36,13 +36,13 @@ public class GunterOverlay extends AbstractOverlay {
         buttonList.clear();
         buttonRelations.put(new GuiButton(0, width / 2 - 100, height / 2 - 24, "Gemstone Tracker"), () -> new GunterGemstoneTrackerOverlay(this));
         buttonRelations.put(new GuiButton(0, width / 2 - 100, height / 2 + 0, "Chat Features"), () -> new GunterChatOverlay(this));
-        buttonRelations.put(new GuiButton(0, width / 2 - 100, height / 2 + 24, "Collection Tracker"), () -> this); // Not ready yet
-        buttonRelations.put(new GuiButton(0, width / 2 - 100, height / 2 + 48, "Money Tracker"), () -> this); // Not ready yet
+        buttonRelations.put(new GuiButton(0, width / 2 - 100, height / 2 + 24, "Collection Tracker"), () -> null); // Not ready yet
+        buttonRelations.put(new GuiButton(0, width / 2 - 100, height / 2 + 48, "Money Tracker"), () -> null); // Not ready yet
         buttonRelations.put(new GuiButton(0, width / 2 - 100, height / 2 + 72, "Auto Kicker"), () -> new GunterAutoKickOverlay(this));
         buttonRelations.put(new GuiButton(0, width / 2 - 100, height / 2 + 96, "Auto Harp"), () -> new GunterAutoHarpOverlay(this));
         buttonRelations.put(new GuiButton(0, width / 2 - 100, height / 2 + 120, "Information Overlay"), () -> new InformationOverlay(this));
-        autoFisherButton = new GuiButton(0, width / 2 - 100, height / 2 + 120, "Auto Fisher: " + (Setting.AUTO_FISHING.isEnabled() ? "§a§lEnabled" : "§c§lDisabled"));
-        autoUpdateButton = new GuiButton(0, width / 2 - 100, height / 2 + 144, "Auto Updates: " + (Setting.AUTO_UPDATES.isEnabled() ? "§a§lEnabled" : "§c§lDisabled"));
+        autoFisherButton = new GuiButton(0, width / 2 - 100, height / 2 + 144, "Auto Fisher: " + (Setting.AUTO_FISHING.isEnabled() ? "§a§lEnabled" : "§c§lDisabled"));
+        autoUpdateButton = new GuiButton(0, width / 2 - 100, height / 2 + 168, "Auto Updates: " + (Setting.AUTO_UPDATES.isEnabled() ? "§a§lEnabled" : "§c§lDisabled"));
 
         buttonList.add(autoFisherButton);
         buttonList.add(autoUpdateButton);
