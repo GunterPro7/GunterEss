@@ -82,7 +82,8 @@ public class InformationListener {
                 lastFacingX = player.rotationYaw;
                 lastFacingY = player.rotationPitch;
 
-                informationValues.put("Facing", df.format(player.rotationYaw) + " " + df.format(player.rotationPitch));
+                // TODO rotation goes above 360 and under 360
+                informationValues.put("Facing", df.format(player.rotationYaw) + " / " + df.format(player.rotationPitch));
             }
 
             // Lacy Tasks
