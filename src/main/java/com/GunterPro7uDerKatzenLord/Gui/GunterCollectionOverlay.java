@@ -45,7 +45,6 @@ public class GunterCollectionOverlay extends AbstractOverlay {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        drawDefaultBackground();
         drawCenteredString(fontRendererObj, "§lGunter Essentials", width / 2, 40, 0xFFFFFF);
         drawCenteredString(fontRendererObj, "-> Collection Tracker", width / 2, 60, 0xFFFFFF);
         drawCenteredString(fontRendererObj, "Collection:", width / 2 - 70, height / 2 - 42, 0xFFFFFF);

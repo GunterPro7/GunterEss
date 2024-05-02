@@ -31,7 +31,6 @@ public class InformationOverlay extends AbstractOverlay {
 
     static {
         Map<String, Setting> settings = Setting.infoSettings;
-        Map<String, Setting.Position> positions = Setting.infoPositions;
 
         informationsAndButtonList = CollectionUtils.mapOf(
                 "Ping", CollectionUtils.listOf(new GuiCheckBox(100, 0, 0, "Ping Overlay Enabled", settings.get("Ping").isEnabled()),
@@ -57,44 +56,46 @@ public class InformationOverlay extends AbstractOverlay {
     @Override
     public void initGui() {
         super.initGui();
-        reInitGui();
-    }
-
-    public void reInitGui() {
-        buttonList.clear();
         dropdownButtons.clear();
 
-        prefixColorButton = new GuiButton(0, width / 2 - 100, height / 2 - 53, "Prefix Color: " + Setting.infoPrefixColor + Setting.infoPrefixColor.getFriendlyName());
-        suffixColorButton = new GuiButton(0, width / 2 - 100, height / 2 - 29, "Suffix Color: " + Setting.infoSuffixColor + Setting.infoSuffixColor.getFriendlyName());
-        valueColorButton = new GuiButton(0, width / 2 - 100, height / 2 - 5, "Value Color: " + Setting.infoValueColor + Setting.infoValueColor.getFriendlyName());
+        GuiLabel label = new GuiLabel(fontRendererObj, 0, width / 2 - 50, 40, 100, 20, 50).setCentered();
+        label.func_175202_a("§f§lGunter Essentials");
+        label.func_175202_a("");
+        label.func_175202_a("§f-> Information Overlay");
+
+        labelList.add(label);
+
+        prefixColorButton = new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Prefix Color: " + Setting.infoPrefixColor + Setting.infoPrefixColor.getFriendlyName());
+        suffixColorButton = new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Suffix Color: " + Setting.infoSuffixColor + Setting.infoSuffixColor.getFriendlyName());
+        valueColorButton = new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Value Color: " + Setting.infoValueColor + Setting.infoValueColor.getFriendlyName());
         buttonList.add(prefixColorButton);
         buttonList.add(suffixColorButton);
         buttonList.add(valueColorButton);
 
-        AtomicInteger curHeight = new AtomicInteger(25);
         AtomicInteger curIndex = new AtomicInteger();
 
         informationsAndButtonList.forEach((key, value) -> {
-            dropdownButtons.add(new GuiButton(0, width / 2 - 100, height / 2 + curHeight.getAndAdd(pixelsPerButton), key));
+            dropdownButtons.add(new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, key));
 
 
             if (dropdownButtonsOpened.get(curIndex.getAndAdd(1))) {
                 value.forEach(gui -> {
                     if (gui instanceof GuiCheckBox) {
+                        pageContentHeight += pixelsPerCheckBox;
                         GuiCheckBox checkBox = (GuiCheckBox) gui;
-                        checkBox.xPosition = width / 2 - 5;
-                        checkBox.yPosition = height / 2 + curHeight.getAndAdd(pixelsPerCheckBox);
+                        checkBox.xPosition = width / 2 - 50;
+                        checkBox.yPosition = pageContentHeight += pixelsPerCheckBox / 2;
                         buttonList.add(checkBox);
                     } else if (gui instanceof GuiButton) {
                         GuiButton button = (GuiButton) gui;
                         button.xPosition = width / 2 - 100;
-                        button.yPosition = height / 2 + curHeight.getAndAdd(pixelsPerButton);
+                        button.yPosition = pageContentHeight += pixelsPerButton;
                         buttonList.add(button);
                     }
 
                 });
 
-                curHeight.getAndAdd(20);
+                pageContentHeight += pixelsPerButton;
             }
         });
 
@@ -103,12 +104,6 @@ public class InformationOverlay extends AbstractOverlay {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        drawDefaultBackground();
-
-
-        drawCenteredString(fontRendererObj, "§lGunter Essentials", width / 2, 40, 0xFFFFFF);
-        drawCenteredString(fontRendererObj, "-> Information Overlay", width / 2, 60, 0xFFFFFF);
-
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
@@ -135,8 +130,9 @@ public class InformationOverlay extends AbstractOverlay {
         for (GuiButton curButton : dropdownButtons) {
             if (curButton == button) {
                 dropdownButtonsOpened.set(index, !dropdownButtonsOpened.get(index));
-                reInitGui();
-                Minecraft.getMinecraft().displayGuiScreen(new InformationOverlay(lastScreen));
+                InformationOverlay informationOverlay = new InformationOverlay(lastScreen);
+                informationOverlay.scrollOffset = this.scrollOffset;
+                Minecraft.getMinecraft().displayGuiScreen(informationOverlay);
                 return;
             }
             index++;

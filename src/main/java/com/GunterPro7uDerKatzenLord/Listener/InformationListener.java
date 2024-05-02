@@ -86,20 +86,20 @@ public class InformationListener {
                 informationValues.put("Facing", df.format(player.rotationYaw) + " / " + df.format(player.rotationPitch));
             }
 
+            LocalTime currentTime = LocalTime.now();
+            if (lastTimeSec != currentTime.getSecond()) {
+                informationValues.put("Time", currentTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"))); // TODO format in settings
+                lastTimeSec = currentTime.getSecond();
+            }
+
             // Lacy Tasks
             if (System.currentTimeMillis() - lacyLastTime >= 1000) {
                 informationValues.put("Fps", String.valueOf(Minecraft.getDebugFPS()));
-                LocalTime currentTime = LocalTime.now();
 
-                if (lastTimeSec != currentTime.getSecond()) {
-                    informationValues.put("Time", currentTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"))); // TODO format in settings
-                    lastTimeSec = currentTime.getSecond();
-
-                    LocalDate currentDate = LocalDate.now();
-                    if (currentDate.getDayOfYear() != lastDayOfYear) {
-                        informationValues.put("Day", currentDate.format(DateTimeFormatter.ofPattern("yyyy.MM.dd"))); // TODO format in settings
-                        lastDayOfYear = currentDate.getDayOfYear();
-                    }
+                LocalDate currentDate = LocalDate.now();
+                if (currentDate.getDayOfYear() != lastDayOfYear) {
+                    informationValues.put("Day", currentDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))); // TODO format in settings
+                    lastDayOfYear = currentDate.getDayOfYear();
                 }
 
                 int curPing = Utils.getPing();

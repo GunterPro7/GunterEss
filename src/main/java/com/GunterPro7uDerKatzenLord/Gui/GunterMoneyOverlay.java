@@ -34,7 +34,6 @@ public class GunterMoneyOverlay extends AbstractOverlay {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        drawDefaultBackground();
         drawCenteredString(fontRendererObj, "§lGunter Essentials", width / 2, 40, 0xFFFFFF);
         drawCenteredString(fontRendererObj, "-> Money Tracker", width / 2, 60, 0xFFFFFF);
         //textField1.drawTextBox();

@@ -62,8 +62,7 @@ public class GunterOverlay extends AbstractOverlay {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        drawDefaultBackground();
-        drawCenteredString(fontRendererObj, "§lGunter Essentials", width / 2, 40, 0xFFFFFF);
+        drawCenteredString(fontRendererObj, "§lGunter Essentials", width / 2, 40, 0xFFFFFF); // TODO das hier alles umändern, sodass es pageContentHeight anstatt von fixen zahlen verwendet (in allen klassen)
         //textField0.drawTextBox();
         //textField1.drawTextBox();
         drawCenteredString(fontRendererObj, "GunterPro7 f. DerKatzenLord", width / 2, 60, 0xFFFFFF);

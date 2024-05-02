@@ -74,11 +74,13 @@ public abstract class AbstractOverlay extends GuiScreen {
     //    public int field_146174_h;             <-- y
     //    private List<String> field_146173_k;   <-- message
     //
-    //                                 id,  x,  y, width, height, idk
-    //    new GuiLabel(fontRendererObj, 0, 50, 50,    60,     20,   1)
+    //                                 id,  x,  y, width, height, color
+    //    new GuiLabel(fontRendererObj, 0, 50, 50,    60,     20,     1)
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        drawDefaultBackground();
+
         int j;
         for (j = 0; j < this.buttonList.size(); ++j) {
             GuiButton button = this.buttonList.get(j);

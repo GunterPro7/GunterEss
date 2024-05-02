@@ -32,7 +32,6 @@ public class MoveObjectOverlay extends AbstractOverlay {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        drawDefaultBackground();
         customIngameUI.drawInfoBox(offsetX, offsetY, true);
         super.drawScreen(mouseX, mouseY, partialTicks);
     }

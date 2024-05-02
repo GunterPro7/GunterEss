@@ -33,7 +33,6 @@ public class GunterGemstoneTrackerOverlay extends AbstractOverlay {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        drawDefaultBackground();
         drawCenteredString(fontRendererObj, "§lGunter Essentials", width / 2, 40, 0xFFFFFF);
         drawCenteredString(fontRendererObj, "-> Gemstone Tracker", width / 2, 60, 0xFFFFFF);
 
