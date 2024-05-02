@@ -7,14 +7,13 @@ import net.minecraft.client.gui.GuiTextField;
 
 import java.io.IOException;
 
-public class GunterCollectionOverlay extends GuiScreen {
-    private final GuiScreen lastScreen;
+public class GunterCollectionOverlay extends AbstractOverlay {
     private GuiTextField textField0;
     private GuiButton button0;
     private GuiButton button1;
 
     public GunterCollectionOverlay(GuiScreen lastScreen) {
-        this.lastScreen = lastScreen;
+        super(lastScreen);
     }
 
     public GunterCollectionOverlay() {
@@ -73,10 +72,5 @@ public class GunterCollectionOverlay extends GuiScreen {
             buttonList.set(1, button1);
             Setting.COLLECTION_OVERLAY.switchEnabled();
         }
-    }
-
-    @Override
-    public boolean doesGuiPauseGame() {
-        return false;
     }
 }

@@ -5,14 +5,13 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 
-public class GunterGemstoneTrackerOverlay extends GuiScreen {
-    private final GuiScreen lastScreen;
+public class GunterGemstoneTrackerOverlay extends AbstractOverlay {
     private GuiTextField textField0;
     private GuiButton activeButton;
     private GuiButton moveObjectButton;
 
     public GunterGemstoneTrackerOverlay(GuiScreen lastScreen) {
-        this.lastScreen = lastScreen;
+        super(lastScreen);
     }
 
     public GunterGemstoneTrackerOverlay() {
@@ -50,10 +49,5 @@ public class GunterGemstoneTrackerOverlay extends GuiScreen {
         } else if (button == moveObjectButton) {
             mc.displayGuiScreen(new MoveObjectOverlay(new CustomIngameUI(0x00000000, 0x80000000, "§b1 §1Fine§f, §b1 §aFlawed §e✧ Topaz Gemstone"), Setting.GEMSTONE_DISPLAY, this));
         }
-    }
-
-    @Override
-    public boolean doesGuiPauseGame() {
-        return false;
     }
 }

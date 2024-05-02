@@ -6,23 +6,23 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.item.EnumDyeColor;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.fml.client.config.GuiCheckBox;
 
-import javax.management.modelmbean.ModelMBean;
-import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-public class InformationOverlay extends GuiScreen {
-    private static final List<String> colors = Arrays.stream(EnumDyeColor.values()).map(EnumDyeColor::getName).collect(Collectors.toList());
+public class InformationOverlay extends AbstractOverlay {
     private static final Map<String, List<Gui>> informationsAndButtonList;
+    private static final List<String> colors = Arrays.stream(EnumChatFormatting.values()).filter(EnumChatFormatting::isColor).map(e -> e + e.getFriendlyName()).collect(Collectors.toList());
+    private static final Map<String, EnumChatFormatting> colorsByPrefix = CollectionUtils.mapOf(colors, Arrays.stream(EnumChatFormatting.values()).filter(EnumChatFormatting::isColor).collect(Collectors.toList()));
+
     private static final List<Boolean> dropdownButtonsOpened = CollectionUtils.listOf(() -> false, 5);
     private static final int pixelsPerButton = 25;
 
-    private final GuiScreen lastScreen;
     private static GuiButton prefixColorButton;
+    private static GuiButton suffixColorButton;
     private static GuiButton valueColorButton;
 
     private static final List<GuiButton> dropdownButtons = new ArrayList<>();
@@ -49,7 +49,7 @@ public class InformationOverlay extends GuiScreen {
     }
 
     public InformationOverlay(GuiScreen lastScreen) {
-        this.lastScreen = lastScreen;
+        super(lastScreen);
     }
 
     @Override
@@ -62,12 +62,14 @@ public class InformationOverlay extends GuiScreen {
         buttonList.clear();
         dropdownButtons.clear();
 
-        prefixColorButton = new GuiButton(0, width / 2 - 100, height / 2 - 53, "Prefix Color: §lorange");
-        valueColorButton = new GuiButton(0, width / 2 - 100, height / 2 - 29, "Value Color: §lwhite");
+        prefixColorButton = new GuiButton(0, width / 2 - 100, height / 2 - 53, "Prefix Color: " + Setting.infoPrefixColor + Setting.infoPrefixColor.getFriendlyName());
+        suffixColorButton = new GuiButton(0, width / 2 - 100, height / 2 - 29, "Suffix Color: " + Setting.infoSuffixColor + Setting.infoSuffixColor.getFriendlyName());
+        valueColorButton = new GuiButton(0, width / 2 - 100, height / 2 - 5, "Value Color: " + Setting.infoValueColor + Setting.infoValueColor.getFriendlyName());
         buttonList.add(prefixColorButton);
+        buttonList.add(suffixColorButton);
         buttonList.add(valueColorButton);
 
-        AtomicInteger curHeight = new AtomicInteger();
+        AtomicInteger curHeight = new AtomicInteger(25);
         AtomicInteger curIndex = new AtomicInteger();
 
         informationsAndButtonList.forEach((key, value) -> {
@@ -109,10 +111,20 @@ public class InformationOverlay extends GuiScreen {
 
     @Override
     protected void actionPerformed(GuiButton button) {
-        if (button == prefixColorButton || button == valueColorButton) {
-            int idx = colors.indexOf(button.displayString.substring("Prefix Color: §l".length()));
+        if (button == prefixColorButton || button == valueColorButton || button == suffixColorButton) {
+            int idx = colors.indexOf(button.displayString.split("Color: ")[1]);
+            String color = colors.get(idx == colors.size() - 1 ? 0 : idx + 1);
 
-            button.displayString = "Prefix Color: §l" + colors.get(idx == colors.size() - 1 ? 0 : idx + 1);
+            button.displayString = button.displayString.split(" ")[0] + " Color: " + color;
+
+            if (button == prefixColorButton) {
+                Setting.infoPrefixColor = colorsByPrefix.get(color);
+            } else if (button == suffixColorButton) {
+                Setting.infoSuffixColor = colorsByPrefix.get(color);
+            } else if (button == valueColorButton) {
+                Setting.infoValueColor = colorsByPrefix.get(color);
+            }
+
             return;
         }
 
@@ -134,8 +146,8 @@ public class InformationOverlay extends GuiScreen {
 
         if (button.id == 2) {
             String key = button.displayString.split(" ")[1];
-            MoveObjectOverlay moveObjectOverlay = new MoveObjectOverlay(new CustomIngameUI(0x00000000, 0x00000000, key + ": <Value>"), Setting.infoPositions.get(key), this);
-            // TODO add color to the moveObjectOverlay
+            MoveObjectOverlay moveObjectOverlay = new MoveObjectOverlay(new CustomIngameUI(0x00000000, 0x00000000,
+                    Setting.infoPrefixColor + key + Setting.infoSuffixColor + ": " + Setting.infoValueColor + "<Value>"), Setting.infoPositions.get(key), this);
 
             Minecraft.getMinecraft().displayGuiScreen(moveObjectOverlay);
         }

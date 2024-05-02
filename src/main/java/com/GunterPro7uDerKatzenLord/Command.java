@@ -8,7 +8,6 @@ import com.GunterPro7uDerKatzenLord.Utils.Utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.util.ChatComponentText;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -36,7 +35,7 @@ public class Command extends CommandBase {
         }
         if (args.length > 1) {
             if (Objects.equals(args[0], "copy")) {
-                Utils.copyToClipBoard(AdvancedChat.clearChatComponent(String.join(" ", Arrays.copyOfRange(args, 1, args.length))));
+                Utils.copyToClipBoard(AdvancedChat.clearChatMessage(String.join(" ", Arrays.copyOfRange(args, 1, args.length))));
             }
             if (args[0].equalsIgnoreCase("mcchat")) {
                 String message = String.join(" ", Arrays.copyOfRange(args, 1, args.length));

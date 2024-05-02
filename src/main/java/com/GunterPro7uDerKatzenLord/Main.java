@@ -1,6 +1,6 @@
 package com.GunterPro7uDerKatzenLord;
 
-import com.GunterPro7uDerKatzenLord.Gui.ItemLoreScroller;
+import com.GunterPro7uDerKatzenLord.Listener.ItemLoreScroller;
 import com.GunterPro7uDerKatzenLord.Gui.TextureLoader;
 import com.GunterPro7uDerKatzenLord.Listener.*;
 import com.GunterPro7uDerKatzenLord.Utils.GemstoneDisplay;

@@ -5,14 +5,13 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 
-public class GunterMoneyOverlay extends GuiScreen {
-    private final GuiScreen lastScreen;
+public class GunterMoneyOverlay extends AbstractOverlay {
     private GuiTextField textField0;
     private GuiButton button1;
     private GuiButton button0;
 
     public GunterMoneyOverlay(GuiScreen lastScreen) {
-        this.lastScreen = lastScreen;
+        super(lastScreen);
     }
 
     public GunterMoneyOverlay() {
@@ -53,10 +52,5 @@ public class GunterMoneyOverlay extends GuiScreen {
             button0 = new GuiButton(1, width / 2 - 100, height / 2 - 24, "Money Tracker: " + (Setting.MONEY_OVERLAY.isEnabled() ? "§a§lEnabled" : "§c§lDisabled"));
             buttonList.set(1, button1);
         }
-    }
-
-    @Override
-    public boolean doesGuiPauseGame() {
-        return false;
     }
 }

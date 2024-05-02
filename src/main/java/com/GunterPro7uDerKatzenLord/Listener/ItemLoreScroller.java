@@ -1,4 +1,4 @@
-package com.GunterPro7uDerKatzenLord.Gui;
+package com.GunterPro7uDerKatzenLord.Listener;
 
 import com.GunterPro7uDerKatzenLord.Listener.AdvancedChat;
 import com.GunterPro7uDerKatzenLord.Listener.ClientMouseEvent;

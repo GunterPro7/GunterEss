@@ -5,8 +5,7 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 
-public class GunterChatOverlay extends GuiScreen {
-    private final GuiScreen lastScreen;
+public class GunterChatOverlay extends AbstractOverlay {
     private GuiButton button0;
     private GuiButton button1;
     private GuiButton button2;
@@ -15,7 +14,7 @@ public class GunterChatOverlay extends GuiScreen {
     private GuiTextField textField0;
 
     public GunterChatOverlay(GuiScreen lastScreen) {
-        this.lastScreen = lastScreen;
+        super(lastScreen);
     }
 
     public GunterChatOverlay() {
@@ -74,10 +73,5 @@ public class GunterChatOverlay extends GuiScreen {
             Setting.DONT_CHECK_USELESS_CHAT_MESSAGES.switchEnabled();
             button4.displayString = "Dont check useless chat messages: " + (Setting.DONT_CHECK_USELESS_CHAT_MESSAGES.isEnabled() ? "§a§lEnabled" : "§c§lDisabled");
         }
-    }
-
-    @Override
-    public boolean doesGuiPauseGame() {
-        return false;
     }
 }

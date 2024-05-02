@@ -1,12 +1,12 @@
 package com.GunterPro7uDerKatzenLord.Gui;
 
+import com.GunterPro7uDerKatzenLord.Gui.CustomIngameUI;
 import com.GunterPro7uDerKatzenLord.Setting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 
-public class MoveObjectOverlay extends GuiScreen {
-    public final GuiScreen lastScreen;
+public class MoveObjectOverlay extends AbstractOverlay {
     private final CustomIngameUI customIngameUI;
     private int offsetX = 50;
     private int offsetY = 50;
@@ -15,9 +15,9 @@ public class MoveObjectOverlay extends GuiScreen {
     private final Setting.Position position;
 
     public MoveObjectOverlay(CustomIngameUI customIngameUI, Setting.Position position, GuiScreen lastScreen) {
+        super(lastScreen);
         this.customIngameUI = customIngameUI;
         this.position = position;
-        this.lastScreen = lastScreen;
 
         this.offsetX = position.getOffsetX();
         this.offsetY = position.getOffsetY();

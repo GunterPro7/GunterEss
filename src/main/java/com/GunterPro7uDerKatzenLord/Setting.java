@@ -1,6 +1,7 @@
 package com.GunterPro7uDerKatzenLord;
 
 import com.GunterPro7uDerKatzenLord.Utils.CollectionUtils;
+import net.minecraft.util.EnumChatFormatting;
 
 import java.io.*;
 import java.lang.reflect.Field;
@@ -27,7 +28,7 @@ public class Setting {
             "Day", new Setting(false),
             "Time", new Setting(false),
             "Position", new Setting(false),
-            "Facing", new Setting(false));
+            "Facing", new Setting(false)); // TODO also safe this
 
     public static final Map<String, Position> infoPositions = CollectionUtils.mapOf("Ping", new Position(false),
             "Fps", new Position(false),
@@ -36,7 +37,10 @@ public class Setting {
             "X", new Position(false),
             "Y", new Position(false),
             "Z", new Position(false),
-            "Facing", new Position(false));
+            "Facing", new Position(false)); // TODO also safe this
+    public static EnumChatFormatting infoPrefixColor = EnumChatFormatting.GRAY; // TODO also safe this
+    public static EnumChatFormatting infoValueColor = EnumChatFormatting.GOLD; // TODO also safe this
+    public static EnumChatFormatting infoSuffixColor = EnumChatFormatting.WHITE;
 
     public static File settingsFile;
 

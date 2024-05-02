@@ -19,6 +19,16 @@ public class CollectionUtils {
         return list;
     }
 
+    public static <T, U> Map<T, U> mapOf(List<T> keys, List<U> values) {
+        Map<T, U> map = new HashMap<>();
+
+        for (int i = 0; i < keys.size(); i++) {
+            map.put(keys.get(i), values.get(i));
+        }
+
+        return map;
+    }
+
     public static <T, U> Map<T, U> mapOf(Object... params) {
         Map<T, U> map = new HashMap<>();
 

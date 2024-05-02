@@ -5,14 +5,13 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 
-public class GunterAutoHarpOverlay extends GuiScreen {
-    private final GuiScreen lastScreen;
+public class GunterAutoHarpOverlay extends AbstractOverlay {
 
     private GuiButton buttonEnabled;
     private GuiTextField textFieldPing;
 
     public GunterAutoHarpOverlay(GuiScreen lastScreen) {
-        this.lastScreen = lastScreen;
+        super(lastScreen);
     }
 
     @Override

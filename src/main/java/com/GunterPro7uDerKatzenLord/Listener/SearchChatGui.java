@@ -2,7 +2,6 @@ package com.GunterPro7uDerKatzenLord.Listener;
 
 import com.google.common.collect.Lists;
 
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -122,7 +121,7 @@ public class SearchChatGui extends Gui {
 
     private void sortChatLine(ChatLine chatLine, String s, int i) {
         IChatComponent chatComponent = chatLine.getChatComponent();
-        String text = AdvancedChat.clearChatComponent(chatLine.getChatComponent().getUnformattedText());
+        String text = AdvancedChat.clearChatMessage(chatLine.getChatComponent().getUnformattedText());
 
         if (text.toLowerCase().contains(s.toLowerCase())) {
             List<IChatComponent> list = GuiUtilRenderComponents.splitText(chatComponent, i, this.mc.fontRendererObj, false, false);

@@ -62,7 +62,7 @@ public class AutoDungeonJoiner extends ContainerInformation {
         public DungeonInformation(String displayName, List<String> lore, int slotIndex) {
             super(displayName, lore, slotIndex);
 
-            if (!AdvancedChat.clearChatComponent(lore.get(0)).endsWith("'s Party")) {
+            if (!AdvancedChat.clearChatMessage(lore.get(0)).endsWith("'s Party")) {
                 throw new IllegalArgumentException("Not a valid dungeonInformationField ItemStack");
             }
 
@@ -70,7 +70,7 @@ public class AutoDungeonJoiner extends ContainerInformation {
             boolean membersNow = false;
 
             for (String l : lore) {
-                String line = AdvancedChat.clearChatComponent(l);
+                String line = AdvancedChat.clearChatMessage(l);
                 String[] parts = line.split(":");
 
                 if (parts.length != 2) {
@@ -114,7 +114,7 @@ public class AutoDungeonJoiner extends ContainerInformation {
                 }
             }
 
-            available = AdvancedChat.clearChatComponent(lore.get(lore.size() - 1)).equals("Click to join!");
+            available = AdvancedChat.clearChatMessage(lore.get(lore.size() - 1)).equals("Click to join!");
 
         }
 

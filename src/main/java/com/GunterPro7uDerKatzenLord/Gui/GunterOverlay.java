@@ -13,11 +13,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public class GunterOverlay extends GuiScreen {
+public class GunterOverlay extends AbstractOverlay {
     private GuiButton autoFisherButton;
     private GuiButton autoUpdateButton;
     private final Map<GuiButton, Supplier<? extends GuiScreen>> buttonRelations = new HashMap<>();
-    private final GuiScreen lastScreen;
 
     public GuiScreen getLastScreen() {
         return lastScreen;
@@ -25,7 +24,7 @@ public class GunterOverlay extends GuiScreen {
 
 
     public GunterOverlay(GuiScreen lastScreen) {
-        this.lastScreen = lastScreen;
+        super(lastScreen);
     }
 
     public GunterOverlay() {
@@ -34,7 +33,7 @@ public class GunterOverlay extends GuiScreen {
 
     @Override
     public void initGui() {
-        buttonList.clear(); // TODO untested
+        buttonList.clear();
         buttonRelations.put(new GuiButton(0, width / 2 - 100, height / 2 - 24, "Gemstone Tracker"), () -> new GunterGemstoneTrackerOverlay(this));
         buttonRelations.put(new GuiButton(0, width / 2 - 100, height / 2 + 0, "Chat Features"), () -> new GunterChatOverlay(this));
         buttonRelations.put(new GuiButton(0, width / 2 - 100, height / 2 + 24, "Collection Tracker"), () -> this); // Not ready yet
@@ -102,10 +101,5 @@ public class GunterOverlay extends GuiScreen {
             Setting.AUTO_UPDATES.switchEnabled();
             autoUpdateButton.displayString = "Auto Updates: " + (Setting.AUTO_UPDATES.isEnabled() ? "§a§lEnabled" : "§c§lDisabled");
         }
-    }
-
-    @Override
-    public boolean doesGuiPauseGame() {
-        return false;
     }
 }

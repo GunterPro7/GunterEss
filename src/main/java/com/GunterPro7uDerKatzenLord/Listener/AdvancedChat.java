@@ -34,7 +34,7 @@ public class AdvancedChat {
     private static final AdvancedChat instance = new AdvancedChat();
 
     public static final Map<ChatCondition, Function> actionMap = Utils.createMap(ChatCondition.class, Function.class,
-            new ChatCondition("QUICK MATHS! Solve: ", Condition.STARTSWITH), (Function) message -> AdvancedChat.sendChatMessageAsPlayer("/ac " + String.valueOf(MathUtils.eval(clearChatComponent(message.getUnformattedText()).substring("QUICK MATHS! Solve: ".length()).replaceAll("x", "*"))).replace(".0", "")),
+            new ChatCondition("QUICK MATHS! Solve: ", Condition.STARTSWITH), (Function) message -> AdvancedChat.sendChatMessageAsPlayer("/ac " + String.valueOf(MathUtils.eval(clearChatMessage(message.getUnformattedText()).substring("QUICK MATHS! Solve: ".length()).replaceAll("x", "*"))).replace(".0", "")),
             new ChatCondition("Click HERE to sign the ", Condition.STARTSWITH), (Function) message -> AdvancedChat.sendChatMessageAsPlayer(message.getChatStyle().getChatClickEvent().getValue()),
             new ChatCondition("[FEAR] Public Speaking Demon: Speak ", Condition.STARTSWITH), (Function) message -> AdvancedChat.sendChatMessageAsPlayer("/ac q weqwe qwe qwe qeqwe qweqwe qwe qwe ")
     );
@@ -73,7 +73,7 @@ public class AdvancedChat {
             return;
         }
 
-        String text = clearChatComponent(unformattedText);
+        String text = clearChatMessage(unformattedText);
 
         // Do Chat Actions if specific message
 
@@ -199,7 +199,7 @@ public class AdvancedChat {
                                 messageToCopy += " (" + ((Keyboard.isKeyDown(29) || Keyboard.isKeyDown(157)) && Mouse.isButtonDown(1) ? "$7" : "") + messageInformation.getCount() + ")";
                             }
                         } else {
-                            messageToCopy = AdvancedChat.clearChatComponent(chatComponent.getUnformattedText());
+                            messageToCopy = AdvancedChat.clearChatMessage(chatComponent.getUnformattedText());
                         }
                         if ((Keyboard.isKeyDown(42) || Keyboard.isKeyDown(52)) && Mouse.isButtonDown(1)) {
                             String message = messageToCopy.replaceAll("\\$[0-9a-zA-Z]", "");
@@ -310,7 +310,7 @@ public class AdvancedChat {
         for (final IChatComponent chatComponent : message) {
             String text = chatComponent.getUnformattedTextForChat();
             if (updateColors) {
-                if (clearChatComponent(text).endsWith("|GunterEss")) {
+                if (clearChatMessage(text).endsWith("|GunterEss")) {
                     text = text.replaceAll("\\|GunterEss", "");
                 }
                 text = text.replaceAll("(?!\\\\$)\\$", "§");
@@ -365,7 +365,7 @@ public class AdvancedChat {
         mc.thePlayer.sendChatMessage(text);
     }
 
-    public static String clearChatComponent(String text) {
+    public static String clearChatMessage(String text) {
         return text.replaceAll("§[0-9a-zA-Z]", "");
     }
 
@@ -377,7 +377,7 @@ public class AdvancedChat {
         if (geMark) {
             iChatComponent = new ChatComponentText("§a§lGunterEss > §r").appendSibling(iChatComponent);
         }
-        mc.thePlayer.addChatMessage(AdvancedChat.formatChatComponentForCopy(iChatComponent, AdvancedChat.clearChatComponent(iChatComponent.getUnformattedText()), false));
+        mc.thePlayer.addChatMessage(AdvancedChat.formatChatComponentForCopy(iChatComponent, AdvancedChat.clearChatMessage(iChatComponent.getUnformattedText()), false));
     }
 
     public static class ChatCondition {

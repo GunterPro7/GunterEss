@@ -13,7 +13,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.IChatComponent;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
-import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -56,7 +55,7 @@ public class QuiverEmptyChecker {
 
     @SubscribeEvent
     public void onChatMessage(ClientChatReceivedEvent event) {
-        String message = AdvancedChat.clearChatComponent(event.message.getUnformattedText());
+        String message = AdvancedChat.clearChatMessage(event.message.getUnformattedText());
         if (message.matches("You filled your quiver with .* extra arrows!")) {
             arrows += Utils.parseInt(message.substring("You filled your quiver with ".length()).split(" ")[0]);
             if (arrows > maxArrows) {
@@ -73,7 +72,7 @@ public class QuiverEmptyChecker {
 
                 if (container instanceof ContainerChest) {
                     IChatComponent displayName = ((ContainerChest) container).getLowerChestInventory().getDisplayName();
-                    if (AdvancedChat.clearChatComponent(displayName.getFormattedText()).equals("Quiver")) {
+                    if (AdvancedChat.clearChatMessage(displayName.getFormattedText()).equals("Quiver")) {
                         reload(container);
                     }
                 }
@@ -114,7 +113,7 @@ public class QuiverEmptyChecker {
 
                         if (loreString.toLowerCase().contains("infinite quiver")) {
                             try {
-                                infiniteQuiverLvl = Utils.convertToNumberFromRomNumber(AdvancedChat.clearChatComponent(loreString.toLowerCase().split("infinite quiver")[1].split(" ")[1].replaceAll(",", ""))); // This is temporary
+                                infiniteQuiverLvl = Utils.convertToNumberFromRomNumber(AdvancedChat.clearChatMessage(loreString.toLowerCase().split("infinite quiver")[1].split(" ")[1].replaceAll(",", ""))); // This is temporary
                             } catch (NumberFormatException e) {
                                 e.printStackTrace();
                             }

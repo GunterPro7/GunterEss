@@ -10,15 +10,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GunterAutoKickOverlay extends GuiScreen {
-    private final GuiScreen lastScreen;
+public class GunterAutoKickOverlay extends AbstractOverlay {
     private GuiTextField textField0;
     private final List<GuiButton> localButtonList = new ArrayList<>();
     public final static boolean[] values = new boolean[]{false, false, false, false, false};
     private static GuiTextField textField1 = new GuiTextField(0, Minecraft.getMinecraft().fontRendererObj, 0, 0, 200, 20);
 
     public GunterAutoKickOverlay(GuiScreen lastScreen) {
-        this.lastScreen = lastScreen;
+        super(lastScreen);
     }
 
     public GunterAutoKickOverlay() {
@@ -78,15 +77,10 @@ public class GunterAutoKickOverlay extends GuiScreen {
             if (localButton == button) {
                 String displayString = localButton.displayString;
                 boolean b = displayString.endsWith("Disabled");
-                localButton.displayString = AdvancedChat.clearChatComponent(displayString.split("Disabled|Enabled")[0]) + (b ? "§a§lEnabled" : "§c§lDisabled");
+                localButton.displayString = AdvancedChat.clearChatMessage(displayString.split("Disabled|Enabled")[0]) + (b ? "§a§lEnabled" : "§c§lDisabled");
                 values[localButton.id] = b;
             }
         }
-    }
-
-    @Override
-    public boolean doesGuiPauseGame() {
-        return false;
     }
 
     public static List<String> getIgnoredPlayers() {
