@@ -2,6 +2,7 @@ package com.GunterPro7uDerKatzenLord.Utils;
 
 import com.GunterPro7uDerKatzenLord.Listener.AdvancedChat;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -182,6 +183,15 @@ public class Utils {
         }
 
         return scaleFactor;
+    }
+
+    public static int getPing() {
+        NetworkPlayerInfo networkPlayerInfo = Minecraft.getMinecraft().getNetHandler().getPlayerInfo(Minecraft.getMinecraft().thePlayer.getUniqueID());
+        if (networkPlayerInfo != null) {
+            return networkPlayerInfo.getResponseTime();
+        } else {
+            return -1;
+        }
     }
 
 }

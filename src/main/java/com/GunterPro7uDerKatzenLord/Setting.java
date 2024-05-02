@@ -23,14 +23,16 @@ public class Setting {
     public static final Position GEMSTONE_DISPLAY = new Position(true, 50, 200);
     public static final Setting AUTO_UPDATES = new Setting(true);
     public static final Value AUTO_HARP = new Value(true, 250);
-    public static final Map<String, Setting> infoSettings = CollectionUtils.mapOf("Ping", new Setting(false),
+    public static final Map<String, Setting> infoSettings = CollectionUtils.mapOf(
+            "Ping", new Setting(false),
             "Fps", new Setting(false),
             "Day", new Setting(false),
             "Time", new Setting(false),
             "Position", new Setting(false),
             "Facing", new Setting(false)); // TODO also safe this
 
-    public static final Map<String, Position> infoPositions = CollectionUtils.mapOf("Ping", new Position(false),
+    public static final Map<String, Position> infoPositions = CollectionUtils.mapOf(
+            "Ping", new Position(false),
             "Fps", new Position(false),
             "Day", new Position(false),
             "Time", new Position(false),
