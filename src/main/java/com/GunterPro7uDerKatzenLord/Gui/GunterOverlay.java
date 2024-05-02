@@ -34,6 +34,8 @@ public class GunterOverlay extends AbstractOverlay {
     @Override
     public void initGui() {
         buttonList.clear();
+        buttonRelations.clear();
+
         buttonRelations.put(new GuiButton(0, width / 2 - 100, height / 2 - 24, "Gemstone Tracker"), () -> new GunterGemstoneTrackerOverlay(this));
         buttonRelations.put(new GuiButton(0, width / 2 - 100, height / 2 + 0, "Chat Features"), () -> new GunterChatOverlay(this));
         buttonRelations.put(new GuiButton(0, width / 2 - 100, height / 2 + 24, "Collection Tracker"), () -> null); // Not ready yet
