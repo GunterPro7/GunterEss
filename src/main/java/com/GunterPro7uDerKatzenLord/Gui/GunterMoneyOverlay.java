@@ -40,14 +40,6 @@ public class GunterMoneyOverlay extends AbstractOverlay {
         buttonList.add(button1);
     }
 
-    @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        drawCenteredString(fontRendererObj, "§lGunter Essentials", width / 2, 40, 0xFFFFFF);
-        drawCenteredString(fontRendererObj, "-> Money Tracker", width / 2, 60, 0xFFFFFF);
-        //textField1.drawTextBox();
-        super.drawScreen(mouseX, mouseY, partialTicks);
-    }
-
 
     @Override
     protected void actionPerformed(GuiButton button) {

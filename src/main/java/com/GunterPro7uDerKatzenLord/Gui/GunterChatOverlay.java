@@ -43,11 +43,6 @@ public class GunterChatOverlay extends AbstractOverlay {
         buttonList.add(button4);
     }
 
-    @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        super.drawScreen(mouseX, mouseY, partialTicks);
-    }
-
 
     @Override
     protected void actionPerformed(GuiButton button) {

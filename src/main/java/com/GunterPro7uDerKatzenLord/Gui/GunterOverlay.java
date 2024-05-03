@@ -68,14 +68,6 @@ public class GunterOverlay extends AbstractOverlay {
     }
 
     @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        super.drawScreen(mouseX, mouseY, partialTicks);
-        //ResourceLocation resourceLocation = new ResourceLocation(Main.MOD_ID, "textures/items/wheat.png");
-        //mc.getTextureManager().bindTexture(resourceLocation); // Set the texture (item's texture).
-        //drawTexturedModalRect(2, 2, 0, 0, 16, 16);
-    }
-
-    @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
         //if (textField0.isFocused()) {
         //    textField0.textboxKeyTyped(typedChar, keyCode);

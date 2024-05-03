@@ -59,11 +59,6 @@ public class GunterCollectionOverlay extends AbstractOverlay {
     }
 
     @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        super.drawScreen(mouseX, mouseY, partialTicks);
-    }
-
-    @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
         textField0.textboxKeyTyped(typedChar, keyCode);
 

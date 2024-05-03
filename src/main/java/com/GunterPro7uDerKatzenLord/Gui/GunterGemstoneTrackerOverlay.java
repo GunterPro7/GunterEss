@@ -39,11 +39,6 @@ public class GunterGemstoneTrackerOverlay extends AbstractOverlay {
         buttonList.add(moveObjectButton);
     }
 
-    @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        super.drawScreen(mouseX, mouseY, partialTicks);
-    }
-
 
     @Override
     protected void actionPerformed(GuiButton button) {
