@@ -6,15 +6,16 @@ import com.GunterPro7uDerKatzenLord.Utils.Utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.Vec3;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.text.DecimalFormat;
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.UnsupportedTemporalTypeException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,7 +36,7 @@ public class InformationListener {
     @SubscribeEvent
     public void onRenderGameOverlay(RenderGameOverlayEvent.Post event) {
         if (event.type == RenderGameOverlayEvent.ElementType.TEXT) {
-            Setting.infoSettings.forEach((key, value) -> {
+            Setting.INFO_SETTINGS.forEach((key, value) -> {
                 if (value.isEnabled()) {
                     if (key.equals("Position")) {
                         for (String c : new String[]{"X", "Y", "Z"}) {
@@ -50,7 +51,7 @@ public class InformationListener {
     }
 
     private void renderInformationOverlay(String key) {
-        Setting.Position position = Setting.infoPositions.get(key);
+        Setting.Position position = Setting.INFO_POSITIONS.get(key);
 
         String v = "loading...";
         if (informationValues.containsKey(key)) {
@@ -58,7 +59,7 @@ public class InformationListener {
         }
 
         CustomIngameUI customIngameUI = new CustomIngameUI(0x00000000, 0x00000000,
-                Setting.infoPrefixColor + key + Setting.infoSuffixColor + ": " + Setting.infoValueColor + v);
+                Setting.INFO_PREFIX_COLOR + key + Setting.INFO_SUFFIX_COLOR + ": " + Setting.INFO_VALUE_COLOR + v);
         customIngameUI.drawInfoBox(position.getOffsetX(), position.getOffsetY(), true);
     }
 
@@ -88,7 +89,14 @@ public class InformationListener {
 
             LocalTime currentTime = LocalTime.now();
             if (lastTimeSec != currentTime.getSecond()) {
-                informationValues.put("Time", currentTime.format(DateTimeFormatter.ofPattern("HH:mm:ss"))); // TODO format in settings
+                String v;
+                try {
+                    v = currentTime.format(DateTimeFormatter.ofPattern(Setting.INFO_TIME_FORMAT));
+                } catch (IllegalArgumentException | DateTimeException e) {
+                    v = "<Invalid Format>";
+                }
+
+                informationValues.put("Time", v);
                 lastTimeSec = currentTime.getSecond();
             }
 
@@ -98,7 +106,14 @@ public class InformationListener {
 
                 LocalDate currentDate = LocalDate.now();
                 if (currentDate.getDayOfYear() != lastDayOfYear) {
-                    informationValues.put("Day", currentDate.format(DateTimeFormatter.ofPattern("dd.MM.yyyy"))); // TODO format in settings
+                    String v;
+                    try {
+                        v = currentDate.format(DateTimeFormatter.ofPattern(Setting.INFO_DATE_FORMAT));
+                    } catch (IllegalArgumentException | DateTimeException e) {
+                        v = "<Invalid Format>";
+                    }
+
+                    informationValues.put("Day", v);
                     lastDayOfYear = currentDate.getDayOfYear();
                 }
 

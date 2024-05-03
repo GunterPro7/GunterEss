@@ -2,6 +2,7 @@ package com.GunterPro7uDerKatzenLord.Gui;
 
 import com.GunterPro7uDerKatzenLord.Setting;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiLabel;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 
@@ -24,7 +25,14 @@ public class GunterGemstoneTrackerOverlay extends AbstractOverlay {
 
     @Override
     public void initGui() {
-        buttonList.clear();
+        super.initGui();
+
+        GuiLabel label = new GuiLabel(fontRendererObj, 0, width / 2 - 50, 40, 100, 20, 0xFFFFFF).setCentered();
+        label.func_175202_a("§lGunter Essentials");
+        label.func_175202_a("");
+        label.func_175202_a("-> Gemstone Tracker");
+        labelList.add(label);
+
         activeButton = new GuiButton(0, width / 2 - 100, height / 2 + 0, Setting.GEMSTONE_DISPLAY.isEnabled() ? "§a§lEnabled" : "§c§lDisabled");
         moveObjectButton = new GuiButton(0, width / 2 - 100, height / 2 + 24, "Move Object");
         buttonList.add(activeButton);
@@ -33,9 +41,6 @@ public class GunterGemstoneTrackerOverlay extends AbstractOverlay {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        drawCenteredString(fontRendererObj, "§lGunter Essentials", width / 2, 40, 0xFFFFFF);
-        drawCenteredString(fontRendererObj, "-> Gemstone Tracker", width / 2, 60, 0xFFFFFF);
-
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 

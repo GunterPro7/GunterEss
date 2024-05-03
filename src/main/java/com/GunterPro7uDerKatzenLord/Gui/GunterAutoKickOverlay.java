@@ -3,6 +3,7 @@ package com.GunterPro7uDerKatzenLord.Gui;
 import com.GunterPro7uDerKatzenLord.Listener.AdvancedChat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiLabel;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 
@@ -30,7 +31,22 @@ public class GunterAutoKickOverlay extends AbstractOverlay {
 
     @Override
     public void initGui() {
-        buttonList.clear();
+        super.initGui();
+
+        GuiLabel label = new GuiLabel(fontRendererObj, 0, width / 2 - 50, 40, 100, 20, 0xFFFFFF).setCentered();
+        label.func_175202_a("§lGunter Essentials");
+        label.func_175202_a("");
+        label.func_175202_a("-> Dungeon Utils");
+        labelList.add(label);
+
+        GuiLabel labelIgnoredPlayers = new GuiLabel(fontRendererObj, 0, width / 2 - 60, height / 2 + 120, 100, 20, 0xFFFFFF);
+        labelIgnoredPlayers.func_175202_a("Ignored Players (with ';' between):");
+        labelList.add(labelIgnoredPlayers);
+
+        GuiLabel labelAutoJoin = new GuiLabel(fontRendererObj, 0, width / 2 - 60, height / 2 + 180, 100, 20, 0xFFFFFF);
+        labelAutoJoin.func_175202_a("Auto Join:");
+        labelList.add(labelAutoJoin);
+
         addButton(new GuiButton(0, width / 2 - 100, height / 2 + 0, "Mage: " + (values[0] ? "§a§lEnabled" : "§c§lDisabled")));
         addButton(new GuiButton(1, width / 2 - 100, height / 2 + 24, "Berserk: " + (values[1] ? "§a§lEnabled" : "§c§lDisabled")));
         addButton(new GuiButton(2, width / 2 - 100, height / 2 + 48, "Healer: " + (values[2] ? "§a§lEnabled" : "§c§lDisabled")));
@@ -44,6 +60,8 @@ public class GunterAutoKickOverlay extends AbstractOverlay {
         textField1.yPosition = height / 2 + 140;
         textField1.setFocused(true);
         textField1.setMaxStringLength(65536);
+
+        textFieldList.add(textField1);
     }
 
     private void addButton(GuiButton button) {
@@ -53,12 +71,6 @@ public class GunterAutoKickOverlay extends AbstractOverlay {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        drawCenteredString(fontRendererObj, "§lGunter Essentials", width / 2, 40, 0xFFFFFF);
-        drawCenteredString(fontRendererObj, "-> Dungeon Utils", width / 2, 60, 0xFFFFFF);
-        drawCenteredString(fontRendererObj, "Ignored Players (with ';' between):", width / 2 - 60, height / 2 + 120, 0xFFFFFF);
-        drawCenteredString(fontRendererObj, "Auto Join:", width / 2 - 60, height / 2 + 180, 0xFFFFFF);
-
-        textField1.drawTextBox();
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 

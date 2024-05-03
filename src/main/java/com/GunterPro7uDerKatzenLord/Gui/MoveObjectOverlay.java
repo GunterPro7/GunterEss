@@ -25,6 +25,8 @@ public class MoveObjectOverlay extends AbstractOverlay {
 
     @Override
     public void initGui() {
+        super.initGui();
+
         button = new GuiButton(0, width / 2 - 100, (int) (height / 1.25), "Save");
         buttonList.add(button);
     }
@@ -32,8 +34,8 @@ public class MoveObjectOverlay extends AbstractOverlay {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        customIngameUI.drawInfoBox(offsetX, offsetY, true);
         super.drawScreen(mouseX, mouseY, partialTicks);
+        customIngameUI.drawInfoBox(offsetX, offsetY, true);
     }
 
     @Override

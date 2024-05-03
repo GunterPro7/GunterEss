@@ -1,6 +1,7 @@
 package com.GunterPro7uDerKatzenLord.Gui;
 
 import com.GunterPro7uDerKatzenLord.Listener.AdvancedChat;
+import com.GunterPro7uDerKatzenLord.Utils.McUtils;
 import com.GunterPro7uDerKatzenLord.Utils.TimeUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -22,7 +23,7 @@ public abstract class AbstractOverlay extends GuiScreen {
     protected int pageContentHeight;
     protected int scrollOffset;
 
-    private final List<GuiTextField> textFieldList = new ArrayList<>();
+    protected final List<GuiTextField> textFieldList = new ArrayList<>();
 
     public AbstractOverlay(GuiScreen lastScreen) {
         this.lastScreen = lastScreen;
@@ -35,6 +36,8 @@ public abstract class AbstractOverlay extends GuiScreen {
         } else {
             super.keyTyped(typedChar, keyCode);
         }
+
+        textFieldList.forEach(textField -> textField.textboxKeyTyped(typedChar, keyCode));
     }
 
     @Override
@@ -114,6 +117,7 @@ public abstract class AbstractOverlay extends GuiScreen {
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         super.mouseClicked(mouseX, mouseY + scrollOffset, mouseButton);
+        textFieldList.forEach(textField -> textField.mouseClicked(mouseX, mouseY + scrollOffset, 0));
     }
 
 

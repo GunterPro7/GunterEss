@@ -2,6 +2,7 @@ package com.GunterPro7uDerKatzenLord.Gui;
 
 import com.GunterPro7uDerKatzenLord.Setting;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiLabel;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 
@@ -26,7 +27,18 @@ public class GunterCollectionOverlay extends AbstractOverlay {
 
     @Override
     public void initGui() {
-        buttonList.clear();
+        super.initGui();
+
+        GuiLabel label = new GuiLabel(fontRendererObj, 0, width / 2 - 50, 40, 100, 20, 0xFFFFFF).setCentered();
+        label.func_175202_a("§lGunter Essentials");
+        label.func_175202_a("");
+        label.func_175202_a("-> Collection Tracker");
+        labelList.add(label);
+
+        GuiLabel label2 = new GuiLabel(fontRendererObj, 0, width / 2 - 70, height / 2 - 42, 50, 20, 0xFFFFFF);
+        label2.func_175202_a("Collection:");
+        labelList.add(label2);
+
         button0 = new GuiButton(0, width / 2 - 100, height / 2 - 0, "Edit Position");
         button1 = new GuiButton(1, width / 2 - 100, height / 2 + 24, "Collection Tracker: " + (Setting.COLLECTION_OVERLAY.isEnabled() ? "§a§lEnabled" : "§c§lDisabled"));
 
@@ -36,20 +48,18 @@ public class GunterCollectionOverlay extends AbstractOverlay {
         textField0 = new GuiTextField(0, fontRendererObj, width / 2 - 100, height / 2 - 24, 200, 20);
         textField0.setMaxStringLength(64);
         textField0.setFocused(true);
-//
+
+        textFieldList.add(textField0);
+
         //textField1 = new GuiTextField(1, fontRendererObj, width / 2 - 160, height / 2 + 24, 100, 20);
         //textField1.setMaxStringLength(100);
+        //textFieldList.add(textField1);
 
 
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        drawCenteredString(fontRendererObj, "§lGunter Essentials", width / 2, 40, 0xFFFFFF);
-        drawCenteredString(fontRendererObj, "-> Collection Tracker", width / 2, 60, 0xFFFFFF);
-        drawCenteredString(fontRendererObj, "Collection:", width / 2 - 70, height / 2 - 42, 0xFFFFFF);
-        textField0.drawTextBox();
-        //textField1.drawTextBox();
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 

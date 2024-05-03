@@ -23,7 +23,7 @@ public class Setting {
     public static final Position GEMSTONE_DISPLAY = new Position(true, 50, 200);
     public static final Setting AUTO_UPDATES = new Setting(true);
     public static final Value AUTO_HARP = new Value(true, 250);
-    public static final Map<String, Setting> infoSettings = CollectionUtils.mapOf(
+    public static final Map<String, Setting> INFO_SETTINGS = CollectionUtils.mapOf(
             "Ping", new Setting(false),
             "Fps", new Setting(false),
             "Day", new Setting(false),
@@ -31,7 +31,7 @@ public class Setting {
             "Position", new Setting(false),
             "Facing", new Setting(false)); // TODO also safe this
 
-    public static final Map<String, Position> infoPositions = CollectionUtils.mapOf(
+    public static final Map<String, Position> INFO_POSITIONS = CollectionUtils.mapOf(
             "Ping", new Position(false),
             "Fps", new Position(false),
             "Day", new Position(false),
@@ -40,9 +40,11 @@ public class Setting {
             "Y", new Position(false),
             "Z", new Position(false),
             "Facing", new Position(false)); // TODO also safe this
-    public static EnumChatFormatting infoPrefixColor = EnumChatFormatting.GRAY; // TODO also safe this
-    public static EnumChatFormatting infoValueColor = EnumChatFormatting.GOLD; // TODO also safe this
-    public static EnumChatFormatting infoSuffixColor = EnumChatFormatting.WHITE;
+    public static EnumChatFormatting INFO_PREFIX_COLOR = EnumChatFormatting.GRAY; // TODO also safe this
+    public static EnumChatFormatting INFO_VALUE_COLOR = EnumChatFormatting.GOLD; // TODO also safe this
+    public static EnumChatFormatting INFO_SUFFIX_COLOR = EnumChatFormatting.WHITE;
+    public static String INFO_TIME_FORMAT = "HH:mm:ss";
+    public static String INFO_DATE_FORMAT = "dd.MM.yyyy";
 
     public static File settingsFile;
 

@@ -2,8 +2,8 @@ package com.GunterPro7uDerKatzenLord.Gui;
 
 import com.GunterPro7uDerKatzenLord.Setting;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiLabel;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.GuiTextField;
 
 public class GunterChatOverlay extends AbstractOverlay {
     private GuiButton button0;
@@ -11,14 +11,9 @@ public class GunterChatOverlay extends AbstractOverlay {
     private GuiButton button2;
     private GuiButton button3;
     private GuiButton button4;
-    private GuiTextField textField0;
 
     public GunterChatOverlay(GuiScreen lastScreen) {
         super(lastScreen);
-    }
-
-    public GunterChatOverlay() {
-        this(new GunterOverlay());
     }
 
     public GuiScreen getLastScreen() {
@@ -27,7 +22,14 @@ public class GunterChatOverlay extends AbstractOverlay {
 
     @Override
     public void initGui() {
-        buttonList.clear();
+        super.initGui();
+
+        GuiLabel label = new GuiLabel(fontRendererObj, 0, width / 2 - 50, 40, 100, 20, 0xFFFFFF).setCentered();
+        label.func_175202_a("§lGunter Essentials");
+        label.func_175202_a("");
+        label.func_175202_a("-> Chat Features");
+        labelList.add(label);
+
         button0 = new GuiButton(0, width / 2 - 100, height / 2 - 0, "Copy Chat: " + (Setting.COPY_CHAT.isEnabled() ? "§a§lEnabled" : "§c§lDisabled"));
         button1 = new GuiButton(0, width / 2 - 100, height / 2 + 24, "Copy with Stack: " + (Setting.COPY_WITH_STACK.isEnabled() ? "§a§lEnabled" : "§c§lDisabled"));
         button2 = new GuiButton(0, width / 2 - 100, height / 2 + 48, "Stack Chat Messages: " + (Setting.STACK_CHAT_MESSAGES.isEnabled() ? "§a§lEnabled" : "§c§lDisabled"));
@@ -39,17 +41,10 @@ public class GunterChatOverlay extends AbstractOverlay {
         buttonList.add(button2);
         buttonList.add(button3);
         buttonList.add(button4);
-        textField0 = new GuiTextField(0, fontRendererObj, width / 2 + 100, height / 2 + 120, 100, 20);
-        textField0.setMaxStringLength(100);
-        textField0.setFocused(true);
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        drawCenteredString(fontRendererObj, "§lGunter Essentials", width / 2, 40, 0xFFFFFF);
-        drawCenteredString(fontRendererObj, "-> Chat Features", width / 2, 60, 0xFFFFFF);
-        drawCenteredString(fontRendererObj, "Time messages are stacking (seconds):", width / 2, height / 2 + 120, 0xFFFFFF);
-        textField0.drawTextBox();
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 

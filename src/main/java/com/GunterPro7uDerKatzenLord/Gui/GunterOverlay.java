@@ -5,6 +5,7 @@ import com.GunterPro7uDerKatzenLord.Main;
 import com.GunterPro7uDerKatzenLord.Setting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiLabel;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
 
@@ -33,8 +34,14 @@ public class GunterOverlay extends AbstractOverlay {
 
     @Override
     public void initGui() {
-        buttonList.clear();
+        super.initGui();
         buttonRelations.clear();
+
+        GuiLabel label = new GuiLabel(fontRendererObj, 0, width / 2 - 50, 40, 100, 20, 0xFFFFFF).setCentered();
+        label.func_175202_a("§lGunter Essentials");
+        label.func_175202_a("");
+        label.func_175202_a("by GunterPro7 f. DerKatzenLord");
+        labelList.add(label);
 
         buttonRelations.put(new GuiButton(0, width / 2 - 100, height / 2 - 24, "Gemstone Tracker"), () -> new GunterGemstoneTrackerOverlay(this));
         buttonRelations.put(new GuiButton(0, width / 2 - 100, height / 2 + 0, "Chat Features"), () -> new GunterChatOverlay(this));
@@ -62,15 +69,10 @@ public class GunterOverlay extends AbstractOverlay {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        drawCenteredString(fontRendererObj, "§lGunter Essentials", width / 2, 40, 0xFFFFFF); // TODO das hier alles umändern, sodass es pageContentHeight anstatt von fixen zahlen verwendet (in allen klassen)
-        //textField0.drawTextBox();
-        //textField1.drawTextBox();
-        drawCenteredString(fontRendererObj, "GunterPro7 f. DerKatzenLord", width / 2, 60, 0xFFFFFF);
         super.drawScreen(mouseX, mouseY, partialTicks);
-        ResourceLocation resourceLocation = new ResourceLocation(Main.MOD_ID, "textures/items/wheat.png");
-        mc.getTextureManager().bindTexture(resourceLocation); // Set the texture (item's texture).
-        drawTexturedModalRect(2, 2, 0, 0, 16, 16);
-
+        //ResourceLocation resourceLocation = new ResourceLocation(Main.MOD_ID, "textures/items/wheat.png");
+        //mc.getTextureManager().bindTexture(resourceLocation); // Set the texture (item's texture).
+        //drawTexturedModalRect(2, 2, 0, 0, 16, 16);
     }
 
     @Override

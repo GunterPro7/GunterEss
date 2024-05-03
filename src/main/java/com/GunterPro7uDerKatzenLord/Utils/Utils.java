@@ -16,6 +16,8 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.*;
 
+// This Class if for Utils related to basic Java
+// TODO move mc shit over to "McUtils"
 public class Utils {
     public static final Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
     public static final Map<Long, Runnable> commandTasks = new HashMap<>();

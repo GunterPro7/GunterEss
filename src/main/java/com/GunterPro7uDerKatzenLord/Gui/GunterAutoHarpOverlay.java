@@ -2,6 +2,7 @@ package com.GunterPro7uDerKatzenLord.Gui;
 
 import com.GunterPro7uDerKatzenLord.Setting;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiLabel;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 
@@ -18,18 +19,16 @@ public class GunterAutoHarpOverlay extends AbstractOverlay {
     public void initGui() {
         super.initGui();
 
+        GuiLabel label = new GuiLabel(fontRendererObj, 0, width / 2 - 50, 40, 100, 20, 0xFFFFFF).setCentered();
+        label.func_175202_a("§lGunter Essentials");
+        label.func_175202_a("");
+        label.func_175202_a("-> Auto Harp");
+        labelList.add(label);
+
         buttonEnabled = new GuiButton(0, width / 2 - 100, height / 2, (Setting.AUTO_HARP.isEnabled() ? "§a§lEnabled" : "§c§lDisabled"));
         textFieldPing = new GuiTextField(1, fontRendererObj, width / 2 - 100, height / 2 + 24, 100, 20);
         textFieldPing.setMaxStringLength(5);
-    }
 
-    @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        super.drawScreen(mouseX, mouseY, partialTicks);
-
-        drawCenteredString(fontRendererObj, "§lGunter Essentials", width / 2, 40, 0xFFFFFF);
-        drawCenteredString(fontRendererObj, "-> Auto Harp", width / 2, 60, 0xFFFFFF);
-
-        textFieldPing.drawTextBox();
+        textFieldList.add(textFieldPing); // TODO shit missing here
     }
 }
