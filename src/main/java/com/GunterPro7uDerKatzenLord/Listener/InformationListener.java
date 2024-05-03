@@ -32,6 +32,9 @@ public class InformationListener {
     private int lastPing = -2;
     private long lacyLastTime = System.currentTimeMillis();
 
+    private String lastDateFormat;
+    private String lastTimeFormat;
+
     // Render Information
     @SubscribeEvent
     public void onRenderGameOverlay(RenderGameOverlayEvent.Post event) {
@@ -88,7 +91,7 @@ public class InformationListener {
             }
 
             LocalTime currentTime = LocalTime.now();
-            if (lastTimeSec != currentTime.getSecond()) {
+            if (lastTimeSec != currentTime.getSecond() || !lastTimeFormat.equals(Setting.INFO_TIME_FORMAT)) {
                 String v;
                 try {
                     v = currentTime.format(DateTimeFormatter.ofPattern(Setting.INFO_TIME_FORMAT));
@@ -98,14 +101,15 @@ public class InformationListener {
 
                 informationValues.put("Time", v);
                 lastTimeSec = currentTime.getSecond();
+                lastTimeFormat = Setting.INFO_TIME_FORMAT;
             }
 
             // Lacy Tasks
-            if (System.currentTimeMillis() - lacyLastTime >= 1000) {
+            if (System.currentTimeMillis() - lacyLastTime >= 1000 || !lastDateFormat.equals(Setting.INFO_DATE_FORMAT)) {
                 informationValues.put("Fps", String.valueOf(Minecraft.getDebugFPS()));
 
                 LocalDate currentDate = LocalDate.now();
-                if (currentDate.getDayOfYear() != lastDayOfYear) {
+                if (currentDate.getDayOfYear() != lastDayOfYear || !lastDateFormat.equals(Setting.INFO_DATE_FORMAT)) {
                     String v;
                     try {
                         v = currentDate.format(DateTimeFormatter.ofPattern(Setting.INFO_DATE_FORMAT));
@@ -115,6 +119,7 @@ public class InformationListener {
 
                     informationValues.put("Day", v);
                     lastDayOfYear = currentDate.getDayOfYear();
+                    lastDateFormat = Setting.INFO_DATE_FORMAT;
                 }
 
                 int curPing = Utils.getPing();
