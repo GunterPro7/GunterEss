@@ -49,6 +49,7 @@ public class Setting {
     public static File settingsFile;
 
     private boolean enabled;
+
     public Setting(boolean enabled) {
         this.enabled = enabled;
     }
@@ -62,7 +63,8 @@ public class Setting {
         return enabled;
     }
 
-    public Setting() {}
+    public Setting() {
+    }
 
     public void switchEnabled() {
         enabled = !enabled;
@@ -140,7 +142,9 @@ public class Setting {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(": ");
-                settings.put(parts[0], parts[1]);
+                if (parts.length > 1) {
+                    settings.put(parts[0], parts[1]);
+                }
             }
         }
 
@@ -156,34 +160,92 @@ public class Setting {
         for (Field field : fields) {
             if (Modifier.isStatic(field.getModifiers())) {
                 Object o = field.get(null);
-                if (o instanceof Setting) { // TODO give this in eigene methode, dass ein listenobjekt diese mehrmals ausführen kann, auch bei schreiben anschauen.
-                    Setting setting = (Setting) o;
-                    String fieldName = field.getName();
+                if (o instanceof Map) {
+                    Map<?, ?> map = (Map<?, ?>) o;
 
-                    settings.forEach((name, info) -> {
-                        if (fieldName.equals(name)) {
-                            String[] parts = info.split(";");
-                            setting.enabled = Boolean.parseBoolean(parts[0]);
+                    for (Map.Entry<?, ?> entry : map.entrySet()) {
+                        initRawSetting(entry.getKey(), field.getName() + ";" + entry.getKey(), settings, field);
+                        initRawSetting(entry.getValue(), field.getName() + ";" + entry.getKey(), settings, field);
+                    }
+                } else if (o instanceof List) {
+                    List<?> list = (List<?>) o;
 
-                            if (setting instanceof Position) {
-                                Position pos = (Position) setting;
-                                if (parts.length > 2) {
-                                    pos.offsetX = Integer.parseInt(parts[1]);
-                                    pos.offsetX = Integer.parseInt(parts[2]);
-                                }
-
-                            } else if (setting instanceof Value) {
-                                Value v = (Value) setting;
-                                if (parts.length > 1) {
-                                    v.value = Integer.parseInt(parts[1]);
-                                }
-                            }
-                        }
-                    });
+                    int index = 0;
+                    for (Object element : list) {
+                        initRawSetting(element, field.getName() + ";" + index++, settings, field);
+                    }
+                } else {
+                    initRawSetting(o, field.getName(), settings, field);
                 }
             }
         }
 
+    }
+
+    private static void initRawSetting(Object object, String name, Map<String, String> settings, Field field) {
+        settings.forEach((curName, info) -> {
+            if (name.equals(curName)) {
+                String[] parts = info.split(";");
+                if (object instanceof Setting) {
+                    Setting setting = (Setting) object;
+                    setting.enabled = Boolean.parseBoolean(parts[0]);
+
+                    if (setting instanceof Position) {
+                        Position pos = (Position) setting;
+                        if (parts.length > 2) {
+                            pos.offsetX = Integer.parseInt(parts[1]);
+                            pos.offsetX = Integer.parseInt(parts[2]);
+                        }
+
+                    } else if (setting instanceof Value) {
+                        Value v = (Value) setting;
+                        if (parts.length > 1) {
+                            v.value = Integer.parseInt(parts[1]);
+                        }
+                    }
+                } else if (object instanceof EnumChatFormatting) {
+                    try {
+                        field.set(null, EnumChatFormatting.valueOf(parts[0]));
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
+
+                } else if (object instanceof String) {
+                    try {
+                        Object o = field.get(null);
+                        if (o instanceof Map) {
+                            String key = name.split(";")[1];
+
+                            for (Map.Entry<String, ?> entry : ((Map<String, ?>) o).entrySet()) {
+                                if (entry.getKey().equals(key)) {
+                                    if (entry.getValue() instanceof Setting) {
+                                        if (parts.length > 0) {
+                                            Setting setting = (Setting) entry.getValue();
+                                            setting.enabled = Boolean.parseBoolean(parts[0]);
+                                        }
+
+                                    }
+                                    if (entry.getValue() instanceof Position) {
+                                        if (parts.length > 2) {
+                                            Position position = (Position) entry.getValue();
+
+                                            position.offsetX = Integer.parseInt(parts[1]);
+                                            position.offsetY = Integer.parseInt(parts[2]);
+                                        }
+                                    }
+                                }
+                            }
+
+                        } else {
+                            field.set(null, parts[0]);
+                        }
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+        });
     }
 
     public static void saveSettings() {
@@ -195,6 +257,23 @@ public class Setting {
                     Object o = field.get(null);
                     if (o instanceof Setting) {
                         writer.write(field.getName() + ": " + o + "\n");
+                    } else if (o instanceof EnumChatFormatting) {
+                        writer.write(field.getName() + ": " + ((EnumChatFormatting) o).name() + "\n");
+                    } else if (o instanceof String) {
+                        writer.write(field.getName() + ": " + o + "\n");
+                    } else if (o instanceof Map) {
+                        Map<?, ?> map = (Map<?, ?>) o;
+
+                        for (Map.Entry<?, ?> entry : map.entrySet()) {
+                            writer.write(field.getName() + ";" + entry.getKey() + ": " + entry.getValue() + "\n");
+                        }
+                    } else if (o instanceof List) {
+                        List<?> list = (List<?>) o;
+
+                        int index = 0;
+                        for (Object curSetting : list) {
+                            writer.write(field.getName() + ";" + index++ + ": " + curSetting + "\n");
+                        }
                     }
                 }
             }
