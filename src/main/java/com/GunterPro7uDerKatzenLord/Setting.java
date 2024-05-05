@@ -164,7 +164,6 @@ public class Setting {
                     Map<?, ?> map = (Map<?, ?>) o;
 
                     for (Map.Entry<?, ?> entry : map.entrySet()) {
-                        initRawSetting(entry.getKey(), field.getName() + ";" + entry.getKey(), settings, field);
                         initRawSetting(entry.getValue(), field.getName() + ";" + entry.getKey(), settings, field);
                     }
                 } else if (o instanceof List) {
@@ -194,7 +193,7 @@ public class Setting {
                         Position pos = (Position) setting;
                         if (parts.length > 2) {
                             pos.offsetX = Integer.parseInt(parts[1]);
-                            pos.offsetX = Integer.parseInt(parts[2]);
+                            pos.offsetY = Integer.parseInt(parts[2]);
                         }
 
                     } else if (setting instanceof Value) {
