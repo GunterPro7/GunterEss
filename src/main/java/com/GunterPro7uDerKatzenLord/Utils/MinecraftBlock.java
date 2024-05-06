@@ -1,34 +1,44 @@
 package com.GunterPro7uDerKatzenLord.Utils;
 
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class MinecraftBlock {
-    private static Map<Integer, Integer> RE_MAP = new HashMap<>(); // TODO implement that carrots got like the planted form, it automatically gets the other form o-o
+    private static final Map<Integer, Integer> RE_MAP = CollectionUtils.mapOf(
+            59, 296, // Wheat
+            141, 391,        // Carrot
+            127, 351,        // Cocoa
+            142, 392,        // Potato
+            83, 338,         // Sugar Cane
+            115, 372         // Nether wart
+    );
+
+    private static final Item DEFAULT_ITEM = Items.name_tag;
     private final int id;
     private final int dataValue;
     private String name;
     private final ItemStack itemStack;
 
-    public MinecraftBlock(int id, int dataValue) {
-        this.id = id;
+    public MinecraftBlock(Block block, int dataValue) {
+        this.id = Block.getIdFromBlock(block);
         this.dataValue = dataValue;
-        ItemStack itemStack;
-        try {
-            itemStack = new ItemStack(Item.getItemById(id), 1, dataValue);
-            this.name = itemStack.getDisplayName();
-        } catch (Exception e) {
-            itemStack = null;
-        }
-        this.itemStack = itemStack;
-    }
 
-    public MinecraftBlock(int id) {
-        this(id, 0);
+        Item item = Item.getItemFromBlock(block);
+        if (item == null) {
+            if (RE_MAP.containsKey(id)) {
+                item = Item.getItemById(RE_MAP.get(id));
+            } else {
+                item = DEFAULT_ITEM;
+            }
+        }
+
+        this.itemStack = new ItemStack(item, 1, dataValue);
+        this.name = this.itemStack.getDisplayName();
     }
 
     public int getId() {
@@ -62,5 +72,10 @@ public class MinecraftBlock {
     @Override
     public int hashCode() {
         return Objects.hash(id, dataValue);
+    }
+
+    @Override
+    public String toString() {
+        return "id: " + id + ", dataValue: " + dataValue + ", name: " + name;
     }
 }

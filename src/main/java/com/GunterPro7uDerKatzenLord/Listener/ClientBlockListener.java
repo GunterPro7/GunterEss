@@ -3,6 +3,7 @@ package com.GunterPro7uDerKatzenLord.Listener;
 import com.GunterPro7uDerKatzenLord.Utils.MinecraftBlock;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.item.Item;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.client.event.sound.SoundEvent;
@@ -35,10 +36,14 @@ public class ClientBlockListener {
                 return;
             }
 
+            AdvancedChat.sendPrivateMessage("BLOCK: " + Item.getItemFromBlock(Minecraft.getMinecraft().theWorld.getBlockState(blockPos).getBlock()));
             int id = Block.getIdFromBlock(Minecraft.getMinecraft().theWorld.getBlockState(blockPos).getBlock());
+            AdvancedChat.sendPrivateMessage(Minecraft.getMinecraft().theWorld.getBlockState(blockPos).getBlock().toString());
+            AdvancedChat.sendPrivateMessage(String.valueOf(id));
             int dataValue = Minecraft.getMinecraft().theWorld.getBlockState(blockPos).getBlock().getMetaFromState(Minecraft.getMinecraft().theWorld.getBlockState(blockPos));
 
-            tasksNextTick.add(new BlockCheckTask(blockPos, Minecraft.getMinecraft().theWorld.getBlockState(blockPos).getBlock().getLocalizedName(), new MinecraftBlock(id, dataValue)));
+            tasksNextTick.add(new BlockCheckTask(blockPos, Minecraft.getMinecraft().theWorld.getBlockState(blockPos).getBlock().getLocalizedName(),
+                    new MinecraftBlock(Minecraft.getMinecraft().theWorld.getBlockState(blockPos).getBlock(), dataValue)));
         }
     }
 
@@ -49,9 +54,7 @@ public class ClientBlockListener {
             tasksNextTick.remove(0);
             String newBlock = Minecraft.getMinecraft().theWorld.getBlockState(blockCheckTask.getBlockPos()).getBlock().getLocalizedName();
             if (!newBlock.equals(blockCheckTask.getOldBlock())) {
-                MinecraftForge.EVENT_BUS.post(new ClientBlockBreakEvent(blockCheckTask.getBlockPos(), blockCheckTask.getMinecraftBlock()));
-            } else {
-                MinecraftForge.EVENT_BUS.post(new ClientBlockPlaceEvent(blockCheckTask.getBlockPos(), blockCheckTask.getMinecraftBlock()));
+                MinecraftForge.EVENT_BUS.post(new ClientBlockChangeEvent(blockCheckTask.getBlockPos(), blockCheckTask.getMinecraftBlock()));
             }
         }
     }
@@ -80,11 +83,11 @@ public class ClientBlockListener {
         }
     }
 
-    public static class ClientBlockBreakEvent extends Event {
+    public static class ClientBlockChangeEvent extends Event {
         private final BlockPos blockPos;
         private final MinecraftBlock mcBlock;
 
-        public ClientBlockBreakEvent(BlockPos blockPos, MinecraftBlock mcBlock) {
+        public ClientBlockChangeEvent(BlockPos blockPos, MinecraftBlock mcBlock) {
             this.blockPos = blockPos;
             this.mcBlock = mcBlock;
         }
@@ -97,11 +100,4 @@ public class ClientBlockListener {
             return mcBlock;
         }
     }
-
-    public static class ClientBlockPlaceEvent extends ClientBlockBreakEvent {
-        public ClientBlockPlaceEvent(BlockPos blockPos, MinecraftBlock mcBlock) {
-            super(blockPos, mcBlock);
-        }
-    }
-
 }

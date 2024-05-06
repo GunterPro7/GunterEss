@@ -45,7 +45,7 @@ public class Listeners {
     private static final String[] classList = new String[]{"Mage", "Berserk", "Healer", "Tank", "Archer"};
 
     @SubscribeEvent
-    public void onFontRenderer(final RenderGameOverlayEvent event) {
+    public void onFontRenderer(final RenderGameOverlayEvent.Post event) {
         if (event.type == RenderGameOverlayEvent.ElementType.TEXT) {
             if (Setting.MONEY_OVERLAY.isEnabled()) {
                 FontRenderer fontRenderer = Minecraft.getMinecraft().fontRendererObj;
@@ -113,7 +113,7 @@ public class Listeners {
 
 
     @SubscribeEvent
-    public void onBlockBreak(final ClientBlockListener.ClientBlockBreakEvent event) {
+    public void onBlockBreak(final ClientBlockListener.ClientBlockChangeEvent event) {
         cropTimeList.add(System.currentTimeMillis());
         if (cropTimeList.size() % 25 == 0) {
             try {
@@ -149,8 +149,13 @@ public class Listeners {
     }
 
     @SubscribeEvent
-    public void blockBreakEvent(ClientBlockListener.ClientBlockBreakEvent event) {
-        //Utils.sendPrivateMessage(event.getMinecraftBlock().getName());
+    public void blockBreakEvent(ClientBlockListener.ClientBlockChangeEvent event) {
+        if (event.getMinecraftBlock().getItemStack() != null) {
+            AdvancedChat.sendPrivateMessage(event.getMinecraftBlock().getName());
+        } else {
+            AdvancedChat.sendPrivateMessage(event.getMinecraftBlock().toString());
+        }
+
     }
 
     @SubscribeEvent
