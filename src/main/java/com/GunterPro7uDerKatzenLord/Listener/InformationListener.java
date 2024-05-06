@@ -16,8 +16,10 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.UnsupportedTemporalTypeException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
 
 public class InformationListener {
 
@@ -35,10 +37,23 @@ public class InformationListener {
     private String lastDateFormat;
     private String lastTimeFormat;
 
+    private final LinkedList<Long> frameTimes = new LinkedList<>();
+
     // Render Information
     @SubscribeEvent
     public void onRenderGameOverlay(RenderGameOverlayEvent.Post event) {
         if (event.type == RenderGameOverlayEvent.ElementType.TEXT) {
+
+            // Calculating Fps
+            long curTime = System.currentTimeMillis();
+            frameTimes.addLast(curTime);
+
+            while (!frameTimes.isEmpty() && curTime - frameTimes.getFirst() > 1000) {
+                frameTimes.removeFirst();
+            }
+
+            informationValues.put("Fps", String.valueOf(frameTimes.size()));
+
             Setting.INFO_SETTINGS.forEach((key, value) -> {
                 if (value.isEnabled()) {
                     if (key.equals("Position")) {
@@ -106,8 +121,6 @@ public class InformationListener {
 
             // Lacy Tasks
             if (System.currentTimeMillis() - lacyLastTime >= 1000 || !lastDateFormat.equals(Setting.INFO_DATE_FORMAT)) {
-                informationValues.put("Fps", String.valueOf(Minecraft.getDebugFPS()));
-
                 LocalDate currentDate = LocalDate.now();
                 if (currentDate.getDayOfYear() != lastDayOfYear || !lastDateFormat.equals(Setting.INFO_DATE_FORMAT)) {
                     String v;
