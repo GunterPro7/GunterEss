@@ -49,14 +49,22 @@ public class Setting {
     public static File settingsFile;
 
     private boolean enabled;
+    protected boolean lacy;
 
     public Setting(boolean enabled) {
         this.enabled = enabled;
     }
 
+    // Lacy = only update on .update();
+    public void setLacy(boolean lacy) {
+        this.lacy = lacy;
+    }
+
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
-        saveSettings();
+        if (!lacy) {
+            update();
+        }
     }
 
     public boolean isEnabled() {
@@ -68,6 +76,12 @@ public class Setting {
 
     public void switchEnabled() {
         enabled = !enabled;
+        if (!lacy) {
+            update();
+        }
+    }
+
+    public void update() {
         saveSettings();
     }
 
@@ -95,7 +109,9 @@ public class Setting {
 
         public void setOffsetX(int offsetX) {
             this.offsetX = offsetX;
-            saveSettings();
+            if (!lacy) {
+                update();
+            }
         }
 
         public int getOffsetY() {
@@ -104,7 +120,9 @@ public class Setting {
 
         public void setOffsetY(int offsetY) {
             this.offsetY = offsetY;
-            saveSettings();
+            if (!lacy) {
+                update();
+            }
         }
 
         @Override

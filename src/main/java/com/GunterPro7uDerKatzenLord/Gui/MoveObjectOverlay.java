@@ -1,23 +1,25 @@
 package com.GunterPro7uDerKatzenLord.Gui;
 
-import com.GunterPro7uDerKatzenLord.Gui.CustomIngameUI;
 import com.GunterPro7uDerKatzenLord.Setting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
+
+import java.io.IOException;
 
 public class MoveObjectOverlay extends AbstractOverlay {
     private final CustomIngameUI customIngameUI;
     private int offsetX = 50;
     private int offsetY = 50;
     private boolean allowMove;
-    private GuiButton button;
+    private GuiButton saveButton;
     private final Setting.Position position;
 
     public MoveObjectOverlay(CustomIngameUI customIngameUI, Setting.Position position, GuiScreen lastScreen) {
         super(lastScreen);
         this.customIngameUI = customIngameUI;
         this.position = position;
+        position.setLacy(true);
 
         this.offsetX = position.getOffsetX();
         this.offsetY = position.getOffsetY();
@@ -27,8 +29,8 @@ public class MoveObjectOverlay extends AbstractOverlay {
     public void initGui() {
         super.initGui();
 
-        button = new GuiButton(0, width / 2 - 100, (int) (height / 1.25), "Save");
-        buttonList.add(button);
+        saveButton = new GuiButton(0, width / 2 - 100, (int) (height / 1.25), "Save");
+        buttonList.add(saveButton);
     }
 
 
@@ -43,7 +45,28 @@ public class MoveObjectOverlay extends AbstractOverlay {
         if (mouseX > offsetX && mouseX < offsetX + customIngameUI.boxWidth && mouseY > offsetY && mouseY < offsetY + customIngameUI.boxHeight) {
             allowMove = true;
         }
-        if (mouseX > button.xPosition && mouseX < button.xPosition + button.width && mouseY > button.yPosition && mouseY < button.yPosition + button.height) {
+        if (mouseX > saveButton.xPosition && mouseX < saveButton.xPosition + saveButton.width && mouseY > saveButton.yPosition && mouseY < saveButton.yPosition + saveButton.height) {
+            position.setOffsetX(offsetX);
+            position.setOffsetY(offsetY);
+            position.update();
+            position.setLacy(false);
+            Minecraft.getMinecraft().displayGuiScreen(lastScreen);
+        }
+    }
+
+    @Override
+    public void onGuiClosed() {
+        super.onGuiClosed();
+
+        position.update();
+        position.setLacy(false);
+    }
+
+    @Override
+    protected void actionPerformed(GuiButton button) throws IOException {
+        super.actionPerformed(button);
+
+        if (button == saveButton) {
             position.setOffsetX(offsetX);
             position.setOffsetY(offsetY);
             Minecraft.getMinecraft().displayGuiScreen(lastScreen);

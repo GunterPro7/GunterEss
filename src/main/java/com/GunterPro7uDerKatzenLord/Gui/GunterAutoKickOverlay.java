@@ -21,10 +21,6 @@ public class GunterAutoKickOverlay extends AbstractOverlay {
         super(lastScreen);
     }
 
-    public GunterAutoKickOverlay() {
-        this(new GunterOverlay());
-    }
-
     public GuiScreen getLastScreen() {
         return lastScreen;
     }
@@ -33,11 +29,9 @@ public class GunterAutoKickOverlay extends AbstractOverlay {
     public void initGui() {
         super.initGui();
 
-        GuiLabel label = new GuiLabel(fontRendererObj, 0, width / 2 - 50, 40, 100, 20, 0xFFFFFF).setCentered();
-        label.func_175202_a("§lGunter Essentials");
-        label.func_175202_a("");
-        label.func_175202_a("-> Dungeon Utils");
-        labelList.add(label);
+        title.func_175202_a("§lGunter Essentials");
+        title.func_175202_a("");
+        title.func_175202_a("-> Dungeon Utils");
 
         GuiLabel labelIgnoredPlayers = new GuiLabel(fontRendererObj, 0, width / 2 - 60, height / 2 + 120, 100, 20, 0xFFFFFF);
         labelIgnoredPlayers.func_175202_a("Ignored Players (with ';' between):");
@@ -47,15 +41,16 @@ public class GunterAutoKickOverlay extends AbstractOverlay {
         labelAutoJoin.func_175202_a("Auto Join:");
         labelList.add(labelAutoJoin);
 
-        addButton(new GuiButton(0, width / 2 - 100, height / 2 + 0, "Mage: " + (values[0] ? "§a§lEnabled" : "§c§lDisabled")));
-        addButton(new GuiButton(1, width / 2 - 100, height / 2 + 24, "Berserk: " + (values[1] ? "§a§lEnabled" : "§c§lDisabled")));
-        addButton(new GuiButton(2, width / 2 - 100, height / 2 + 48, "Healer: " + (values[2] ? "§a§lEnabled" : "§c§lDisabled")));
-        addButton(new GuiButton(3, width / 2 - 100, height / 2 + 72, "Tank: " + (values[3] ? "§a§lEnabled" : "§c§lDisabled")));
-        addButton(new GuiButton(4, width / 2 - 100, height / 2 + 96, "Archer: " + (values[4] ? "§a§lEnabled" : "§c§lDisabled")));
-        addButton(new GuiButton(5, width / 2 - 100, height / 2 + 200, "Enabled / Disabled IMPLEMENT"));
-        addButton(new GuiButton(5, width / 2 - 100, height / 2 + 224, "MIN LVL INPUT"));
-        addButton(new GuiButton(5, width / 2 - 0, height / 2 + 224, "MAX LVL INPUT"));
-        addButton(new GuiButton(5, width / 2 - 100, height / 2 + 248, "MAX LVL INPUT"));
+        addButton(new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Mage: " + (values[0] ? "§a§lEnabled" : "§c§lDisabled")));
+        addButton(new GuiButton(1, width / 2 - 100, pageContentHeight += pixelsPerButton, "Berserk: " + (values[1] ? "§a§lEnabled" : "§c§lDisabled")));
+        addButton(new GuiButton(2, width / 2 - 100, pageContentHeight += pixelsPerButton, "Healer: " + (values[2] ? "§a§lEnabled" : "§c§lDisabled")));
+        addButton(new GuiButton(3, width / 2 - 100, pageContentHeight += pixelsPerButton, "Tank: " + (values[3] ? "§a§lEnabled" : "§c§lDisabled")));
+        addButton(new GuiButton(4, width / 2 - 100, pageContentHeight += pixelsPerButton, "Archer: " + (values[4] ? "§a§lEnabled" : "§c§lDisabled")));
+        pageContentHeight += 100;
+        addButton(new GuiButton(5, width / 2 - 100, pageContentHeight += pixelsPerButton, "Enabled / Disabled IMPLEMENT"));
+        addButton(new GuiButton(5, width / 2 - 100, pageContentHeight += pixelsPerButton, "MIN LVL INPUT"));
+        addButton(new GuiButton(5, width / 2 - 0, pageContentHeight, "MAX LVL INPUT"));
+        addButton(new GuiButton(5, width / 2 - 100, pageContentHeight += pixelsPerButton, "MAX LVL INPUT"));
         textField1.xPosition = width / 2 - 100;
         textField1.yPosition = height / 2 + 140;
         textField1.setFocused(true);

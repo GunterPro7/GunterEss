@@ -2,7 +2,6 @@ package com.GunterPro7uDerKatzenLord.Gui;
 
 import com.GunterPro7uDerKatzenLord.Setting;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiLabel;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 
@@ -27,14 +26,12 @@ public class GunterMoneyOverlay extends AbstractOverlay {
     public void initGui() {
         super.initGui();
 
-        GuiLabel label = new GuiLabel(fontRendererObj, 0, width / 2 - 50, 40, 100, 20, 0xFFFFFF).setCentered();
-        label.func_175202_a("§lGunter Essentials");
-        label.func_175202_a("");
-        label.func_175202_a("-> Money Tracker");
-        labelList.add(label);
+        title.func_175202_a("§lGunter Essentials");
+        title.func_175202_a("");
+        title.func_175202_a("-> Money Tracker");
 
-        button0 = new GuiButton(1, width / 2 - 100, height / 2 - 24, "Money Tracker: " + (Setting.MONEY_OVERLAY.isEnabled() ? "§a§lEnabled" : "§c§lDisabled"));
-        button1 = new GuiButton(0, width / 2 - 100, height / 2 - 0, "Edit Position");
+        button0 = new GuiButton(1, width / 2 - 100, pageContentHeight += pixelsPerButton, "Money Tracker: " + (Setting.MONEY_OVERLAY.isEnabled() ? "§a§lEnabled" : "§c§lDisabled"));
+        button1 = new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Edit Position");
 
         buttonList.add(button0);
         buttonList.add(button1);

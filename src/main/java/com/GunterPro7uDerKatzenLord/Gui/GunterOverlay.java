@@ -1,13 +1,10 @@
 package com.GunterPro7uDerKatzenLord.Gui;
 
-import akka.serialization.Serialization;
-import com.GunterPro7uDerKatzenLord.Main;
 import com.GunterPro7uDerKatzenLord.Setting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiLabel;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.util.ResourceLocation;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -37,21 +34,19 @@ public class GunterOverlay extends AbstractOverlay {
         super.initGui();
         buttonRelations.clear();
 
-        GuiLabel label = new GuiLabel(fontRendererObj, 0, width / 2 - 50, 40, 100, 20, 0xFFFFFF).setCentered();
-        label.func_175202_a("§lGunter Essentials");
-        label.func_175202_a("");
-        label.func_175202_a("by GunterPro7 f. DerKatzenLord");
-        labelList.add(label);
+        title.func_175202_a("§lGunter Essentials");
+        title.func_175202_a("");
+        title.func_175202_a("by GunterPro7 f. DerKatzenLord");
 
-        buttonRelations.put(new GuiButton(0, width / 2 - 100, height / 2 - 24, "Gemstone Tracker"), () -> new GunterGemstoneTrackerOverlay(this));
-        buttonRelations.put(new GuiButton(0, width / 2 - 100, height / 2 + 0, "Chat Features"), () -> new GunterChatOverlay(this));
-        buttonRelations.put(new GuiButton(0, width / 2 - 100, height / 2 + 24, "Collection Tracker"), () -> null); // Not ready yet
-        buttonRelations.put(new GuiButton(0, width / 2 - 100, height / 2 + 48, "Money Tracker"), () -> null); // Not ready yet
-        buttonRelations.put(new GuiButton(0, width / 2 - 100, height / 2 + 72, "Auto Kicker"), () -> new GunterAutoKickOverlay(this));
-        buttonRelations.put(new GuiButton(0, width / 2 - 100, height / 2 + 96, "Auto Harp"), () -> new GunterAutoHarpOverlay(this));
-        buttonRelations.put(new GuiButton(0, width / 2 - 100, height / 2 + 120, "Information Overlay"), () -> new InformationOverlay(this));
-        autoFisherButton = new GuiButton(0, width / 2 - 100, height / 2 + 144, "Auto Fisher: " + (Setting.AUTO_FISHING.isEnabled() ? "§a§lEnabled" : "§c§lDisabled"));
-        autoUpdateButton = new GuiButton(0, width / 2 - 100, height / 2 + 168, "Auto Updates: " + (Setting.AUTO_UPDATES.isEnabled() ? "§a§lEnabled" : "§c§lDisabled"));
+        buttonRelations.put(new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Gemstone Tracker"), () -> new GunterGemstoneTrackerOverlay(this));
+        buttonRelations.put(new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Chat Features"), () -> new GunterChatOverlay(this));
+        buttonRelations.put(new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Collection Tracker"), () -> null); // Not ready yet
+        buttonRelations.put(new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Money Tracker"), () -> null); // Not ready yet
+        buttonRelations.put(new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Auto Kicker"), () -> new GunterAutoKickOverlay(this));
+        buttonRelations.put(new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Auto Harp"), () -> new GunterAutoHarpOverlay(this));
+        buttonRelations.put(new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Information Overlay"), () -> new InformationOverlay(this));
+        autoFisherButton = new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Auto Fisher: " + (Setting.AUTO_FISHING.isEnabled() ? "§a§lEnabled" : "§c§lDisabled"));
+        autoUpdateButton = new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Auto Updates: " + (Setting.AUTO_UPDATES.isEnabled() ? "§a§lEnabled" : "§c§lDisabled"));
 
         buttonList.add(autoFisherButton);
         buttonList.add(autoUpdateButton);

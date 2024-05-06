@@ -2,7 +2,6 @@ package com.GunterPro7uDerKatzenLord.Gui;
 
 import com.GunterPro7uDerKatzenLord.Setting;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiLabel;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 
@@ -27,14 +26,12 @@ public class GunterGemstoneTrackerOverlay extends AbstractOverlay {
     public void initGui() {
         super.initGui();
 
-        GuiLabel label = new GuiLabel(fontRendererObj, 0, width / 2 - 50, 40, 100, 20, 0xFFFFFF).setCentered();
-        label.func_175202_a("§lGunter Essentials");
-        label.func_175202_a("");
-        label.func_175202_a("-> Gemstone Tracker");
-        labelList.add(label);
+        title.func_175202_a("§lGunter Essentials");
+        title.func_175202_a("");
+        title.func_175202_a("-> Gemstone Tracker");
 
-        activeButton = new GuiButton(0, width / 2 - 100, height / 2 + 0, Setting.GEMSTONE_DISPLAY.isEnabled() ? "§a§lEnabled" : "§c§lDisabled");
-        moveObjectButton = new GuiButton(0, width / 2 - 100, height / 2 + 24, "Move Object");
+        activeButton = new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, Setting.GEMSTONE_DISPLAY.isEnabled() ? "§a§lEnabled" : "§c§lDisabled");
+        moveObjectButton = new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Move Object");
         buttonList.add(activeButton);
         buttonList.add(moveObjectButton);
     }

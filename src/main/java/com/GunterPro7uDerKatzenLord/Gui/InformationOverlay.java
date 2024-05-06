@@ -18,8 +18,6 @@ public class InformationOverlay extends AbstractOverlay {
     private static final Map<String, EnumChatFormatting> colorsByPrefix = CollectionUtils.mapOf(colors, Arrays.stream(EnumChatFormatting.values()).filter(EnumChatFormatting::isColor).collect(Collectors.toList()));
 
     private static final List<Boolean> dropdownButtonsOpened = CollectionUtils.listOf(() -> false, 5);
-    private static final int pixelsPerButton = 25;
-    private static final int pixelsPerCheckBox = 16;
 
     private static GuiButton prefixColorButton;
     private static GuiButton suffixColorButton;
@@ -84,11 +82,9 @@ public class InformationOverlay extends AbstractOverlay {
         super.initGui();
         dropdownButtons.clear();
 
-        GuiLabel label = new GuiLabel(fontRendererObj, 0, width / 2 - 50, 40, 100, 20, 0xFFFFFF).setCentered();
-        label.func_175202_a("§lGunter Essentials");
-        label.func_175202_a("");
-        label.func_175202_a("-> Information Overlay");
-        labelList.add(label);
+        title.func_175202_a("§lGunter Essentials");
+        title.func_175202_a("");
+        title.func_175202_a("-> Information Overlay");
 
         prefixColorButton = new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Prefix Color: " + Setting.INFO_PREFIX_COLOR + Setting.INFO_PREFIX_COLOR.getFriendlyName());
         suffixColorButton = new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Suffix Color: " + Setting.INFO_SUFFIX_COLOR + Setting.INFO_SUFFIX_COLOR.getFriendlyName());
@@ -113,17 +109,17 @@ public class InformationOverlay extends AbstractOverlay {
                         buttonList.add(checkBox);
                     } else if (gui instanceof GuiButton) {
                         GuiButton button = (GuiButton) gui;
-                        button.xPosition = width / 2 - 100;
+                        button.xPosition = width / 2 - 80;
                         button.yPosition = pageContentHeight += pixelsPerButton;
                         buttonList.add(button);
                     } else if (gui instanceof GuiLabel) {
                         GuiLabel guiLabel = (GuiLabel) gui;
-                        guiLabel.field_146162_g = width / 2 - 80;
+                        guiLabel.field_146162_g = width / 2 - 60;
                         guiLabel.field_146174_h = pageContentHeight + pixelsPerButton;
                         labelList.add(guiLabel);
                     } else if (gui instanceof GuiTextField) {
                         GuiTextField guiTextField = (GuiTextField) gui;
-                        guiTextField.xPosition = width / 2;
+                        guiTextField.xPosition = width / 2 + 20;
                         guiTextField.yPosition = pageContentHeight += pixelsPerButton;
                         textFieldList.add(guiTextField);
                     }

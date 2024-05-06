@@ -1,15 +1,10 @@
 package com.GunterPro7uDerKatzenLord.Gui;
 
-import com.GunterPro7uDerKatzenLord.Listener.AdvancedChat;
-import com.GunterPro7uDerKatzenLord.Utils.McUtils;
-import com.GunterPro7uDerKatzenLord.Utils.TimeUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiLabel;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
-import net.minecraftforge.client.event.GuiScreenEvent;
-import net.minecraftforge.common.MinecraftForge;
 import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
@@ -17,9 +12,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractOverlay extends GuiScreen {
-    private static final int SCROLL_SIZE = 9;
+    protected static final int SCROLL_SIZE = 9;
+    protected static final int pixelsPerButton = 25;
+    protected static final int pixelsPerCheckBox = 16;
 
     protected final GuiScreen lastScreen;
+    protected GuiLabel title;
     protected int pageContentHeight;
     protected int scrollOffset;
 
@@ -65,9 +63,11 @@ public abstract class AbstractOverlay extends GuiScreen {
         super.initGui();
         buttonList.clear();
         labelList.clear();
+        title = new GuiLabel(fontRendererObj, 0, width / 2 - 50, 40, 100, 20, 0xFFFFFF).setCentered();
+        labelList.add(title);
+
         textFieldList.clear();
         pageContentHeight = 85;
-
     }
 
     // LABEL:
@@ -83,6 +83,7 @@ public abstract class AbstractOverlay extends GuiScreen {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawDefaultBackground();
+        if (fontRendererObj == null) return;
 
         int j;
         for (j = 0; j < this.buttonList.size(); ++j) {

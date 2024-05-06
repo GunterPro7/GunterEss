@@ -2,7 +2,6 @@ package com.GunterPro7uDerKatzenLord.Gui;
 
 import com.GunterPro7uDerKatzenLord.Setting;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiLabel;
 import net.minecraft.client.gui.GuiScreen;
 
 public class GunterChatOverlay extends AbstractOverlay {
@@ -24,17 +23,15 @@ public class GunterChatOverlay extends AbstractOverlay {
     public void initGui() {
         super.initGui();
 
-        GuiLabel label = new GuiLabel(fontRendererObj, 0, width / 2 - 50, 40, 100, 20, 0xFFFFFF).setCentered();
-        label.func_175202_a("§lGunter Essentials");
-        label.func_175202_a("");
-        label.func_175202_a("-> Chat Features");
-        labelList.add(label);
+        title.func_175202_a("§lGunter Essentials");
+        title.func_175202_a("");
+        title.func_175202_a("-> Chat Features");
 
-        button0 = new GuiButton(0, width / 2 - 100, height / 2 - 0, "Copy Chat: " + (Setting.COPY_CHAT.isEnabled() ? "§a§lEnabled" : "§c§lDisabled"));
-        button1 = new GuiButton(0, width / 2 - 100, height / 2 + 24, "Copy with Stack: " + (Setting.COPY_WITH_STACK.isEnabled() ? "§a§lEnabled" : "§c§lDisabled"));
-        button2 = new GuiButton(0, width / 2 - 100, height / 2 + 48, "Stack Chat Messages: " + (Setting.STACK_CHAT_MESSAGES.isEnabled() ? "§a§lEnabled" : "§c§lDisabled"));
-        button3 = new GuiButton(0, width / 2 - 100, height / 2 + 72, "Remove Blank Lines: " + (Setting.REMOVE_BLANK_LINES.isEnabled() ? "§a§lEnabled" : "§c§lDisabled"));
-        button4 = new GuiButton(0, width / 2 - 100, height / 2 + 96, "Dont Stack useless Chat Messages: " + (Setting.DONT_CHECK_USELESS_CHAT_MESSAGES.isEnabled() ? "§a§lEnabled" : "§c§lDisabled"));
+        button0 = new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Copy Chat: " + (Setting.COPY_CHAT.isEnabled() ? "§a§lEnabled" : "§c§lDisabled"));
+        button1 = new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Copy with Stack: " + (Setting.COPY_WITH_STACK.isEnabled() ? "§a§lEnabled" : "§c§lDisabled"));
+        button2 = new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Stack Chat Messages: " + (Setting.STACK_CHAT_MESSAGES.isEnabled() ? "§a§lEnabled" : "§c§lDisabled"));
+        button3 = new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Remove Blank Lines: " + (Setting.REMOVE_BLANK_LINES.isEnabled() ? "§a§lEnabled" : "§c§lDisabled"));
+        button4 = new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Dont Stack useless Chat Messages: " + (Setting.DONT_CHECK_USELESS_CHAT_MESSAGES.isEnabled() ? "§a§lEnabled" : "§c§lDisabled"));
 
         buttonList.add(button0);
         buttonList.add(button1);

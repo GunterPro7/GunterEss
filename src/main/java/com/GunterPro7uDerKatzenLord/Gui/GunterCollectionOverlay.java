@@ -29,11 +29,9 @@ public class GunterCollectionOverlay extends AbstractOverlay {
     public void initGui() {
         super.initGui();
 
-        GuiLabel label = new GuiLabel(fontRendererObj, 0, width / 2 - 50, 40, 100, 20, 0xFFFFFF).setCentered();
-        label.func_175202_a("§lGunter Essentials");
-        label.func_175202_a("");
-        label.func_175202_a("-> Collection Tracker");
-        labelList.add(label);
+        title.func_175202_a("§lGunter Essentials");
+        title.func_175202_a("");
+        title.func_175202_a("-> Collection Tracker");
 
         GuiLabel label2 = new GuiLabel(fontRendererObj, 0, width / 2 - 70, height / 2 - 42, 50, 20, 0xFFFFFF);
         label2.func_175202_a("Collection:");
