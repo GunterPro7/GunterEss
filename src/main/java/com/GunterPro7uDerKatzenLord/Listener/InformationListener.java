@@ -152,7 +152,7 @@ public class InformationListener {
             }
 
             if (System.currentTimeMillis() - lagLastTime >= 500) {
-                InformationListener.informationValues.put("Lag", df.format(LagHandler.INSTANCE.curLatency() * 10) + "%"); // TODO make field for lag
+                InformationListener.informationValues.put("Lag", df.format(LagHandler.INSTANCE.curLatency() * 10) + "%");
 
                 lagLastTime = System.currentTimeMillis();
             }
