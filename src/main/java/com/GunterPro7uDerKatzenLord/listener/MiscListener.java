@@ -182,7 +182,7 @@ public class MiscListener {
                     String level = message.substring(index + 6, message.length() - 1);
                     String player = message.split("Party Finder > ")[1].split(" ")[0];
                     if (AutoKickOverlay.getIgnoredPlayers().contains(player)) {
-                        Utils.executeCommand("/p kick " + player, 350);
+                        TimeUtils.addToQueue(350, () -> Minecraft.getMinecraft().thePlayer.sendChatMessage("/p kick " + player));
                         return;
                     }
                     String gameClass = message.split(" Level")[0].split("\\(")[1];
@@ -191,7 +191,7 @@ public class MiscListener {
                         if (b) {
                             String curClass = classList[i];
                             if (Objects.equals(gameClass, curClass)) {
-                                Utils.executeCommand("/p kick " + player, 350);
+                                TimeUtils.addToQueue(350, () -> Minecraft.getMinecraft().thePlayer.sendChatMessage("/p kick " + player));
                                 return;
                             }
                         }
@@ -202,19 +202,6 @@ public class MiscListener {
     }
 
     public static final SearchChatGui searchChat = new SearchChatGui(Minecraft.getMinecraft());
-
-    @SubscribeEvent
-    public void onClientTick(TickEvent.ClientTickEvent event) {
-        if (!Utils.commandTasks.isEmpty()) {
-            for (long time : Utils.commandTasks.keySet()) {
-                if (System.currentTimeMillis() > time) {
-                    Runnable command = Utils.commandTasks.get(time);
-                    command.run();
-                    Utils.commandTasks.remove(time);
-                }
-            }
-        }
-    }
 
     @SubscribeEvent
     public void searchInChat(RenderGameOverlayEvent.Post event) {

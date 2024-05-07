@@ -20,7 +20,6 @@ import java.util.*;
 // TODO move mc shit over to "McUtils"
 public class Utils {
     public static final Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-    public static final Map<Long, Runnable> commandTasks = new HashMap<>();
 
     public static void copyToClipBoard(String text) {
         clipboard.setContents(new StringSelection(text), null);
@@ -49,14 +48,6 @@ public class Utils {
         return Integer.parseInt(newInt.toString());
     }
 
-    public static String convertToMinecraftId(final int id) {
-        final StringBuilder string = new StringBuilder();
-        for (final char c : Integer.toString(id).toCharArray()) {
-            string.append("§").append(c);
-        }
-        return string.toString();
-    }
-
     public static String commaAfterThird(String input) {
         if (input == null || input.length() <= 3) {
             return input;
@@ -68,15 +59,6 @@ public class Utils {
             result.insert(i, ',');
         }
         return result.toString();
-    }
-
-    public static void executeCommand(String command, int waitTime) {
-        execute(() -> Minecraft.getMinecraft().thePlayer.sendChatMessage(command), waitTime);
-        AdvancedChat.sendPrivateMessage("§rSending Command '" + command + "'");
-    }
-
-    public static void execute(Runnable f, int waitTime) {
-        commandTasks.put(System.currentTimeMillis() + waitTime, f);
     }
 
     public static String formatTime(long time, String pattern) {
@@ -132,6 +114,6 @@ public class Utils {
         }
 
         return value;
-    } // TODO aufgehört in MCUtils zu geben
+    }
 
 }
