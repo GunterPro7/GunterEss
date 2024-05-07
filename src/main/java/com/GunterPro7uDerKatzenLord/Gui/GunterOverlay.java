@@ -41,7 +41,7 @@ public class GunterOverlay extends AbstractOverlay {
         buttonRelations.put(new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Gemstone Tracker"), () -> new GunterGemstoneTrackerOverlay(this));
         buttonRelations.put(new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Chat Features"), () -> new GunterChatOverlay(this));
         buttonRelations.put(new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Collection Tracker"), () -> null); // Not ready yet
-        buttonRelations.put(new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Money Tracker"), () -> null); // Not ready yet
+        buttonRelations.put(new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Money Tracker"), () -> new FarmingTrackerOverlay(this)); // Not ready yet
         buttonRelations.put(new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Auto Kicker"), () -> new GunterAutoKickOverlay(this));
         buttonRelations.put(new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Auto Harp"), () -> new GunterAutoHarpOverlay(this));
         buttonRelations.put(new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Information Overlay"), () -> new InformationOverlay(this));

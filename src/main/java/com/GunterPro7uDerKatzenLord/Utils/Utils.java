@@ -6,6 +6,7 @@ import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.PingResponseHandler;
 
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
@@ -27,13 +28,13 @@ public class Utils {
         clipboard.setContents(new StringSelection(text), null);
     }
 
-    public static int getLengthPerSecond(List<Long> cropTimeList) {
-        if (cropTimeList.size() == 0) {
+    public static int getLengthPerSecond(List<Long> timeList) {
+        if (timeList.size() == 0) {
             return 0;
         }
         int count = 0;
-        for (int i = cropTimeList.size() - 1; i >= 0; i--) {
-            if (System.currentTimeMillis() - cropTimeList.get(i) <= 1000) {
+        for (int i = timeList.size() - 1; i >= 0; i--) {
+            if (System.currentTimeMillis() - timeList.get(i) <= 1000) {
                 count++;
             }
         }

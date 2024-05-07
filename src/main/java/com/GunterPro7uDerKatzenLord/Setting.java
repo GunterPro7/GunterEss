@@ -29,7 +29,8 @@ public class Setting {
             "Day", new Setting(false),
             "Time", new Setting(false),
             "Position", new Setting(false),
-            "Facing", new Setting(false)); // TODO also safe this
+            "Facing", new Setting(false),
+            "Lag", new Setting(false));
 
     public static final Map<String, Position> INFO_POSITIONS = CollectionUtils.mapOf(
             "Ping", new Position(false),
@@ -39,7 +40,8 @@ public class Setting {
             "X", new Position(false),
             "Y", new Position(false),
             "Z", new Position(false),
-            "Facing", new Position(false)); // TODO also safe this
+            "Facing", new Position(false),
+            "Lag", new Position(false));
     public static EnumChatFormatting INFO_PREFIX_COLOR = EnumChatFormatting.GRAY; // TODO also safe this
     public static EnumChatFormatting INFO_VALUE_COLOR = EnumChatFormatting.GOLD; // TODO also safe this
     public static EnumChatFormatting INFO_SUFFIX_COLOR = EnumChatFormatting.WHITE;

@@ -1,13 +1,20 @@
 package com.GunterPro7uDerKatzenLord.Listener;
 
 import com.GunterPro7uDerKatzenLord.Gui.CustomIngameUI;
+import com.GunterPro7uDerKatzenLord.LagHandler;
 import com.GunterPro7uDerKatzenLord.Setting;
 import com.GunterPro7uDerKatzenLord.Utils.Utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.util.BlockPos;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.RenderWorldEvent;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.text.DecimalFormat;
@@ -15,17 +22,13 @@ import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.UnsupportedTemporalTypeException;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.LogRecord;
-import java.util.logging.Logger;
 
 public class InformationListener {
 
     private static final DecimalFormat df = new DecimalFormat("#.#");
 
-    private final Map<String, String> informationValues = new HashMap<>();
+    public static final Map<String, String> informationValues = new HashMap<>();
     private BlockPos lastPos;
     private float lastFacingX = 361f;
     private float lastFacingY = 361f;
@@ -33,11 +36,15 @@ public class InformationListener {
     private int lastDayOfYear = -1;
     private int lastPing = -2;
     private long lacyLastTime = System.currentTimeMillis();
+    private long lagLastTime = System.currentTimeMillis();
 
     private String lastDateFormat;
     private String lastTimeFormat;
 
     private final LinkedList<Long> frameTimes = new LinkedList<>();
+    private final LinkedList<Long> blocksBrokenTimes = new LinkedList<>();
+
+    private WorldClient lastWorldClient;
 
     // Render Information
     @SubscribeEvent
@@ -144,8 +151,33 @@ public class InformationListener {
                 lacyLastTime = System.currentTimeMillis();
             }
 
+            if (System.currentTimeMillis() - lagLastTime >= 500) {
+                InformationListener.informationValues.put("Lag", df.format(LagHandler.INSTANCE.curLatency() * 10) + "%"); // TODO make field for lag
+
+                lagLastTime = System.currentTimeMillis();
+            }
+
+            long curTime = System.currentTimeMillis();
+            while (!blocksBrokenTimes.isEmpty() && curTime - blocksBrokenTimes.getFirst() > 1000) {
+                blocksBrokenTimes.removeFirst();
+            }
+
+            informationValues.put("Broken_Blocks", String.valueOf(blocksBrokenTimes.size()));
+
+            if ((lastWorldClient == null || lastWorldClient != FMLClientHandler.instance().getWorldClient()) && FMLClientHandler.instance().getWorldClient() != null) {
+                lastWorldClient = FMLClientHandler.instance().getWorldClient();
+
+                System.out.println("RESETING...");
+                System.out.println("TODO check ob des geht");
+
+                LagHandler.INSTANCE.reset();
+            }
         }
     }
 
+    @SubscribeEvent
+    public void onBlockBreak(final ClientBlockListener.ClientBlockChangeEvent event) {
+        blocksBrokenTimes.add(System.currentTimeMillis());
+    }
 }
 

@@ -5,16 +5,16 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 
-public class GunterMoneyOverlay extends AbstractOverlay {
+public class FarmingTrackerOverlay extends AbstractOverlay {
     private GuiTextField textField0;
     private GuiButton button1;
     private GuiButton button0;
 
-    public GunterMoneyOverlay(GuiScreen lastScreen) {
+    public FarmingTrackerOverlay(GuiScreen lastScreen) {
         super(lastScreen);
     }
 
-    public GunterMoneyOverlay() {
+    public FarmingTrackerOverlay() {
         this(new GunterOverlay());
     }
 

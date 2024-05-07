@@ -56,7 +56,11 @@ public class InformationOverlay extends AbstractOverlay {
                 "Fps", CollectionUtils.listOf(new GuiCheckBox(104, 0, 0, "Fps Overlay Enabled", settings.get("Fps").isEnabled()),
                         new GuiButton(2, 0, 0, "Move Fps Overlay")),
                 "Facing", CollectionUtils.listOf(new GuiCheckBox(105, 0, 0, "Facing Overlay Enabled", settings.get("Facing").isEnabled()),
-                        new GuiButton(2, 0, 0, "Move Facing Overlay")));
+                        new GuiButton(2, 0, 0, "Move Facing Overlay")),
+                "Lag", CollectionUtils.listOf(new GuiCheckBox(106, 0, 0, "Lag Overlay Enabled", settings.get("Lag").isEnabled()),
+                        new GuiButton(2, 0, 0, "Move Lag Overlay"))
+
+        );
     }
 
     public InformationOverlay(GuiScreen lastScreen) {
