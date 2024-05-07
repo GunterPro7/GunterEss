@@ -1,13 +1,12 @@
 package com.GunterPro7uDerKatzenLord.listener;
 
-import com.GunterPro7uDerKatzenLord.LagHandler;
 import com.GunterPro7uDerKatzenLord.event.ClientBlockChangeEvent;
 import com.GunterPro7uDerKatzenLord.event.ClientChangeWorldEvent;
 import com.GunterPro7uDerKatzenLord.event.ClientFishingEvent;
 import com.GunterPro7uDerKatzenLord.gui.CustomIngameUI;
-import com.GunterPro7uDerKatzenLord.gui.GunterAutoKickOverlay;
-import com.GunterPro7uDerKatzenLord.gui.GunterCollectionOverlay;
-import com.GunterPro7uDerKatzenLord.gui.GunterOverlay;
+import com.GunterPro7uDerKatzenLord.gui.AutoKickOverlay;
+import com.GunterPro7uDerKatzenLord.gui.CollectionOverlay;
+import com.GunterPro7uDerKatzenLord.gui.GunterEssOverlay;
 import com.GunterPro7uDerKatzenLord.Setting;
 import com.GunterPro7uDerKatzenLord.utils.*;
 import com.GunterPro7uDerKatzenLord.utils.Collections;
@@ -85,7 +84,7 @@ public class MiscListener {
     @SubscribeEvent
     public void onTick(final TickEvent.ClientTickEvent event) {
         if (setGunterOverlayNextTick) {
-            Minecraft.getMinecraft().displayGuiScreen(new GunterOverlay(null));
+            Minecraft.getMinecraft().displayGuiScreen(new GunterEssOverlay(null));
             setGunterOverlayNextTick = false;
         }
         if (Setting.COLLECTION_OVERLAY.isEnabled() && System.currentTimeMillis() - time > 180000) {
@@ -116,10 +115,10 @@ public class MiscListener {
     @SubscribeEvent
     public void onKeyPress(final InputEvent.KeyInputEvent event) {
         if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
-            if (mc.currentScreen instanceof GunterCollectionOverlay) {
-                mc.displayGuiScreen(((GunterCollectionOverlay) mc.currentScreen).getLastScreen());
-            } else if (mc.currentScreen instanceof GunterOverlay) {
-                mc.displayGuiScreen(((GunterOverlay) mc.currentScreen).getLastScreen());
+            if (mc.currentScreen instanceof CollectionOverlay) {
+                mc.displayGuiScreen(((CollectionOverlay) mc.currentScreen).getLastScreen());
+            } else if (mc.currentScreen instanceof GunterEssOverlay) {
+                mc.displayGuiScreen(((GunterEssOverlay) mc.currentScreen).getLastScreen());
             }
         }
 
@@ -182,13 +181,13 @@ public class MiscListener {
                 if (index != -1) {
                     String level = message.substring(index + 6, message.length() - 1);
                     String player = message.split("Party Finder > ")[1].split(" ")[0];
-                    if (GunterAutoKickOverlay.getIgnoredPlayers().contains(player)) {
+                    if (AutoKickOverlay.getIgnoredPlayers().contains(player)) {
                         Utils.executeCommand("/p kick " + player, 350);
                         return;
                     }
                     String gameClass = message.split(" Level")[0].split("\\(")[1];
-                    for (int i = 0; i < GunterAutoKickOverlay.values.length; i++) {
-                        boolean b = GunterAutoKickOverlay.values[i];
+                    for (int i = 0; i < AutoKickOverlay.values.length; i++) {
+                        boolean b = AutoKickOverlay.values[i];
                         if (b) {
                             String curClass = classList[i];
                             if (Objects.equals(gameClass, curClass)) {

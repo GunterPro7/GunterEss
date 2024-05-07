@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public class GunterOverlay extends AbstractOverlay {
+public class GunterEssOverlay extends AbstractOverlay {
     private GuiButton autoFisherButton;
     private GuiButton autoUpdateButton;
     private final Map<GuiButton, Supplier<? extends GuiScreen>> buttonRelations = new HashMap<>();
@@ -20,11 +20,11 @@ public class GunterOverlay extends AbstractOverlay {
     }
 
 
-    public GunterOverlay(GuiScreen lastScreen) {
+    public GunterEssOverlay(GuiScreen lastScreen) {
         super(lastScreen);
     }
 
-    public GunterOverlay() {
+    public GunterEssOverlay() {
         this(Minecraft.getMinecraft().currentScreen);
     }
 
@@ -37,12 +37,12 @@ public class GunterOverlay extends AbstractOverlay {
         title.func_175202_a("");
         title.func_175202_a("by GunterPro7 f. DerKatzenLord");
 
-        buttonRelations.put(new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Gemstone Tracker"), () -> new GunterGemstoneTrackerOverlay(this));
-        buttonRelations.put(new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Chat Features"), () -> new GunterChatOverlay(this));
+        buttonRelations.put(new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Gemstone Tracker"), () -> new GemstoneTrackerOverlay(this));
+        buttonRelations.put(new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Chat Features"), () -> new ChatOverlay(this));
         buttonRelations.put(new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Collection Tracker"), () -> null); // Not ready yet
         buttonRelations.put(new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Money Tracker"), () -> new FarmingTrackerOverlay(this)); // Not ready yet
-        buttonRelations.put(new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Auto Kicker"), () -> new GunterAutoKickOverlay(this));
-        buttonRelations.put(new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Auto Harp"), () -> new GunterAutoHarpOverlay(this));
+        buttonRelations.put(new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Auto Kicker"), () -> new AutoKickOverlay(this));
+        buttonRelations.put(new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Auto Harp"), () -> new AutoHarpOverlay(this));
         buttonRelations.put(new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Information Overlay"), () -> new InformationOverlay(this));
         autoFisherButton = new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Auto Fisher: " + (Setting.AUTO_FISHING.isEnabled() ? "§a§lEnabled" : "§c§lDisabled"));
         autoUpdateButton = new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Auto Updates: " + (Setting.AUTO_UPDATES.isEnabled() ? "§a§lEnabled" : "§c§lDisabled"));

@@ -5,17 +5,17 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 
-public class GunterGemstoneTrackerOverlay extends AbstractOverlay {
+public class GemstoneTrackerOverlay extends AbstractOverlay {
     private GuiTextField textField0;
     private GuiButton activeButton;
     private GuiButton moveObjectButton;
 
-    public GunterGemstoneTrackerOverlay(GuiScreen lastScreen) {
+    public GemstoneTrackerOverlay(GuiScreen lastScreen) {
         super(lastScreen);
     }
 
-    public GunterGemstoneTrackerOverlay() {
-        this(new GunterOverlay());
+    public GemstoneTrackerOverlay() {
+        this(new GunterEssOverlay());
     }
 
     public GuiScreen getLastScreen() {

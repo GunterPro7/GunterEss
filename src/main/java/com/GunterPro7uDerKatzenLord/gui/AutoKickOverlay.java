@@ -11,13 +11,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GunterAutoKickOverlay extends AbstractOverlay {
+public class AutoKickOverlay extends AbstractOverlay {
     private GuiTextField textField0;
     private final List<GuiButton> localButtonList = new ArrayList<>();
     public final static boolean[] values = new boolean[]{false, false, false, false, false};
     private static GuiTextField textField1 = new GuiTextField(0, Minecraft.getMinecraft().fontRendererObj, 0, 0, 200, 20);
 
-    public GunterAutoKickOverlay(GuiScreen lastScreen) {
+    public AutoKickOverlay(GuiScreen lastScreen) {
         super(lastScreen);
     }
 

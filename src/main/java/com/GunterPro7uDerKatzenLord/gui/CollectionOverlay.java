@@ -8,17 +8,17 @@ import net.minecraft.client.gui.GuiTextField;
 
 import java.io.IOException;
 
-public class GunterCollectionOverlay extends AbstractOverlay {
+public class CollectionOverlay extends AbstractOverlay {
     private GuiTextField textField0;
     private GuiButton button0;
     private GuiButton button1;
 
-    public GunterCollectionOverlay(GuiScreen lastScreen) {
+    public CollectionOverlay(GuiScreen lastScreen) {
         super(lastScreen);
     }
 
-    public GunterCollectionOverlay() {
-        this(new GunterOverlay());
+    public CollectionOverlay() {
+        this(new GunterEssOverlay());
     }
 
     public GuiScreen getLastScreen() {

@@ -1,6 +1,6 @@
 package com.GunterPro7uDerKatzenLord;
 
-import com.GunterPro7uDerKatzenLord.gui.GunterAutoKickOverlay;
+import com.GunterPro7uDerKatzenLord.gui.AutoKickOverlay;
 import com.GunterPro7uDerKatzenLord.listener.AdvancedChat;
 import com.GunterPro7uDerKatzenLord.listener.BackendService;
 import com.GunterPro7uDerKatzenLord.listener.MiscListener;
@@ -42,7 +42,7 @@ public class Command extends CommandBase {
                 AdvancedChat.sendChatMessageAsPlayer(message);
             }
             if (Objects.equals(args[0], "ignore")) {
-                GunterAutoKickOverlay.addIgnoredPlayer(args[1]);
+                AutoKickOverlay.addIgnoredPlayer(args[1]);
             }
             if (args[0].equalsIgnoreCase("msg")) {
                 String playerFrom = Minecraft.getMinecraft().thePlayer.getGameProfile().getName();

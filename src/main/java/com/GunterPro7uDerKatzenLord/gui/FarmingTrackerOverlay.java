@@ -15,7 +15,7 @@ public class FarmingTrackerOverlay extends AbstractOverlay {
     }
 
     public FarmingTrackerOverlay() {
-        this(new GunterOverlay());
+        this(new GunterEssOverlay());
     }
 
     public GuiScreen getLastScreen() {

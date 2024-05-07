@@ -4,14 +4,14 @@ import com.GunterPro7uDerKatzenLord.Setting;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 
-public class GunterChatOverlay extends AbstractOverlay {
+public class ChatOverlay extends AbstractOverlay {
     private GuiButton button0;
     private GuiButton button1;
     private GuiButton button2;
     private GuiButton button3;
     private GuiButton button4;
 
-    public GunterChatOverlay(GuiScreen lastScreen) {
+    public ChatOverlay(GuiScreen lastScreen) {
         super(lastScreen);
     }
 
