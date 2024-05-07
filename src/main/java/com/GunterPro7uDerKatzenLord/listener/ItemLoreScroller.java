@@ -1,6 +1,7 @@
 package com.GunterPro7uDerKatzenLord.listener;
 
 import com.GunterPro7uDerKatzenLord.event.ClientMouseEvent;
+import com.GunterPro7uDerKatzenLord.utils.McUtils;
 import com.GunterPro7uDerKatzenLord.utils.Utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -24,7 +25,7 @@ public class ItemLoreScroller {
 
     @SubscribeEvent
     public void onScroll(ClientMouseEvent.Scroll event) {
-        if (Utils.mcLoaded()) {
+        if (McUtils.mcLoaded()) {
             if (Minecraft.getMinecraft().currentScreen instanceof GuiContainer) {
                 Slot slot = ((GuiContainer) Minecraft.getMinecraft().currentScreen).getSlotUnderMouse();
                 if (slot != null) {
@@ -87,7 +88,7 @@ public class ItemLoreScroller {
     }
 
     private static int getMaxLines() {
-        int scaling = mc.gameSettings.guiScale == 0 ? Utils.getMaxGuiScale() : mc.gameSettings.guiScale;
+        int scaling = mc.gameSettings.guiScale == 0 ? McUtils.getMaxGuiScale() : mc.gameSettings.guiScale;
         int fontHeight = mc.fontRendererObj.FONT_HEIGHT + 1;
 
         return mc.displayHeight / scaling / fontHeight - 3;

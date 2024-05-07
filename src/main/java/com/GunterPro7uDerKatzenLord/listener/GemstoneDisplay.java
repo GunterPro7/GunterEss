@@ -1,7 +1,8 @@
-package com.GunterPro7uDerKatzenLord.utils;
+package com.GunterPro7uDerKatzenLord.listener;
 
 import com.GunterPro7uDerKatzenLord.gui.CustomIngameUI;
 import com.GunterPro7uDerKatzenLord.Setting;
+import com.GunterPro7uDerKatzenLord.hypixel.Gemstone;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;

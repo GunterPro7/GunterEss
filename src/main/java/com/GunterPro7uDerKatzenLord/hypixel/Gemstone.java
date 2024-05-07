@@ -1,4 +1,4 @@
-package com.GunterPro7uDerKatzenLord.utils;
+package com.GunterPro7uDerKatzenLord.hypixel;
 
 import net.minecraft.util.ResourceLocation;
 

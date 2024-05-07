@@ -1,6 +1,6 @@
 package com.GunterPro7uDerKatzenLord.listener;
 
-import com.GunterPro7uDerKatzenLord.utils.DungeonUtils;
+import com.GunterPro7uDerKatzenLord.hypixel.DungeonUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.inventory.Container;

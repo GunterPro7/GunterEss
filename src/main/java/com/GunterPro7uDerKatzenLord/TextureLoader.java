@@ -1,4 +1,4 @@
-package com.GunterPro7uDerKatzenLord.gui;// Importe
+package com.GunterPro7uDerKatzenLord;// Importe
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.ITextureObject;

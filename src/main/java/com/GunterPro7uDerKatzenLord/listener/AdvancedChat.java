@@ -36,7 +36,7 @@ public class AdvancedChat {
     private static boolean pasteEnabled;
     private static final AdvancedChat instance = new AdvancedChat();
 
-    public static final Map<ChatCondition, Function> actionMap = Utils.createMap(ChatCondition.class, Function.class,
+    public static final Map<ChatCondition, Function> actionMap = CollectionUtils.createMap(ChatCondition.class, Function.class,
             new ChatCondition("QUICK MATHS! Solve: ", Condition.STARTSWITH), (Function) message -> AdvancedChat.sendChatMessageAsPlayer("/ac " + String.valueOf(MathUtils.eval(clearChatMessage(message.getUnformattedText()).substring("QUICK MATHS! Solve: ".length()).replaceAll("x", "*"))).replace(".0", "")),
             new ChatCondition("Click HERE to sign the ", Condition.STARTSWITH), (Function) message -> AdvancedChat.sendChatMessageAsPlayer(message.getChatStyle().getChatClickEvent().getValue()),
             new ChatCondition("[FEAR] Public Speaking Demon: Speak ", Condition.STARTSWITH), (Function) message -> AdvancedChat.sendChatMessageAsPlayer("/ac q weqwe qwe qwe qeqwe qweqwe qwe qwe ")
@@ -105,7 +105,7 @@ public class AdvancedChat {
 
             boolean addCount = true;
             if (Setting.DONT_CHECK_USELESS_CHAT_MESSAGES.isEnabled()) {
-                if (Utils.isIgnoredMessage(text)) {
+                if (McUtils.isUselessMessage(text)) {
                     addCount = false;
                 }
             }

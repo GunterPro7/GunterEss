@@ -1,4 +1,4 @@
-package com.GunterPro7uDerKatzenLord.gui;
+package com.GunterPro7uDerKatzenLord.overlay;
 
 import com.GunterPro7uDerKatzenLord.Setting;
 import net.minecraft.client.gui.GuiButton;

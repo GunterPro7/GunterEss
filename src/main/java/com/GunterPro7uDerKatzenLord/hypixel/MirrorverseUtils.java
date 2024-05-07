@@ -1,4 +1,4 @@
-package com.GunterPro7uDerKatzenLord.utils;
+package com.GunterPro7uDerKatzenLord.hypixel;
 
 import java.util.ArrayList;
 import java.util.List;

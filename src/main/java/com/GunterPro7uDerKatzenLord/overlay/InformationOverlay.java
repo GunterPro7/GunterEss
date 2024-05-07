@@ -1,6 +1,7 @@
-package com.GunterPro7uDerKatzenLord.gui;
+package com.GunterPro7uDerKatzenLord.overlay;
 
 import com.GunterPro7uDerKatzenLord.Setting;
+import com.GunterPro7uDerKatzenLord.gui.CustomIngameUI;
 import com.GunterPro7uDerKatzenLord.utils.CollectionUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;

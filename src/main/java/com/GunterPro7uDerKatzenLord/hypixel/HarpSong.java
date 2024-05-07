@@ -1,4 +1,4 @@
-package com.GunterPro7uDerKatzenLord.utils;
+package com.GunterPro7uDerKatzenLord.hypixel;
 
 public enum HarpSong {
     HYMN_TO_THE_JOY("Hymn to the Joy"),

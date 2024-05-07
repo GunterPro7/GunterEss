@@ -21,7 +21,6 @@ import java.util.*;
 public class Utils {
     public static final Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
     public static final Map<Long, Runnable> commandTasks = new HashMap<>();
-    private static final List<String> ignoredMessages = new ArrayList<>();
 
     public static void copyToClipBoard(String text) {
         clipboard.setContents(new StringSelection(text), null);
@@ -80,34 +79,11 @@ public class Utils {
         commandTasks.put(System.currentTimeMillis() + waitTime, f);
     }
 
-    public static boolean isIgnoredMessage(String text) {
-        return text.matches("▬+|-+") || ignoredMessages.contains(text);
-    }
-
     public static String formatTime(long time, String pattern) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
         dateFormat.setTimeZone(java.util.TimeZone.getTimeZone("UTC"));
 
         return dateFormat.format(new Date(time));
-    }
-
-    public static <K, V> HashMap<K, V> createMap(Class<K> keyClass, Class<V> valueClass, Object... elements) {
-        if (elements.length % 2 != 0) {
-            throw new IllegalArgumentException("An even number of elements is required to create a key-value map.");
-        }
-
-        final HashMap<K, V> map = new HashMap<>();
-        for (int i = 0; i < elements.length; i += 2) {
-            if (keyClass.isInstance(elements[i]) && valueClass.isInstance(elements[i + 1])) {
-                K key = keyClass.cast(elements[i]);
-                V value = valueClass.cast(elements[i + 1]);
-                map.put(key, value);
-            } else {
-                throw new IllegalArgumentException("Invalid key-value pair at index " + i);
-            }
-        }
-
-        return map;
     }
 
     public static String getJavaRuntime() throws IOException {
@@ -156,44 +132,6 @@ public class Utils {
         }
 
         return value;
-    }
-
-    public static NBTTagList getItemLore(ItemStack itemStack) {
-        NBTTagCompound nbt = itemStack.getTagCompound();
-
-        if (nbt != null && nbt.hasKey("display", 10)) {
-            NBTTagCompound display = nbt.getCompoundTag("display");
-
-            if (display.hasKey("Lore", 9)) {
-                return display.getTagList("Lore", 8);
-            }
-        }
-
-        return null;
-    }
-
-    public static boolean mcLoaded() {
-        return Minecraft.getMinecraft().thePlayer != null;
-    }
-
-    public static int getMaxGuiScale() {
-        Minecraft mc = Minecraft.getMinecraft();
-        int scaleFactor = 1;
-
-        while (mc.displayWidth / (scaleFactor + 1) >= 320 && mc.displayHeight / (scaleFactor + 1) >= 240) {
-            scaleFactor++;
-        }
-
-        return scaleFactor;
-    }
-
-    public static int getPing() {
-        NetworkPlayerInfo networkPlayerInfo = Minecraft.getMinecraft().getNetHandler().getPlayerInfo(Minecraft.getMinecraft().thePlayer.getUniqueID());
-        if (networkPlayerInfo != null) {
-            return networkPlayerInfo.getResponseTime();
-        } else {
-            return -1;
-        }
-    }
+    } // TODO aufgehört in MCUtils zu geben
 
 }

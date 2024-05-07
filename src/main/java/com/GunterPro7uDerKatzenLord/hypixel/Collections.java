@@ -1,6 +1,7 @@
-package com.GunterPro7uDerKatzenLord.utils;
+package com.GunterPro7uDerKatzenLord.hypixel;
 
 import com.GunterPro7uDerKatzenLord.Main;
+import com.GunterPro7uDerKatzenLord.utils.JsonCollection;
 
 import java.util.Objects;
 

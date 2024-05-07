@@ -5,6 +5,7 @@ import com.GunterPro7uDerKatzenLord.event.ClientChangeWorldEvent;
 import com.GunterPro7uDerKatzenLord.gui.CustomIngameUI;
 import com.GunterPro7uDerKatzenLord.LagHandler;
 import com.GunterPro7uDerKatzenLord.Setting;
+import com.GunterPro7uDerKatzenLord.utils.McUtils;
 import com.GunterPro7uDerKatzenLord.utils.Utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -138,7 +139,7 @@ public class InformationListener {
                     lastDateFormat = Setting.INFO_DATE_FORMAT;
                 }
 
-                int curPing = Utils.getPing();
+                int curPing = McUtils.getPing();
                 if (lastPing != curPing) {
                     informationValues.put("Ping", String.valueOf(curPing));
                     lastPing = curPing;

@@ -1,4 +1,4 @@
-package com.GunterPro7uDerKatzenLord.gui;
+package com.GunterPro7uDerKatzenLord.overlay;
 
 import com.GunterPro7uDerKatzenLord.listener.AdvancedChat;
 import net.minecraft.client.Minecraft;

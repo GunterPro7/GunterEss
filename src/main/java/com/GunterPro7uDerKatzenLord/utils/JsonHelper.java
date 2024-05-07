@@ -1,5 +1,6 @@
 package com.GunterPro7uDerKatzenLord.utils;
 
+import com.GunterPro7uDerKatzenLord.hypixel.Collections;
 import com.GunterPro7uDerKatzenLord.listener.AdvancedChat;
 import com.GunterPro7uDerKatzenLord.listener.MiscListener;
 import com.GunterPro7uDerKatzenLord.Main;
@@ -111,7 +112,7 @@ public class JsonHelper {
 
         for (String key : map.keySet()) {
             System.out.println(key);
-            Collections coll = Collections.valueOfAPI(key);
+            com.GunterPro7uDerKatzenLord.hypixel.Collections coll = com.GunterPro7uDerKatzenLord.hypixel.Collections.valueOfAPI(key);
             if (coll != null) {
                 coll.setLevel(Math.toIntExact(map.get(key)));
             }
@@ -144,8 +145,8 @@ public class JsonHelper {
                 }
             }
             map.put(parts[0].replace("\"", ""), Long.parseLong(parts[1].replace("\"", "")));
-            if (Collections.includesAPI(parts[0]) && !tiers) {
-                Collections.valueOfAPI(parts[0]).setCrops(Long.parseLong(parts[1].replace("\"", "")));
+            if (com.GunterPro7uDerKatzenLord.hypixel.Collections.includesAPI(parts[0]) && !tiers) {
+                com.GunterPro7uDerKatzenLord.hypixel.Collections.valueOfAPI(parts[0]).setCrops(Long.parseLong(parts[1].replace("\"", "")));
             }
 
 
@@ -162,7 +163,7 @@ public class JsonHelper {
             keys.add(entry.getKey());
             if (entry.getValue().isJsonObject()) {
                 String key = entry.getKey();
-                if (Collections.includesAPI(key)) {
+                if (com.GunterPro7uDerKatzenLord.hypixel.Collections.includesAPI(key)) {
                     Collections.valueOfAPI(key).setCollection(new JsonCollection((JsonObject) entry.getValue()));
                 }
                 addEntriesToEnum(entry.getValue().getAsJsonObject());

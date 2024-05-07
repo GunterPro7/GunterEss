@@ -1,6 +1,6 @@
 package com.GunterPro7uDerKatzenLord;
 
-import com.GunterPro7uDerKatzenLord.gui.AutoKickOverlay;
+import com.GunterPro7uDerKatzenLord.overlay.AutoKickOverlay;
 import com.GunterPro7uDerKatzenLord.listener.AdvancedChat;
 import com.GunterPro7uDerKatzenLord.listener.BackendService;
 import com.GunterPro7uDerKatzenLord.listener.MiscListener;

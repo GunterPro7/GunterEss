@@ -1,7 +1,7 @@
 package com.GunterPro7uDerKatzenLord.listener;
 
 import com.GunterPro7uDerKatzenLord.Setting;
-import com.GunterPro7uDerKatzenLord.utils.HarpSong;
+import com.GunterPro7uDerKatzenLord.hypixel.HarpSong;
 import com.GunterPro7uDerKatzenLord.utils.TimeUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiChest;
