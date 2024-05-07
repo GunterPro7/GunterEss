@@ -16,10 +16,6 @@ public class LagHandler {
     public void calcPacket(S00PacketKeepAlive packet) {
         int i = packet.func_149134_c();
 
-        if (i == 1) {
-            //reset(); // TODO wenn es funktioniert, können wir das hier weggeben
-        }
-
         lastTime = curTime;
         curTime = System.currentTimeMillis();
 

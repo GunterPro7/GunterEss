@@ -12,7 +12,7 @@ public class CollectionUtils {
     public static <T> List<T> listOf(Supplier<T> supplier, int times) {
         List<T> list = new ArrayList<>();
 
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < times; i++) {
             list.add(supplier.get());
         }
 

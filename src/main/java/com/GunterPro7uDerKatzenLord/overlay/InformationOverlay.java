@@ -18,7 +18,7 @@ public class InformationOverlay extends AbstractOverlay {
     private static final List<String> colors = Arrays.stream(EnumChatFormatting.values()).filter(EnumChatFormatting::isColor).map(e -> e + e.getFriendlyName()).collect(Collectors.toList());
     private static final Map<String, EnumChatFormatting> colorsByPrefix = CollectionUtils.mapOf(colors, Arrays.stream(EnumChatFormatting.values()).filter(EnumChatFormatting::isColor).collect(Collectors.toList()));
 
-    private static final List<Boolean> dropdownButtonsOpened = CollectionUtils.listOf(() -> false, 5);
+    private static final List<Boolean> dropdownButtonsOpened = CollectionUtils.listOf(() -> false, 6);
 
     private static GuiButton prefixColorButton;
     private static GuiButton suffixColorButton;
