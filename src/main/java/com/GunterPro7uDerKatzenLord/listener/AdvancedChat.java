@@ -2,6 +2,9 @@ package com.GunterPro7uDerKatzenLord.listener;
 
 import com.GunterPro7uDerKatzenLord.Party;
 import com.GunterPro7uDerKatzenLord.Setting;
+import com.GunterPro7uDerKatzenLord.event.BackendRecievedEvent;
+import com.GunterPro7uDerKatzenLord.event.ClientChatEvent;
+import com.GunterPro7uDerKatzenLord.event.EnteredSkyblockEvent;
 import com.GunterPro7uDerKatzenLord.utils.*;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.GuiTextField;
@@ -117,7 +120,7 @@ public class AdvancedChat {
             event.message = iChatComponent;
         }
 
-        Listeners.searchChat.setChatLine(iChatComponent, messageInformation.getId(), 0);
+        MiscListener.searchChat.setChatLine(iChatComponent, messageInformation.getId(), 0);
     }
 
     @SubscribeEvent
@@ -300,8 +303,8 @@ public class AdvancedChat {
     }
 
     public static IChatComponent getHoveredChatComponent() {
-        if (Listeners.searchChat.getChatOpen())
-            return Listeners.searchChat.getChatComponent(Mouse.getX(), Mouse.getY());
+        if (MiscListener.searchChat.getChatOpen())
+            return MiscListener.searchChat.getChatComponent(Mouse.getX(), Mouse.getY());
         return mc.ingameGUI.getChatGUI().getChatComponent(Mouse.getX(), Mouse.getY());
     }
 

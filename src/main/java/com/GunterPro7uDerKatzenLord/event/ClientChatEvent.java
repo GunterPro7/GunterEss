@@ -1,4 +1,4 @@
-package com.GunterPro7uDerKatzenLord.listener;
+package com.GunterPro7uDerKatzenLord.event;
 
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraftforge.fml.common.eventhandler.Event;

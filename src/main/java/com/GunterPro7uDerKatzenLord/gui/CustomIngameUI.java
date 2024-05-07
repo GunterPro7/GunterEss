@@ -1,6 +1,6 @@
 package com.GunterPro7uDerKatzenLord.gui;
 
-import com.GunterPro7uDerKatzenLord.listener.Listeners;
+import com.GunterPro7uDerKatzenLord.listener.MiscListener;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 
@@ -43,7 +43,7 @@ public class CustomIngameUI {
     public void drawInfoBox(int offsetX, int offsetY, boolean background) {
         FontRenderer fontRenderer = mc.fontRendererObj;
 
-        String text = "Crops: " + Listeners.cropTimeList.size();
+        String text = "Crops: " + MiscListener.cropTimeList.size();
         int maxWidth = fontRenderer.getStringWidth(text);
 
         int margin = 8;

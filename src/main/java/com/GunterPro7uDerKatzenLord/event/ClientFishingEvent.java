@@ -1,4 +1,4 @@
-package com.GunterPro7uDerKatzenLord.listener;
+package com.GunterPro7uDerKatzenLord.event;
 
 import com.GunterPro7uDerKatzenLord.Setting;
 import net.minecraft.entity.Entity;
@@ -15,23 +15,23 @@ import java.util.List;
 
 import static com.GunterPro7uDerKatzenLord.Main.mc;
 
-public class FishingEvent extends Event {
+public class ClientFishingEvent extends Event {
     private final Entity entity;
 
     private static boolean onlineOnHypixelSkyblock = true;
     private static final List<Entity> entities = new ArrayList<>();
 
-    public FishingEvent(Entity entity) {
+    public ClientFishingEvent(Entity entity) {
         this.entity = entity;
     }
 
-    public static class FishOnHookEvent extends FishingEvent {
+    public static class FishOnHookEvent extends ClientFishingEvent {
         public FishOnHookEvent(Entity entity) {
             super(entity);
         }
     }
 
-    public static class FishMovingToHookEvent extends FishingEvent {
+    public static class FishMovingToHookEvent extends ClientFishingEvent {
         public FishMovingToHookEvent(Entity entity) {
             super(entity);
         }

@@ -1,5 +1,7 @@
 package com.GunterPro7uDerKatzenLord;
 
+import com.GunterPro7uDerKatzenLord.event.ClientMouseEvent;
+import com.GunterPro7uDerKatzenLord.event.ClientFishingEvent;
 import com.GunterPro7uDerKatzenLord.listener.ItemLoreScroller;
 import com.GunterPro7uDerKatzenLord.gui.TextureLoader;
 import com.GunterPro7uDerKatzenLord.listener.*;
@@ -25,7 +27,7 @@ import org.spongepowered.asm.mixin.Mixins;
 import java.io.File;
 import java.io.IOException;
 
-import static com.GunterPro7uDerKatzenLord.listener.Listeners.collectionJson;
+import static com.GunterPro7uDerKatzenLord.listener.MiscListener.collectionJson;
 
 @Mod(modid = "GunterEss", useMetadata = true)
 public class Main {
@@ -52,7 +54,7 @@ public class Main {
         Setting.initSettings();
 
         MinecraftForge.EVENT_BUS.register(new ClientBlockListener());
-        MinecraftForge.EVENT_BUS.register(new Listeners());
+        MinecraftForge.EVENT_BUS.register(new MiscListener());
         MinecraftForge.EVENT_BUS.register(new InformationListener());
         MinecraftForge.EVENT_BUS.register(new TimeUtils());
         MinecraftForge.EVENT_BUS.register(new GemstoneDisplay());
@@ -60,7 +62,7 @@ public class Main {
         MinecraftForge.EVENT_BUS.register(new TextureLoader());
         MinecraftForge.EVENT_BUS.register(PreventLabymodUpdater.INSTANCE);
         MinecraftForge.EVENT_BUS.register(new ClientMouseEvent(0));
-        MinecraftForge.EVENT_BUS.register(new FishingEvent(null));
+        MinecraftForge.EVENT_BUS.register(new ClientFishingEvent(null));
         MinecraftForge.EVENT_BUS.register(AdvancedChat.getInstance());
         MinecraftForge.EVENT_BUS.register(new ItemLoreScroller());
         //MinecraftForge.EVENT_BUS.register(new HarpListener());

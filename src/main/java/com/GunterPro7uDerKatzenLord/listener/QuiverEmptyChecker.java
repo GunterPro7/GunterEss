@@ -1,5 +1,7 @@
 package com.GunterPro7uDerKatzenLord.listener;
 
+import com.GunterPro7uDerKatzenLord.event.ClientMouseEvent;
+import com.GunterPro7uDerKatzenLord.event.EnteredSkyblockEvent;
 import com.GunterPro7uDerKatzenLord.gui.CustomIngameUI;
 import com.GunterPro7uDerKatzenLord.utils.Utils;
 import net.minecraft.client.Minecraft;

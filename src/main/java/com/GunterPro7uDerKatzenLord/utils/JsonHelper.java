@@ -1,7 +1,7 @@
 package com.GunterPro7uDerKatzenLord.utils;
 
 import com.GunterPro7uDerKatzenLord.listener.AdvancedChat;
-import com.GunterPro7uDerKatzenLord.listener.Listeners;
+import com.GunterPro7uDerKatzenLord.listener.MiscListener;
 import com.GunterPro7uDerKatzenLord.Main;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -100,7 +100,7 @@ public class JsonHelper {
         String collection = collectionList[collectionList.length - 1].split("}")[0].substring(2); // TODO THIS IS SHIT
         String unlockedTiers = unlockedTierList[unlockedTierList.length - 1].split("}")[0].split("]")[0].substring(2); // TODO THIS IS SHIT
 
-        Listeners.SERVER_COLLECTION_MAP = processJSONString(collection, false);
+        MiscListener.SERVER_COLLECTION_MAP = processJSONString(collection, false);
         HashMap<String, Long> map = processJSONString(unlockedTiers, true);
 
         //for (Collections collections : Collections.values()) {

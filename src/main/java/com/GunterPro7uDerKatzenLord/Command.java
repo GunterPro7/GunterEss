@@ -3,7 +3,7 @@ package com.GunterPro7uDerKatzenLord;
 import com.GunterPro7uDerKatzenLord.gui.GunterAutoKickOverlay;
 import com.GunterPro7uDerKatzenLord.listener.AdvancedChat;
 import com.GunterPro7uDerKatzenLord.listener.BackendService;
-import com.GunterPro7uDerKatzenLord.listener.Listeners;
+import com.GunterPro7uDerKatzenLord.listener.MiscListener;
 import com.GunterPro7uDerKatzenLord.utils.Utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
@@ -31,7 +31,7 @@ public class Command extends CommandBase {
     @Override
     public void processCommand(ICommandSender sender, String[] args) {
         if (args.length == 0) {
-            Listeners.setGunterOverlayNextTick = true;
+            MiscListener.setGunterOverlayNextTick = true;
         }
         if (args.length > 1) {
             if (Objects.equals(args[0], "copy")) {

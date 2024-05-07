@@ -1,5 +1,7 @@
 package com.GunterPro7uDerKatzenLord.listener;
 
+import com.GunterPro7uDerKatzenLord.event.ClientBlockChangeEvent;
+import com.GunterPro7uDerKatzenLord.event.ClientChangeWorldEvent;
 import com.GunterPro7uDerKatzenLord.gui.CustomIngameUI;
 import com.GunterPro7uDerKatzenLord.LagHandler;
 import com.GunterPro7uDerKatzenLord.Setting;
@@ -39,8 +41,6 @@ public class InformationListener {
 
     private final LinkedList<Long> frameTimes = new LinkedList<>();
     private final LinkedList<Long> blocksBrokenTimes = new LinkedList<>();
-
-    private WorldClient lastWorldClient;
 
     // Render Information
     @SubscribeEvent
@@ -159,21 +159,20 @@ public class InformationListener {
             }
 
             informationValues.put("Broken_Blocks", String.valueOf(blocksBrokenTimes.size()));
-
-            if ((lastWorldClient == null || lastWorldClient != FMLClientHandler.instance().getWorldClient()) && FMLClientHandler.instance().getWorldClient() != null) {
-                lastWorldClient = FMLClientHandler.instance().getWorldClient();
-
-                System.out.println("RESETING...");
-                System.out.println("TODO check ob des geht");
-
-                LagHandler.INSTANCE.reset();
-            }
         }
     }
 
     @SubscribeEvent
-    public void onBlockBreak(final ClientBlockListener.ClientBlockChangeEvent event) {
+    public void onBlockBreak(final ClientBlockChangeEvent event) {
         blocksBrokenTimes.add(System.currentTimeMillis());
+    }
+
+    @SubscribeEvent
+    public void onWorldChange(final ClientChangeWorldEvent event) {
+        System.out.println("RESETING...");
+        System.out.println("TODO check ob des geht");
+
+        LagHandler.INSTANCE.reset();
     }
 }
 

@@ -1,5 +1,9 @@
 package com.GunterPro7uDerKatzenLord.listener;
 
+import com.GunterPro7uDerKatzenLord.LagHandler;
+import com.GunterPro7uDerKatzenLord.event.ClientBlockChangeEvent;
+import com.GunterPro7uDerKatzenLord.event.ClientChangeWorldEvent;
+import com.GunterPro7uDerKatzenLord.event.ClientFishingEvent;
 import com.GunterPro7uDerKatzenLord.gui.CustomIngameUI;
 import com.GunterPro7uDerKatzenLord.gui.GunterAutoKickOverlay;
 import com.GunterPro7uDerKatzenLord.gui.GunterCollectionOverlay;
@@ -11,12 +15,15 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -29,7 +36,7 @@ import java.util.concurrent.Executors;
 import static com.GunterPro7uDerKatzenLord.Command.enableSearchChat;
 import static com.GunterPro7uDerKatzenLord.Main.mc;
 
-public class Listeners {
+public class MiscListener {
     public static final ExecutorService POOL = Executors.newCachedThreadPool();
     public static Long time = System.currentTimeMillis();
     public static final List<Long> cropTimeList = new ArrayList<>();
@@ -39,6 +46,7 @@ public class Listeners {
     public static final Random RANDOM = new Random();
     private long totalCrops;
     public static String collectionJson;
+    private WorldClient lastWorldClient;
     public static HashMap<String, Long> SERVER_COLLECTION_MAP = new HashMap<>();
     public static Collections CURRENT_COLLECTION = Collections.wheat;
     public static int CURRENT_LEVEL = 0;
@@ -97,6 +105,12 @@ public class Listeners {
             });
             time = System.currentTimeMillis();
         }
+
+        if ((lastWorldClient == null || lastWorldClient != FMLClientHandler.instance().getWorldClient()) && FMLClientHandler.instance().getWorldClient() != null) {
+            lastWorldClient = FMLClientHandler.instance().getWorldClient();
+
+            MinecraftForge.EVENT_BUS.post(new ClientChangeWorldEvent(lastWorldClient));
+        }
     }
 
     @SubscribeEvent
@@ -113,7 +127,7 @@ public class Listeners {
 
 
     @SubscribeEvent
-    public void onBlockBreak(final ClientBlockListener.ClientBlockChangeEvent event) {
+    public void onBlockBreak(final ClientBlockChangeEvent event) {
         cropTimeList.add(System.currentTimeMillis());
         if (cropTimeList.size() % 25 == 0) {
             try {
@@ -149,7 +163,7 @@ public class Listeners {
     }
 
     @SubscribeEvent
-    public void blockBreakEvent(ClientBlockListener.ClientBlockChangeEvent event) {
+    public void blockBreakEvent(final ClientBlockChangeEvent event) {
         if (event.getMinecraftBlock().getItemStack() != null) {
             AdvancedChat.sendPrivateMessage(event.getMinecraftBlock().getName());
         } else {
@@ -236,7 +250,7 @@ public class Listeners {
     private static int fishingRCDuration;
 
     @SubscribeEvent
-    public void onFishEnter(FishingEvent.FishOnHookEvent event) {
+    public void onFishEnter(ClientFishingEvent.FishOnHookEvent event) {
         if (Setting.AUTO_FISHING.isEnabled()) {
             fishingRCDuration = new Random().nextInt(5) + 3;
             TimeUtils.addToQueue(new Random().nextInt(250) + 600, () -> fishingRCDuration = new Random().nextInt(5) + 3);

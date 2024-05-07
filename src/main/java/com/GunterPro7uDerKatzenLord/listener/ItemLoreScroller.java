@@ -1,5 +1,6 @@
 package com.GunterPro7uDerKatzenLord.listener;
 
+import com.GunterPro7uDerKatzenLord.event.ClientMouseEvent;
 import com.GunterPro7uDerKatzenLord.utils.Utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;

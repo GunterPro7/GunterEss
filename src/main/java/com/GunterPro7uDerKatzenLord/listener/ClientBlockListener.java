@@ -1,5 +1,6 @@
 package com.GunterPro7uDerKatzenLord.listener;
 
+import com.GunterPro7uDerKatzenLord.event.ClientBlockChangeEvent;
 import com.GunterPro7uDerKatzenLord.utils.MinecraftBlock;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -80,24 +81,6 @@ public class ClientBlockListener {
 
         public MinecraftBlock getMinecraftBlock() {
             return minecraftBlock;
-        }
-    }
-
-    public static class ClientBlockChangeEvent extends Event {
-        private final BlockPos blockPos;
-        private final MinecraftBlock mcBlock;
-
-        public ClientBlockChangeEvent(BlockPos blockPos, MinecraftBlock mcBlock) {
-            this.blockPos = blockPos;
-            this.mcBlock = mcBlock;
-        }
-
-        public BlockPos getBlockPos() {
-            return blockPos;
-        }
-
-        public MinecraftBlock getMinecraftBlock() {
-            return mcBlock;
         }
     }
 }
