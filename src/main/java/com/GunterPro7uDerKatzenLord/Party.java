@@ -1,20 +1,18 @@
 package com.GunterPro7uDerKatzenLord;
 
-import com.GunterPro7uDerKatzenLord.Listener.AdvancedChat;
-import com.GunterPro7uDerKatzenLord.Listener.BackendService;
+import com.GunterPro7uDerKatzenLord.listener.AdvancedChat;
+import com.GunterPro7uDerKatzenLord.listener.BackendService;
 import net.minecraft.client.Minecraft;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.IChatComponent;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Stream;
 
 public class Party {
     public static final List<Party> parties = new ArrayList<>();

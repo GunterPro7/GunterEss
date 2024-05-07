@@ -1,10 +1,10 @@
 package com.GunterPro7uDerKatzenLord;
 
-import com.GunterPro7uDerKatzenLord.Gui.GunterAutoKickOverlay;
-import com.GunterPro7uDerKatzenLord.Listener.AdvancedChat;
-import com.GunterPro7uDerKatzenLord.Listener.BackendService;
-import com.GunterPro7uDerKatzenLord.Listener.Listeners;
-import com.GunterPro7uDerKatzenLord.Utils.Utils;
+import com.GunterPro7uDerKatzenLord.gui.GunterAutoKickOverlay;
+import com.GunterPro7uDerKatzenLord.listener.AdvancedChat;
+import com.GunterPro7uDerKatzenLord.listener.BackendService;
+import com.GunterPro7uDerKatzenLord.listener.Listeners;
+import com.GunterPro7uDerKatzenLord.utils.Utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;

@@ -1,11 +1,11 @@
 package com.GunterPro7uDerKatzenLord;
 
-import com.GunterPro7uDerKatzenLord.Listener.ItemLoreScroller;
-import com.GunterPro7uDerKatzenLord.Gui.TextureLoader;
-import com.GunterPro7uDerKatzenLord.Listener.*;
-import com.GunterPro7uDerKatzenLord.Utils.GemstoneDisplay;
-import com.GunterPro7uDerKatzenLord.Utils.JsonHelper;
-import com.GunterPro7uDerKatzenLord.Utils.TimeUtils;
+import com.GunterPro7uDerKatzenLord.listener.ItemLoreScroller;
+import com.GunterPro7uDerKatzenLord.gui.TextureLoader;
+import com.GunterPro7uDerKatzenLord.listener.*;
+import com.GunterPro7uDerKatzenLord.utils.GemstoneDisplay;
+import com.GunterPro7uDerKatzenLord.utils.JsonHelper;
+import com.GunterPro7uDerKatzenLord.utils.TimeUtils;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import net.minecraft.client.Minecraft;
@@ -25,7 +25,7 @@ import org.spongepowered.asm.mixin.Mixins;
 import java.io.File;
 import java.io.IOException;
 
-import static com.GunterPro7uDerKatzenLord.Listener.Listeners.collectionJson;
+import static com.GunterPro7uDerKatzenLord.listener.Listeners.collectionJson;
 
 @Mod(modid = "GunterEss", useMetadata = true)
 public class Main {

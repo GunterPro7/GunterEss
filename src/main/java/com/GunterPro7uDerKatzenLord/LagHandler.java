@@ -1,6 +1,5 @@
 package com.GunterPro7uDerKatzenLord;
 
-import com.GunterPro7uDerKatzenLord.Listener.InformationListener;
 import net.minecraft.network.play.server.S00PacketKeepAlive;
 
 public class LagHandler {

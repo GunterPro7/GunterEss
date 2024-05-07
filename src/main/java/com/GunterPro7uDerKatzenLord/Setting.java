@@ -1,6 +1,6 @@
 package com.GunterPro7uDerKatzenLord;
 
-import com.GunterPro7uDerKatzenLord.Utils.CollectionUtils;
+import com.GunterPro7uDerKatzenLord.utils.CollectionUtils;
 import net.minecraft.util.EnumChatFormatting;
 
 import java.io.*;

@@ -1,6 +1,6 @@
 package com.GunterPro7uDerKatzenLord.mixin;
 
-import com.GunterPro7uDerKatzenLord.Listener.AdvancedChat;
+import com.GunterPro7uDerKatzenLord.listener.AdvancedChat;
 import net.minecraft.client.gui.GuiNewChat;
 import net.minecraft.util.IChatComponent;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
