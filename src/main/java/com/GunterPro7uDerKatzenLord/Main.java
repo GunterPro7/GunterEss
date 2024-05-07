@@ -5,7 +5,7 @@ import com.GunterPro7uDerKatzenLord.event.ClientFishingEvent;
 import com.GunterPro7uDerKatzenLord.listener.ItemLoreScroller;
 import com.GunterPro7uDerKatzenLord.listener.*;
 import com.GunterPro7uDerKatzenLord.listener.GemstoneDisplay;
-import com.GunterPro7uDerKatzenLord.utils.JsonHelper;
+import com.GunterPro7uDerKatzenLord.utils.JsonUtils;
 import com.GunterPro7uDerKatzenLord.utils.TimeUtils;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -68,12 +68,12 @@ public class Main {
         //MinecraftForge.EVENT_BUS.register(QuiverEmptyChecker.getInstance());
         ClientCommandHandler.instance.registerCommand(new Command());
         if (Setting.COLLECTION_OVERLAY.isEnabled()) {
-            JsonHelper.fetch("https://api.hypixel.net/resources/skyblock/collections", response -> {
+            JsonUtils.fetch("https://api.hypixel.net/resources/skyblock/collections", response -> {
                 collectionJson = response;
 
                 if (collectionJson != null) {
                     JsonObject jsonObject = new Gson().fromJson(collectionJson, JsonObject.class);
-                    JsonHelper.addEntriesToEnum(jsonObject);
+                    JsonUtils.addEntriesToEnum(jsonObject);
                 }
             });
         }
@@ -86,7 +86,7 @@ public class Main {
                 if (files != null) {
                     for (File file : files) {
                         if (file.getName().toLowerCase().startsWith("gunteress")) {
-                            installed = JsonHelper.downloadFile("http://49.12.101.156/GunterEss/latest.jar", new File(file.getAbsolutePath()));
+                            installed = JsonUtils.downloadFile("http://49.12.101.156/GunterEss/latest.jar", new File(file.getAbsolutePath()));
                             break;
                         }
                     }
@@ -96,7 +96,7 @@ public class Main {
             }
         }));
 
-        JsonHelper.fetch("http://49.12.101.156/GunterEss/VersionCheck.php?VERSION=" + VERSION + "&DEV=" + DEV, response -> {
+        JsonUtils.fetch("http://49.12.101.156/GunterEss/VersionCheck.php?VERSION=" + VERSION + "&DEV=" + DEV, response -> {
             if (Boolean.parseBoolean(response.split("\"update_available\":")[1].split(",")[0])) {
                 if (!Setting.AUTO_UPDATES.isEnabled()) {
                     String url = "https://github.com/GunterPro7/GunterEss/releases";

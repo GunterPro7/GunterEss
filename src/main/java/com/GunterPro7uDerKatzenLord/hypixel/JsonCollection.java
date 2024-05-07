@@ -1,4 +1,4 @@
-package com.GunterPro7uDerKatzenLord.utils;
+package com.GunterPro7uDerKatzenLord.hypixel;
 
 import com.GunterPro7uDerKatzenLord.listener.AdvancedChat;
 import com.google.gson.JsonElement;

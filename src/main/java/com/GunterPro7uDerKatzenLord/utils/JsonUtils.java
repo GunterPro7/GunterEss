@@ -1,6 +1,7 @@
 package com.GunterPro7uDerKatzenLord.utils;
 
 import com.GunterPro7uDerKatzenLord.hypixel.Collections;
+import com.GunterPro7uDerKatzenLord.hypixel.JsonCollection;
 import com.GunterPro7uDerKatzenLord.listener.AdvancedChat;
 import com.GunterPro7uDerKatzenLord.listener.MiscListener;
 import com.GunterPro7uDerKatzenLord.Main;
@@ -21,10 +22,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
-public class JsonHelper {
-    public static final String PLAYER_UUID = "ca9cc012-83cd-4570-ab57-48b36596ab5d";
-    public static final String PROFILE_UUID = "f7b343ae1cc04f6c826bee85fa37a993";
-    public static final String API_KEY = "a3d12e28-66d5-4d00-8449-2ad71aaa43f2"; // "a3d12e28-66d5-4d00-9449-2ad71aaa43f2"
+public class JsonUtils {
+    public static final String PLAYER_UUID = "";
+    public static final String PROFILE_UUID = "";
+    public static final String API_KEY = "";
     private static final ExecutorService POOL = Executors.newCachedThreadPool();
 
     public static String fetch(String url) throws IOException {

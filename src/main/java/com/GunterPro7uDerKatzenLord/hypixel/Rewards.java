@@ -1,4 +1,4 @@
-package com.GunterPro7uDerKatzenLord.utils;
+package com.GunterPro7uDerKatzenLord.hypixel;
 
 public class Rewards {
     public final int tier;

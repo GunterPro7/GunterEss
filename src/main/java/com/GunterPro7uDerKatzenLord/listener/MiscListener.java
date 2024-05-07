@@ -91,15 +91,15 @@ public class MiscListener {
             // Create a Runnable that performs the HTTP request - OH YEAH I LIKE IT
             POOL.execute(() -> {
                 try {
-                    JsonHelper.collectionApiFetch();
-                    collectionJson = JsonHelper.fetch("https://api.hypixel.net/resources/skyblock/collections");
+                    JsonUtils.collectionApiFetch();
+                    collectionJson = JsonUtils.fetch("https://api.hypixel.net/resources/skyblock/collections");
                 } catch (Exception e) {
                     System.out.println("Notwork disabled, trying again in 3 minutes!");
                 }
 
                 if (collectionJson != null) {
                     JsonObject jsonObject = new Gson().fromJson(collectionJson, JsonObject.class);
-                    JsonHelper.addEntriesToEnum(jsonObject);
+                    JsonUtils.addEntriesToEnum(jsonObject);
                 }
             });
             time = System.currentTimeMillis();
