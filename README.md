@@ -8,13 +8,13 @@ GunterEss is a Minecraft mod that enhances your gameplay experience by adding se
 
 GunterEss brings the following features to your Minecraft world:
 
-### CopyChat Feature
+### Copy Chat Feature
 
 - **Copy Messages:** With the CopyChat feature, you can easily copy messages from the chat by holding "Ctrl" and right-clicking on the desired message.
 
 - **Paste Messages:** To paste copied messages into the chat, press "Shift" and left-click within the chat box.
 
-### compactChat Functionality
+### Compact Chat Functionality
 
 - **Chat Message Cleanup:** The compactChat feature cleans up your chat messages. If a message appears twice, the previous instance is removed, and a numbering system is added, such as " (2)" or (3) to indicate multiple occurrences of the same message.
 
@@ -28,7 +28,27 @@ GunterEss brings the following features to your Minecraft world:
 
 - **Party Chat:** Once in a party, use `GunterEss party chat <party-name> <message>` to communicate exclusively with your party members.
 
-- And much more, use `GunterEss party help`.
+### Auto Fisher
+
+- **Automatic Fishing:** The Auto Fisher feature automatically fishes for you when enabled. Simply cast your line into the water, and GunterEss will handle the rest.
+
+### Auto Updater
+
+- **Automatic Updates:** GunterEss includes an Auto Updater that ensures you always have the latest version of the mod installed. No need to manually download updates!
+
+### Information Overlay
+
+- **HUD Display:** The Information Overlay feature provides useful information overlay UI on the screen, such as FPS, lag, and player position.
+
+### Gemstone Tracker for Hypixel
+
+- **Track Gemstones:** With the Gemstone Tracker, you can easily keep track of gemstones while playing on the Hypixel server.
+
+### In-Game Overlay
+
+- **Custom Overlay:** Access your custom in-game overlay with the command `/gunteress`, providing quick access to additional features and information.
+
+And much more, explore all features with `GunterEss help`.
 
 ## Installation
 
@@ -50,7 +70,7 @@ To install GunterEss, follow these simple steps:
 
 ## Usage
 
-Using GunterEss is straightforward. Once installed, you can simply play Minecraft as you normally would, and the mod's features will enhance your chat experience automatically.
+Using GunterEss is straightforward. Once installed, you can simply play Minecraft as you normally would, and the mod's features will enhance your gameplay experience automatically.
 
 ## Feedback and Bug Reporting
 
@@ -64,4 +84,4 @@ GunterEss is released under the [MIT License](LICENSE), which means you are free
 
 Thank you for choosing GunterEss! We hope you enjoy the enhanced chat features and additional functionalities it brings to your Minecraft world.
 
-- ChatGPT
+- README.md by *ChatGPT*
