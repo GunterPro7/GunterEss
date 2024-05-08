@@ -43,7 +43,7 @@ public class MessageInformation {
         return time;
     }
 
-    public void drawTimeInfoBox(int x, int y, boolean background) { // TODO das geht eine stunde nach
+    public void drawTimeInfoBox(int x, int y, boolean background) {
         CustomIngameUI customIngameUI = new CustomIngameUI(0xFF1E1E1E, 0xFF121212, Utils.formatTime(time, "HH:mm:ss"));
         customIngameUI.drawInfoBox(x, y, background);
     }

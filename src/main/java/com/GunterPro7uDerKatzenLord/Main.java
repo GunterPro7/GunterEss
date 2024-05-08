@@ -23,8 +23,10 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.spongepowered.asm.launch.MixinBootstrap;
 import org.spongepowered.asm.mixin.Mixins;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
 
 import static com.GunterPro7uDerKatzenLord.listener.MiscListener.collectionJson;
 
@@ -33,10 +35,11 @@ public class Main {
     public static final String MOD_ID = "GunterEss";
     public static final Minecraft mc = Minecraft.getMinecraft();
     public static boolean starting = true;
-    public static final String VERSION = "1.3.0";
+    public static final String VERSION = "1.4.0";
     public static final boolean DEV = false;
     public static File configDirectory;
     public boolean updateAvailable;
+    private ByteArrayOutputStream gunterEssByteData;
 
     @Mod.EventHandler
     public void preServerStarting(final FMLPreInitializationEvent event) {
@@ -78,7 +81,7 @@ public class Main {
             });
         }
 
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> { // TODO das so umbauen das es die latest bereits am anfang runterlädt und erst jetzt installiert wird.
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> { // TODO das muss noch getestet werden!
             if (Setting.AUTO_UPDATES.isEnabled() && updateAvailable) {
                 File[] files = new File("mods").listFiles();
                 boolean installed = false;
@@ -86,30 +89,41 @@ public class Main {
                 if (files != null) {
                     for (File file : files) {
                         if (file.getName().toLowerCase().startsWith("gunteress")) {
-                            installed = JsonUtils.downloadFile("http://49.12.101.156/GunterEss/latest.jar", new File(file.getAbsolutePath()));
+                            installed = JsonUtils.saveToFile(new File(file.getAbsolutePath()), gunterEssByteData);
                             break;
                         }
                     }
                 }
 
-                System.out.println("Newest Version of GunterEss Downloaded: " + installed);
+                System.out.println("Newest Version of GunterEss installed: " + installed);
             }
         }));
 
         JsonUtils.fetch("http://49.12.101.156/GunterEss/VersionCheck.php?VERSION=" + VERSION + "&DEV=" + DEV, response -> {
             if (Boolean.parseBoolean(response.split("\"update_available\":")[1].split(",")[0])) {
                 if (!Setting.AUTO_UPDATES.isEnabled()) {
-                    String url = "https://github.com/GunterPro7/GunterEss/releases";
-                    IChatComponent chatComponent = new ChatComponentText("§7New Version of §l§3GunterEss §r§7is available!")
-                            .appendSibling(new ChatComponentText("§c§l[Download]").setChatStyle(new ChatStyle()
-                                    .setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, url))
-                                    .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText("§7Download the latest Version of §a§lGunterEss §r§7here!")))));
-                    TimeUtils.addToQueue(chatComponent);
+                    sendUpdateAvailable();
                 } else {
                     updateAvailable = true;
+                    Optional<ByteArrayOutputStream> optionalData = JsonUtils.downloadFile("http://49.12.101.156/GunterEss/latest.jar");
+                    if (optionalData.isPresent()) {
+                        gunterEssByteData = optionalData.get();
+                        System.out.println("Newest Version of GunterEss downloaded!");
+                    } else {
+                        sendUpdateAvailable();
+                    }
                 }
             }
         });
+    }
+
+    private void sendUpdateAvailable() {
+        String url = "https://github.com/GunterPro7/GunterEss/releases";
+        IChatComponent chatComponent = new ChatComponentText("§7New Version of §l§3GunterEss §r§7is available!")
+                .appendSibling(new ChatComponentText("§c§l[Download]").setChatStyle(new ChatStyle()
+                        .setChatClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, url))
+                        .setChatHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText("§7Download the latest Version of §a§lGunterEss §r§7here!")))));
+        TimeUtils.addToQueue(chatComponent);
     }
 }
 

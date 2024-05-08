@@ -93,6 +93,35 @@ public class JsonUtils {
         return true;
     }
 
+    public static boolean saveToFile(File file, ByteArrayOutputStream data) {
+        try (FileOutputStream fos = new FileOutputStream(file)) {
+            fos.write(data.toByteArray());
+            return true;
+        } catch (IOException e) {
+            System.err.println("Unable to save byte array to file: " + file.getAbsolutePath());
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static Optional<ByteArrayOutputStream> downloadFile(String url) {
+        final ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+        try (BufferedInputStream in = new BufferedInputStream(new URL(url).openStream())) {
+            byte dataBuffer[] = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = in.read(dataBuffer, 0, 1024)) != -1) {
+                out.write(dataBuffer, 0, bytesRead);
+            }
+        } catch (IOException e) {
+            System.err.println("Unable to Download newest Version of GunterEss! Err: ");
+            e.printStackTrace();
+            return Optional.empty();
+        }
+
+        return Optional.of(out);
+    }
+
     public static void collectionApiFetch() throws IOException {
         String url = "https://api.hypixel.net/skyblock/profile?key=" + API_KEY + "&profile=" + PROFILE_UUID;
         String responseContent = fetch(url);

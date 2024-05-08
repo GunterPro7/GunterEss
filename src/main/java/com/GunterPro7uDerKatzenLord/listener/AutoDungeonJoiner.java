@@ -19,7 +19,7 @@ public class AutoDungeonJoiner extends ContainerInformation {
 
         System.out.println(list.size());
         for (DungeonInformation dungeonInformation : list) {
-            if (!dungeonInformation.available && dungeonInformation.note.contains("s+")) { // TODO setting page creation and verknüpfung mit der seiten
+            if (!dungeonInformation.available && dungeonInformation.note.contains("s+")) {
                 int indexSlot = dungeonInformation.getSlotIndex();
 
                 sendClickPacket(container.windowId, indexSlot, 0, 0, container.getSlot(indexSlot));

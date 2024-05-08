@@ -42,8 +42,8 @@ public class Setting {
             "Z", new Position(false),
             "Facing", new Position(false),
             "Lag", new Position(false));
-    public static EnumChatFormatting INFO_PREFIX_COLOR = EnumChatFormatting.GRAY; // TODO also safe this
-    public static EnumChatFormatting INFO_VALUE_COLOR = EnumChatFormatting.GOLD; // TODO also safe this
+    public static EnumChatFormatting INFO_PREFIX_COLOR = EnumChatFormatting.GRAY;
+    public static EnumChatFormatting INFO_VALUE_COLOR = EnumChatFormatting.GOLD;
     public static EnumChatFormatting INFO_SUFFIX_COLOR = EnumChatFormatting.WHITE;
     public static String INFO_TIME_FORMAT = "HH:mm:ss";
     public static String INFO_DATE_FORMAT = "dd.MM.yyyy";

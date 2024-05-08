@@ -170,9 +170,6 @@ public class InformationListener {
 
     @SubscribeEvent
     public void onWorldChange(final ClientChangeWorldEvent event) {
-        System.out.println("RESETING...");
-        System.out.println("TODO check ob des geht");
-
         LagHandler.INSTANCE.reset();
     }
 }
