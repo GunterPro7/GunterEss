@@ -44,11 +44,7 @@ GunterEss brings the following features to your Minecraft world:
 
 - **Track Gemstones:** With the Gemstone Tracker, you can easily keep track of gemstones while playing on the Hypixel server.
 
-### In-Game Overlay
-
-- **Custom Overlay:** Access your custom in-game overlay with the command `/gunteress`, providing quick access to additional features and information.
-
-And much more, explore all features with `GunterEss help`.
+And much more, discover all features using the `/gunteress` command...
 
 ## Installation
 
