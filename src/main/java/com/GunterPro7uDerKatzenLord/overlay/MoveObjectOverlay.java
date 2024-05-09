@@ -31,6 +31,7 @@ public class MoveObjectOverlay extends AbstractOverlay {
         this.offsetY = position.getOffsetY();
 
         this.align = position.getAlign();
+        customIngameUI.align(align);
     }
 
     @Override

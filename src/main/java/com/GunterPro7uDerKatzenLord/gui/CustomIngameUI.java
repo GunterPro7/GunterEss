@@ -1,8 +1,5 @@
 package com.GunterPro7uDerKatzenLord.gui;
 
-import com.GunterPro7uDerKatzenLord.listener.AdvancedChat;
-import com.GunterPro7uDerKatzenLord.listener.MiscListener;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 
@@ -43,9 +40,8 @@ public class CustomIngameUI {
         this(backgroundColor, borderColor, lines.toArray(new String[0]));
     }
 
-    public CustomIngameUI align(Align align) {
+    public void align(Align align) {
         this.align = align;
-        return this;
     }
 
     public void drawInfoBox(int offsetX, int offsetY, boolean background) {

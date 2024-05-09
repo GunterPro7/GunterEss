@@ -132,7 +132,7 @@ public class Utils {
         boolean isFirstLetter = true;
         for (int i = 0; i < input.length(); i++) {
             char currentChar = input.charAt(i);
-            if (Character.isLetter(currentChar)) {
+            if (!Character.isSpaceChar(currentChar)) {
                 if (isFirstLetter) {
                     result.append(Character.toUpperCase(currentChar));
                     isFirstLetter = false;
@@ -148,7 +148,7 @@ public class Utils {
     }
 
     public static String toTitleCase(String input) {
-        return capitalizeFirstLetterAndLowercaseRest(addSpaceBeforeUppercase(input));
+        return addSpaceBeforeUppercase(capitalizeFirstLetterAndLowercaseRest(input));
     }
 
 
