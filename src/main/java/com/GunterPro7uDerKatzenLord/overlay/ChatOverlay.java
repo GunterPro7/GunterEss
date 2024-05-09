@@ -27,11 +27,11 @@ public class ChatOverlay extends AbstractOverlay {
         title.func_175202_a("");
         title.func_175202_a("-> Chat Features");
 
-        button0 = new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Copy Chat: " + (Setting.COPY_CHAT.isEnabled() ? "§a§lEnabled" : "§c§lDisabled"));
-        button1 = new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Copy with Stack: " + (Setting.COPY_WITH_STACK.isEnabled() ? "§a§lEnabled" : "§c§lDisabled"));
-        button2 = new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Stack Chat Messages: " + (Setting.STACK_CHAT_MESSAGES.isEnabled() ? "§a§lEnabled" : "§c§lDisabled"));
-        button3 = new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Remove Blank Lines: " + (Setting.REMOVE_BLANK_LINES.isEnabled() ? "§a§lEnabled" : "§c§lDisabled"));
-        button4 = new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Dont Stack useless Chat Messages: " + (Setting.DONT_CHECK_USELESS_CHAT_MESSAGES.isEnabled() ? "§a§lEnabled" : "§c§lDisabled"));
+        button0 = new GuiButton(0, width / 2 - 100, pageContentHeight += BUTTON_HEIGHT, "Copy Chat: " + (Setting.COPY_CHAT.isEnabled() ? "§a§lEnabled" : "§c§lDisabled"));
+        button1 = new GuiButton(0, width / 2 - 100, pageContentHeight += BUTTON_HEIGHT, "Copy with Stack: " + (Setting.COPY_WITH_STACK.isEnabled() ? "§a§lEnabled" : "§c§lDisabled"));
+        button2 = new GuiButton(0, width / 2 - 100, pageContentHeight += BUTTON_HEIGHT, "Stack Chat Messages: " + (Setting.STACK_CHAT_MESSAGES.isEnabled() ? "§a§lEnabled" : "§c§lDisabled"));
+        button3 = new GuiButton(0, width / 2 - 100, pageContentHeight += BUTTON_HEIGHT, "Remove Blank Lines: " + (Setting.REMOVE_BLANK_LINES.isEnabled() ? "§a§lEnabled" : "§c§lDisabled"));
+        button4 = new GuiButton(0, width / 2 - 100, pageContentHeight += BUTTON_HEIGHT, "Dont Stack useless Chat Messages: " + (Setting.DONT_CHECK_USELESS_CHAT_MESSAGES.isEnabled() ? "§a§lEnabled" : "§c§lDisabled"));
 
         buttonList.add(button0);
         buttonList.add(button1);

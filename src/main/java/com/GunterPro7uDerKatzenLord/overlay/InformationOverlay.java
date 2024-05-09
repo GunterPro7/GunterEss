@@ -91,9 +91,9 @@ public class InformationOverlay extends AbstractOverlay {
         title.func_175202_a("");
         title.func_175202_a("-> Information Overlay");
 
-        prefixColorButton = new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Prefix Color: " + Setting.INFO_PREFIX_COLOR + Setting.INFO_PREFIX_COLOR.getFriendlyName());
-        suffixColorButton = new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Suffix Color: " + Setting.INFO_SUFFIX_COLOR + Setting.INFO_SUFFIX_COLOR.getFriendlyName());
-        valueColorButton = new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Value Color: " + Setting.INFO_VALUE_COLOR + Setting.INFO_VALUE_COLOR.getFriendlyName());
+        prefixColorButton = new GuiButton(0, width / 2 - 100, pageContentHeight += BUTTON_HEIGHT, "Prefix Color: " + Setting.INFO_PREFIX_COLOR + Setting.INFO_PREFIX_COLOR.getFriendlyName());
+        suffixColorButton = new GuiButton(0, width / 2 - 100, pageContentHeight += BUTTON_HEIGHT, "Suffix Color: " + Setting.INFO_SUFFIX_COLOR + Setting.INFO_SUFFIX_COLOR.getFriendlyName());
+        valueColorButton = new GuiButton(0, width / 2 - 100, pageContentHeight += BUTTON_HEIGHT, "Value Color: " + Setting.INFO_VALUE_COLOR + Setting.INFO_VALUE_COLOR.getFriendlyName());
         buttonList.add(prefixColorButton);
         buttonList.add(suffixColorButton);
         buttonList.add(valueColorButton);
@@ -101,37 +101,37 @@ public class InformationOverlay extends AbstractOverlay {
         AtomicInteger curIndex = new AtomicInteger();
 
         informationsAndButtonList.forEach((key, value) -> {
-            dropdownButtons.add(new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, key));
+            dropdownButtons.add(new GuiButton(0, width / 2 - 100, pageContentHeight += BUTTON_HEIGHT, key));
 
 
             if (dropdownButtonsOpened.get(curIndex.getAndAdd(1))) {
                 value.forEach(gui -> {
                     if (gui instanceof GuiCheckBox) {
-                        pageContentHeight += pixelsPerCheckBox;
+                        pageContentHeight += CHECKBOX_HEIGHT;
                         GuiCheckBox checkBox = (GuiCheckBox) gui;
                         checkBox.xPosition = width / 2 - 50;
-                        checkBox.yPosition = pageContentHeight += pixelsPerCheckBox / 2;
+                        checkBox.yPosition = pageContentHeight += CHECKBOX_HEIGHT / 2;
                         buttonList.add(checkBox);
                     } else if (gui instanceof GuiButton) {
                         GuiButton button = (GuiButton) gui;
                         button.xPosition = width / 2 - 80;
-                        button.yPosition = pageContentHeight += pixelsPerButton;
+                        button.yPosition = pageContentHeight += BUTTON_HEIGHT;
                         buttonList.add(button);
                     } else if (gui instanceof GuiLabel) {
                         GuiLabel guiLabel = (GuiLabel) gui;
                         guiLabel.field_146162_g = width / 2 - 60;
-                        guiLabel.field_146174_h = pageContentHeight + pixelsPerButton;
+                        guiLabel.field_146174_h = pageContentHeight + BUTTON_HEIGHT;
                         labelList.add(guiLabel);
                     } else if (gui instanceof GuiTextField) {
                         GuiTextField guiTextField = (GuiTextField) gui;
                         guiTextField.xPosition = width / 2 + 20;
-                        guiTextField.yPosition = pageContentHeight += pixelsPerButton;
+                        guiTextField.yPosition = pageContentHeight += BUTTON_HEIGHT;
                         textFieldList.add(guiTextField);
                     }
 
                 });
 
-                pageContentHeight += pixelsPerButton;
+                pageContentHeight += BUTTON_HEIGHT;
             }
         });
 

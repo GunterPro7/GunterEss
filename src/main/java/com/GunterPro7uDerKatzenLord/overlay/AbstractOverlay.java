@@ -13,8 +13,8 @@ import java.util.List;
 
 public abstract class AbstractOverlay extends GuiScreen {
     protected static final int SCROLL_SIZE = 9;
-    protected static final int pixelsPerButton = 25;
-    protected static final int pixelsPerCheckBox = 16;
+    protected static final int BUTTON_HEIGHT = 25;
+    protected static final int CHECKBOX_HEIGHT = 16;
 
     protected final GuiScreen lastScreen;
     protected GuiLabel title;
@@ -44,8 +44,6 @@ public abstract class AbstractOverlay extends GuiScreen {
         int i = Mouse.getEventDWheel();
 
         if (i != 0) {
-            System.out.println("Mouse scroll: " + i);
-
             if (i > 0) {
                 if (scrollOffset > 0) {
                     scrollOffset = Math.max(scrollOffset - SCROLL_SIZE, 0);

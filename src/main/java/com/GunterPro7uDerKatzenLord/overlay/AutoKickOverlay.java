@@ -41,16 +41,16 @@ public class AutoKickOverlay extends AbstractOverlay {
         labelAutoJoin.func_175202_a("Auto Join:");
         labelList.add(labelAutoJoin);
 
-        addButton(new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Mage: " + (values[0] ? "§a§lEnabled" : "§c§lDisabled")));
-        addButton(new GuiButton(1, width / 2 - 100, pageContentHeight += pixelsPerButton, "Berserk: " + (values[1] ? "§a§lEnabled" : "§c§lDisabled")));
-        addButton(new GuiButton(2, width / 2 - 100, pageContentHeight += pixelsPerButton, "Healer: " + (values[2] ? "§a§lEnabled" : "§c§lDisabled")));
-        addButton(new GuiButton(3, width / 2 - 100, pageContentHeight += pixelsPerButton, "Tank: " + (values[3] ? "§a§lEnabled" : "§c§lDisabled")));
-        addButton(new GuiButton(4, width / 2 - 100, pageContentHeight += pixelsPerButton, "Archer: " + (values[4] ? "§a§lEnabled" : "§c§lDisabled")));
+        addButton(new GuiButton(0, width / 2 - 100, pageContentHeight += BUTTON_HEIGHT, "Mage: " + (values[0] ? "§a§lEnabled" : "§c§lDisabled")));
+        addButton(new GuiButton(1, width / 2 - 100, pageContentHeight += BUTTON_HEIGHT, "Berserk: " + (values[1] ? "§a§lEnabled" : "§c§lDisabled")));
+        addButton(new GuiButton(2, width / 2 - 100, pageContentHeight += BUTTON_HEIGHT, "Healer: " + (values[2] ? "§a§lEnabled" : "§c§lDisabled")));
+        addButton(new GuiButton(3, width / 2 - 100, pageContentHeight += BUTTON_HEIGHT, "Tank: " + (values[3] ? "§a§lEnabled" : "§c§lDisabled")));
+        addButton(new GuiButton(4, width / 2 - 100, pageContentHeight += BUTTON_HEIGHT, "Archer: " + (values[4] ? "§a§lEnabled" : "§c§lDisabled")));
         pageContentHeight += 100;
-        addButton(new GuiButton(5, width / 2 - 100, pageContentHeight += pixelsPerButton, "Enabled / Disabled IMPLEMENT"));
-        addButton(new GuiButton(5, width / 2 - 100, pageContentHeight += pixelsPerButton, "MIN LVL INPUT"));
+        addButton(new GuiButton(5, width / 2 - 100, pageContentHeight += BUTTON_HEIGHT, "Enabled / Disabled IMPLEMENT"));
+        addButton(new GuiButton(5, width / 2 - 100, pageContentHeight += BUTTON_HEIGHT, "MIN LVL INPUT"));
         addButton(new GuiButton(5, width / 2 - 0, pageContentHeight, "MAX LVL INPUT"));
-        addButton(new GuiButton(5, width / 2 - 100, pageContentHeight += pixelsPerButton, "MAX LVL INPUT"));
+        addButton(new GuiButton(5, width / 2 - 100, pageContentHeight += BUTTON_HEIGHT, "MAX LVL INPUT"));
         textField1.xPosition = width / 2 - 100;
         textField1.yPosition = height / 2 + 140;
         textField1.setFocused(true);

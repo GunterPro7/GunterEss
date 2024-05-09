@@ -115,4 +115,41 @@ public class Utils {
         return value;
     }
 
+    private static String addSpaceBeforeUppercase(String input) {
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < input.length(); i++) {
+            char currentChar = input.charAt(i);
+            if (i > 0 && Character.isUpperCase(currentChar)) {
+                result.append(" ");
+            }
+            result.append(currentChar);
+        }
+        return result.toString();
+    }
+
+    private static String capitalizeFirstLetterAndLowercaseRest(String input) {
+        StringBuilder result = new StringBuilder();
+        boolean isFirstLetter = true;
+        for (int i = 0; i < input.length(); i++) {
+            char currentChar = input.charAt(i);
+            if (Character.isLetter(currentChar)) {
+                if (isFirstLetter) {
+                    result.append(Character.toUpperCase(currentChar));
+                    isFirstLetter = false;
+                } else {
+                    result.append(Character.toLowerCase(currentChar));
+                }
+            } else {
+                result.append(currentChar);
+                isFirstLetter = true;
+            }
+        }
+        return result.toString();
+    }
+
+    public static String toTitleCase(String input) {
+        return capitalizeFirstLetterAndLowercaseRest(addSpaceBeforeUppercase(input));
+    }
+
+
 }

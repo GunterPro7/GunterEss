@@ -31,8 +31,8 @@ public class GemstoneTrackerOverlay extends AbstractOverlay {
         title.func_175202_a("");
         title.func_175202_a("-> Gemstone Tracker");
 
-        activeButton = new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, Setting.GEMSTONE_DISPLAY.isEnabled() ? "§a§lEnabled" : "§c§lDisabled");
-        moveObjectButton = new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Move Object");
+        activeButton = new GuiButton(0, width / 2 - 100, pageContentHeight += BUTTON_HEIGHT, Setting.GEMSTONE_DISPLAY.isEnabled() ? "§a§lEnabled" : "§c§lDisabled");
+        moveObjectButton = new GuiButton(0, width / 2 - 100, pageContentHeight += BUTTON_HEIGHT, "Move Object");
         buttonList.add(activeButton);
         buttonList.add(moveObjectButton);
     }

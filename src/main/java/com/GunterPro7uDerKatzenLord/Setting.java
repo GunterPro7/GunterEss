@@ -1,5 +1,6 @@
 package com.GunterPro7uDerKatzenLord;
 
+import com.GunterPro7uDerKatzenLord.gui.Align;
 import com.GunterPro7uDerKatzenLord.utils.CollectionUtils;
 import net.minecraft.util.EnumChatFormatting;
 
@@ -90,6 +91,7 @@ public class Setting {
     public static class Position extends Setting {
         private int offsetX;
         private int offsetY;
+        private Align align = Align.LEFT;
 
         public Position(boolean enabled, int offsetX, int offsetY) {
             super(enabled);
@@ -127,9 +129,20 @@ public class Setting {
             }
         }
 
+        public Align getAlign() {
+            return align;
+        }
+
+        public void setAlign(Align align) {
+            this.align = align;
+            if (!lacy) {
+                update();
+            }
+        }
+
         @Override
         public String toString() {
-            return super.toString() + ";" + this.offsetX + ";" + this.offsetY;
+            return super.toString() + ";" + this.offsetX + ";" + this.offsetY + ";" + (this.align == null ? "LEFT" : this.align.name());
         }
     }
 
@@ -202,6 +215,15 @@ public class Setting {
     }
 
     private static void initRawSetting(Object object, String name, Map<String, String> settings, Field field) {
+        try {
+            initSetting(object, name, settings, field);
+        } catch (Exception e) {
+            System.out.println("GunterEss > Exception occured while reading Settings file:");
+            e.printStackTrace();
+        }
+    }
+
+    private static void initSetting(Object object, String name, Map<String, String> settings, Field field) {
         settings.forEach((curName, info) -> {
             if (name.equals(curName)) {
                 String[] parts = info.split(";");
@@ -214,6 +236,7 @@ public class Setting {
                         if (parts.length > 2) {
                             pos.offsetX = Integer.parseInt(parts[1]);
                             pos.offsetY = Integer.parseInt(parts[2]);
+                            pos.align = Align.valueOf(parts[3]);
                         }
 
                     } else if (setting instanceof Value) {
@@ -250,6 +273,7 @@ public class Setting {
 
                                             position.offsetX = Integer.parseInt(parts[1]);
                                             position.offsetY = Integer.parseInt(parts[2]);
+                                            position.align = Align.valueOf(parts[3]);
                                         }
                                     }
                                 }

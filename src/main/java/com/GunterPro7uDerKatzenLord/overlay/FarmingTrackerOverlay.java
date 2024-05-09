@@ -31,8 +31,8 @@ public class FarmingTrackerOverlay extends AbstractOverlay {
         title.func_175202_a("");
         title.func_175202_a("-> Money Tracker");
 
-        button0 = new GuiButton(1, width / 2 - 100, pageContentHeight += pixelsPerButton, "Money Tracker: " + (Setting.MONEY_OVERLAY.isEnabled() ? "§a§lEnabled" : "§c§lDisabled"));
-        button1 = new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, "Edit Position");
+        button0 = new GuiButton(1, width / 2 - 100, pageContentHeight += BUTTON_HEIGHT, "Money Tracker: " + (Setting.MONEY_OVERLAY.isEnabled() ? "§a§lEnabled" : "§c§lDisabled"));
+        button1 = new GuiButton(0, width / 2 - 100, pageContentHeight += BUTTON_HEIGHT, "Edit Position");
 
         buttonList.add(button0);
         buttonList.add(button1);

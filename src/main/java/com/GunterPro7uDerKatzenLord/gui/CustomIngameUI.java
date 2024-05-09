@@ -1,6 +1,8 @@
 package com.GunterPro7uDerKatzenLord.gui;
 
+import com.GunterPro7uDerKatzenLord.listener.AdvancedChat;
 import com.GunterPro7uDerKatzenLord.listener.MiscListener;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 
@@ -15,6 +17,7 @@ public class CustomIngameUI {
     public String[] lines;
     public int boxWidth;
     public int boxHeight;
+    private Align align = Align.LEFT;
 
     public CustomIngameUI(int backgroundColor, int borderColor, String... lines) {
         this.backgroundColor = backgroundColor;
@@ -40,21 +43,25 @@ public class CustomIngameUI {
         this(backgroundColor, borderColor, lines.toArray(new String[0]));
     }
 
+    public CustomIngameUI align(Align align) {
+        this.align = align;
+        return this;
+    }
+
     public void drawInfoBox(int offsetX, int offsetY, boolean background) {
         FontRenderer fontRenderer = mc.fontRendererObj;
 
-        String text = "Crops: " + MiscListener.cropTimeList.size();
-        int maxWidth = fontRenderer.getStringWidth(text);
-
+        //String text = "Crops: " + MiscListener.cropTimeList.size();
         int margin = 8;
         int padding = 2;
 
-        int boxX = offsetX + margin; // X-Position des GUI, hier 12 Pixel rechts von der Maus
-        int boxY = offsetY + margin; // Y-Position des GUI, hier 12 Pixel unter der Maus
+        int boxX = offsetX; // X-Position des GUI, hier 12 Pixel rechts von der Maus
+        int boxY = offsetY; // Y-Position des GUI, hier 12 Pixel unter der Maus
 
         int textHeight = fontRenderer.FONT_HEIGHT;
         int currentHeight = textHeight + padding * 2;
 
+        int maxWidth = 0;
         for (String line : lines) {
             int lineWidth = fontRenderer.getStringWidth(line);
             if (lineWidth > maxWidth) {
@@ -64,6 +71,12 @@ public class CustomIngameUI {
 
         int boxWidth = maxWidth + padding * 2;
         int boxHeight = currentHeight * lines.length;
+
+        if (align == Align.MIDDLE) {
+            boxX -= boxWidth / 2;
+        } else if (align == Align.RIGHT) {
+            boxX -= boxWidth;
+        }
 
         if (background) {
             Gui.drawRect(boxX, boxY, boxX + boxWidth, boxY + boxHeight, backgroundColor); // Hintergrund zeichnen

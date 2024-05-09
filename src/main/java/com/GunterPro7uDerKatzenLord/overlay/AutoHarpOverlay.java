@@ -22,8 +22,8 @@ public class AutoHarpOverlay extends AbstractOverlay {
         title.func_175202_a("");
         title.func_175202_a("-> Auto Harp");
 
-        buttonEnabled = new GuiButton(0, width / 2 - 100, pageContentHeight += pixelsPerButton, (Setting.AUTO_HARP.isEnabled() ? "§a§lEnabled" : "§c§lDisabled"));
-        textFieldPing = new GuiTextField(1, fontRendererObj, width / 2 - 100, pageContentHeight += pixelsPerButton, 100, 20);
+        buttonEnabled = new GuiButton(0, width / 2 - 100, pageContentHeight += BUTTON_HEIGHT, (Setting.AUTO_HARP.isEnabled() ? "§a§lEnabled" : "§c§lDisabled"));
+        textFieldPing = new GuiTextField(1, fontRendererObj, width / 2 - 100, pageContentHeight += BUTTON_HEIGHT, 100, 20);
         textFieldPing.setMaxStringLength(5);
 
         textFieldList.add(textFieldPing); // TODO shit missing here

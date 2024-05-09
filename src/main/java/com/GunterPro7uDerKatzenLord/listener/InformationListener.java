@@ -58,6 +58,7 @@ public class InformationListener {
 
             informationValues.put("Fps", String.valueOf(frameTimes.size()));
 
+            // Showing Information
             Setting.INFO_SETTINGS.forEach((key, value) -> {
                 if (value.isEnabled()) {
                     if (key.equals("Position")) {
@@ -82,6 +83,7 @@ public class InformationListener {
 
         CustomIngameUI customIngameUI = new CustomIngameUI(0x00000000, 0x00000000,
                 Setting.INFO_PREFIX_COLOR + key + Setting.INFO_SUFFIX_COLOR + ": " + Setting.INFO_VALUE_COLOR + v);
+        customIngameUI.align(position.getAlign());
         customIngameUI.drawInfoBox(position.getOffsetX(), position.getOffsetY(), true);
     }
 
