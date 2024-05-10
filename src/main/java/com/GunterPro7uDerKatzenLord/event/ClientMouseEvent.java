@@ -48,7 +48,7 @@ public class ClientMouseEvent extends Event {
     public void onTick(TickEvent.ClientTickEvent event) {
         for (int i = 0; i < 2; i++) {
             if (Mouse.isButtonDown(i)) {
-                buttonDown.put(i, true);
+                buttonDown.put(i, true); // TODO there is an Event "MouseEvent"
                 MinecraftForge.EVENT_BUS.post(new ClientMouseEvent.Press(i));
             } else {
                 if (buttonDown.get(i)) {

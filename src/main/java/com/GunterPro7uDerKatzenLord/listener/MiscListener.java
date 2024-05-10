@@ -162,16 +162,6 @@ public class MiscListener {
     }
 
     @SubscribeEvent
-    public void blockBreakEvent(final ClientBlockChangeEvent event) {
-        if (event.getMinecraftBlock().getItemStack() != null) {
-            AdvancedChat.sendPrivateMessage(event.getMinecraftBlock().getName());
-        } else {
-            AdvancedChat.sendPrivateMessage(event.getMinecraftBlock().toString());
-        }
-
-    }
-
-    @SubscribeEvent
     public void onClientChatReceive(ClientChatReceivedEvent event) {
         if (Setting.AUTO_KICKER.isEnabled()) {
             String message = AdvancedChat.clearChatMessage(event.message.getUnformattedText());

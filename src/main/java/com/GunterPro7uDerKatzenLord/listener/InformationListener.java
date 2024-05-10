@@ -1,18 +1,19 @@
 package com.GunterPro7uDerKatzenLord.listener;
 
+import com.GunterPro7uDerKatzenLord.Main;
 import com.GunterPro7uDerKatzenLord.event.ClientBlockChangeEvent;
 import com.GunterPro7uDerKatzenLord.event.ClientChangeWorldEvent;
+import com.GunterPro7uDerKatzenLord.event.ClientMouseEvent;
 import com.GunterPro7uDerKatzenLord.gui.CustomIngameUI;
 import com.GunterPro7uDerKatzenLord.LagHandler;
 import com.GunterPro7uDerKatzenLord.Setting;
 import com.GunterPro7uDerKatzenLord.utils.McUtils;
-import com.GunterPro7uDerKatzenLord.utils.Utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.MathHelper;
+import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
@@ -25,7 +26,8 @@ import java.util.*;
 
 public class InformationListener {
 
-    private static final DecimalFormat df = new DecimalFormat("#.#");
+    private static final DecimalFormat DECIMAL_FORMAT_1 = new DecimalFormat("#.#");
+    private static final DecimalFormat DECIMAL_FORMAT_2 = new DecimalFormat("0.00");
 
     public static final Map<String, String> informationValues = new HashMap<>();
     private BlockPos lastPos;
@@ -39,6 +41,9 @@ public class InformationListener {
 
     private String lastDateFormat;
     private String lastTimeFormat;
+
+    private LinkedList<Long> leftClickTimes = new LinkedList<>();
+    private LinkedList<Long> rightClickTimes = new LinkedList<>();
 
     private final LinkedList<Long> frameTimes = new LinkedList<>();
     private final LinkedList<Long> blocksBrokenTimes = new LinkedList<>();
@@ -57,6 +62,22 @@ public class InformationListener {
             }
 
             informationValues.put("Fps", String.valueOf(frameTimes.size()));
+
+            // Calculating CPs
+            while (!leftClickTimes.isEmpty() && curTime - leftClickTimes.getFirst() > 1000) {
+                leftClickTimes.removeFirst();
+            }
+            while (!rightClickTimes.isEmpty() && curTime - rightClickTimes.getFirst() > 1000) {
+                rightClickTimes.removeFirst();
+            }
+
+            informationValues.put("Cps", leftClickTimes.size() + " | " + rightClickTimes.size());
+
+            // Calculating Walking Speed
+            double destX = Main.mc.thePlayer.posX - Main.mc.thePlayer.prevPosX;
+            double destY = Main.mc.thePlayer.posZ - Main.mc.thePlayer.prevPosZ;
+
+            informationValues.put("Speed", DECIMAL_FORMAT_2.format(MathHelper.sqrt_double(destX * destX + destY * destY) * 20));
 
             // Showing Information
             Setting.INFO_SETTINGS.forEach((key, value) -> {
@@ -108,7 +129,7 @@ public class InformationListener {
                 lastFacingY = player.rotationPitch;
 
                 // TODO rotation goes above 360 and under 360
-                informationValues.put("Facing", df.format(player.rotationYaw) + " / " + df.format(player.rotationPitch));
+                informationValues.put("Facing", DECIMAL_FORMAT_1.format(player.rotationYaw) + " / " + DECIMAL_FORMAT_1.format(player.rotationPitch));
             }
 
             LocalTime currentTime = LocalTime.now();
@@ -151,7 +172,7 @@ public class InformationListener {
             }
 
             if (System.currentTimeMillis() - lagLastTime >= 500) {
-                InformationListener.informationValues.put("Lag", df.format(LagHandler.INSTANCE.curLatency() * 10) + "%");
+                InformationListener.informationValues.put("Lag", DECIMAL_FORMAT_1.format(LagHandler.INSTANCE.curLatency() * 10) + "%");
 
                 lagLastTime = System.currentTimeMillis();
             }
@@ -161,13 +182,24 @@ public class InformationListener {
                 blocksBrokenTimes.removeFirst();
             }
 
-            informationValues.put("Broken_Blocks", String.valueOf(blocksBrokenTimes.size()));
+            informationValues.put("Blocks/s", String.valueOf(blocksBrokenTimes.size()));
         }
     }
 
     @SubscribeEvent
     public void onBlockBreak(final ClientBlockChangeEvent event) {
         blocksBrokenTimes.add(System.currentTimeMillis());
+    }
+
+    @SubscribeEvent
+    public void onMouse(MouseEvent e) {
+        if (e.buttonstate) {
+            if (e.button == 0) {
+                leftClickTimes.addLast(System.currentTimeMillis());
+            } else if (e.button == 1) {
+                rightClickTimes.addLast(System.currentTimeMillis());
+            }
+        }
     }
 
     @SubscribeEvent

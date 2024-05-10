@@ -37,10 +37,7 @@ public class ClientBlockListener {
                 return;
             }
 
-            AdvancedChat.sendPrivateMessage("BLOCK: " + Item.getItemFromBlock(Minecraft.getMinecraft().theWorld.getBlockState(blockPos).getBlock()));
             int id = Block.getIdFromBlock(Minecraft.getMinecraft().theWorld.getBlockState(blockPos).getBlock());
-            AdvancedChat.sendPrivateMessage(Minecraft.getMinecraft().theWorld.getBlockState(blockPos).getBlock().toString());
-            AdvancedChat.sendPrivateMessage(String.valueOf(id));
             int dataValue = Minecraft.getMinecraft().theWorld.getBlockState(blockPos).getBlock().getMetaFromState(Minecraft.getMinecraft().theWorld.getBlockState(blockPos));
 
             tasksNextTick.add(new BlockCheckTask(blockPos, Minecraft.getMinecraft().theWorld.getBlockState(blockPos).getBlock().getLocalizedName(),

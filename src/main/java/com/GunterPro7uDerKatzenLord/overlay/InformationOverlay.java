@@ -18,7 +18,7 @@ public class InformationOverlay extends AbstractOverlay {
     private static final List<String> colors = Arrays.stream(EnumChatFormatting.values()).filter(EnumChatFormatting::isColor).map(e -> e + e.getFriendlyName()).collect(Collectors.toList());
     private static final Map<String, EnumChatFormatting> colorsByPrefix = CollectionUtils.mapOf(colors, Arrays.stream(EnumChatFormatting.values()).filter(EnumChatFormatting::isColor).collect(Collectors.toList()));
 
-    private static final List<Boolean> dropdownButtonsOpened = CollectionUtils.listOf(() -> false, 6);
+    private static final List<Boolean> dropdownButtonsOpened;
 
     private static GuiButton prefixColorButton;
     private static GuiButton suffixColorButton;
@@ -59,9 +59,17 @@ public class InformationOverlay extends AbstractOverlay {
                 "Facing", CollectionUtils.listOf(new GuiCheckBox(105, 0, 0, "Facing Overlay Enabled", settings.get("Facing").isEnabled()),
                         new GuiButton(2, 0, 0, "Move Facing Overlay")),
                 "Lag", CollectionUtils.listOf(new GuiCheckBox(106, 0, 0, "Lag Overlay Enabled", settings.get("Lag").isEnabled()),
-                        new GuiButton(2, 0, 0, "Move Lag Overlay"))
+                        new GuiButton(2, 0, 0, "Move Lag Overlay")),
+                "Speed", CollectionUtils.listOf(new GuiCheckBox(107, 0, 0, "Speed Overlay Enabled", settings.get("Speed").isEnabled()),
+                        new GuiButton(2, 0, 0, "Move Speed Overlay")),
+                "Blocks/s", CollectionUtils.listOf(new GuiCheckBox(108, 0, 0, "Blocks/s Overlay Enabled", settings.get("Blocks/s").isEnabled()),
+                        new GuiButton(2, 0, 0, "Move Blocks/s Overlay")),
+                "Cps", CollectionUtils.listOf(new GuiCheckBox(109, 0, 0, "Cps Overlay Enabled", settings.get("Cps").isEnabled()),
+                        new GuiButton(2, 0, 0, "Move Cps Overlay"))
 
         );
+
+        dropdownButtonsOpened = CollectionUtils.listOf(() -> false, informationsAndButtonList.size());
     }
 
     public InformationOverlay(GuiScreen lastScreen) {
@@ -91,9 +99,9 @@ public class InformationOverlay extends AbstractOverlay {
         title.func_175202_a("");
         title.func_175202_a("-> Information Overlay");
 
-        prefixColorButton = new GuiButton(0, width / 2 - 100, pageContentHeight += BUTTON_HEIGHT, "Prefix Color: " + Setting.INFO_PREFIX_COLOR + Setting.INFO_PREFIX_COLOR.getFriendlyName());
-        suffixColorButton = new GuiButton(0, width / 2 - 100, pageContentHeight += BUTTON_HEIGHT, "Suffix Color: " + Setting.INFO_SUFFIX_COLOR + Setting.INFO_SUFFIX_COLOR.getFriendlyName());
-        valueColorButton = new GuiButton(0, width / 2 - 100, pageContentHeight += BUTTON_HEIGHT, "Value Color: " + Setting.INFO_VALUE_COLOR + Setting.INFO_VALUE_COLOR.getFriendlyName());
+        prefixColorButton = new GuiButton(1, width / 2 - 100, pageContentHeight += BUTTON_HEIGHT, "Prefix Color: " + Setting.INFO_PREFIX_COLOR + Setting.INFO_PREFIX_COLOR.getFriendlyName());
+        suffixColorButton = new GuiButton(1, width / 2 - 100, pageContentHeight += BUTTON_HEIGHT, "Suffix Color: " + Setting.INFO_SUFFIX_COLOR + Setting.INFO_SUFFIX_COLOR.getFriendlyName());
+        valueColorButton = new GuiButton(1, width / 2 - 100, pageContentHeight += BUTTON_HEIGHT, "Value Color: " + Setting.INFO_VALUE_COLOR + Setting.INFO_VALUE_COLOR.getFriendlyName());
         buttonList.add(prefixColorButton);
         buttonList.add(suffixColorButton);
         buttonList.add(valueColorButton);
@@ -140,7 +148,7 @@ public class InformationOverlay extends AbstractOverlay {
 
     @Override
     protected void actionPerformed(GuiButton button) {
-        if (button == prefixColorButton || button == valueColorButton || button == suffixColorButton) {
+        if (button.id == 1) {
             int idx = colors.indexOf(button.displayString.split("Color: ")[1]);
             String color = colors.get(idx == colors.size() - 1 ? 0 : idx + 1);
 
@@ -153,6 +161,8 @@ public class InformationOverlay extends AbstractOverlay {
             } else if (button == valueColorButton) {
                 Setting.INFO_VALUE_COLOR = colorsByPrefix.get(color);
             }
+
+            Setting.saveSettings();
 
             return;
         }

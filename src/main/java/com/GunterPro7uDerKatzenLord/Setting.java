@@ -31,8 +31,10 @@ public class Setting {
             "Time", new Setting(false),
             "Position", new Setting(false),
             "Facing", new Setting(false),
-            "Lag", new Setting(false));
-
+            "Lag", new Setting(false),
+            "Speed", new Setting(false),
+            "Blocks/s", new Setting(false),
+            "Cps", new Setting(false));
     public static final Map<String, Position> INFO_POSITIONS = CollectionUtils.mapOf(
             "Ping", new Position(false),
             "Fps", new Position(false),
@@ -42,7 +44,10 @@ public class Setting {
             "Y", new Position(false),
             "Z", new Position(false),
             "Facing", new Position(false),
-            "Lag", new Position(false));
+            "Lag", new Position(false),
+            "Speed", new Position(false),
+            "Blocks/s", new Position(false),
+            "Cps", new Position(false));
     public static EnumChatFormatting INFO_PREFIX_COLOR = EnumChatFormatting.GRAY;
     public static EnumChatFormatting INFO_VALUE_COLOR = EnumChatFormatting.GOLD;
     public static EnumChatFormatting INFO_SUFFIX_COLOR = EnumChatFormatting.WHITE;

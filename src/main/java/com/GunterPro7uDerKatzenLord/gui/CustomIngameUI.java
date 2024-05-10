@@ -8,6 +8,7 @@ import java.util.List;
 import static com.GunterPro7uDerKatzenLord.Main.mc;
 
 public class CustomIngameUI {
+    public static final int PADDING = 2;
 
     public int backgroundColor;
     public int borderColor;
@@ -48,14 +49,11 @@ public class CustomIngameUI {
         FontRenderer fontRenderer = mc.fontRendererObj;
 
         //String text = "Crops: " + MiscListener.cropTimeList.size();
-        int margin = 8;
-        int padding = 2;
-
         int boxX = offsetX; // X-Position des GUI, hier 12 Pixel rechts von der Maus
         int boxY = offsetY; // Y-Position des GUI, hier 12 Pixel unter der Maus
 
         int textHeight = fontRenderer.FONT_HEIGHT;
-        int currentHeight = textHeight + padding * 2;
+        int currentHeight = textHeight + PADDING * 2;
 
         int maxWidth = 0;
         for (String line : lines) {
@@ -65,7 +63,7 @@ public class CustomIngameUI {
             }
         }
 
-        int boxWidth = maxWidth + padding * 2;
+        int boxWidth = maxWidth + PADDING * 2;
         int boxHeight = currentHeight * lines.length;
 
         if (align == Align.MIDDLE) {
@@ -84,7 +82,7 @@ public class CustomIngameUI {
 
         int counter = 0;
         for (String line : lines) {
-            fontRenderer.drawStringWithShadow(line, boxX + padding, boxY + padding + currentHeight * counter++, -1); // Text zeichnen
+            fontRenderer.drawStringWithShadow(line, boxX + PADDING, boxY + PADDING + currentHeight * counter++, -1); // Text zeichnen
         }
     }
 }

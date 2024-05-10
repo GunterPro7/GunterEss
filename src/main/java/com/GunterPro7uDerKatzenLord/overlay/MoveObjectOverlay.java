@@ -3,6 +3,7 @@ package com.GunterPro7uDerKatzenLord.overlay;
 import com.GunterPro7uDerKatzenLord.Setting;
 import com.GunterPro7uDerKatzenLord.gui.Align;
 import com.GunterPro7uDerKatzenLord.gui.CustomIngameUI;
+import com.GunterPro7uDerKatzenLord.listener.AdvancedChat;
 import com.GunterPro7uDerKatzenLord.utils.Utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -59,12 +60,15 @@ public class MoveObjectOverlay extends AbstractOverlay {
 
         if (mouseX > offsetX && mouseX < offsetX + customIngameUI.boxWidth && mouseY > offsetY && mouseY < offsetY + customIngameUI.boxHeight) {
             allowMove = true;
+            if (mouseX + customIngameUI.boxWidth + CustomIngameUI.PADDING >= reCalcMouseX(width)) { // TODO split this into 2 methods
+                mouseX = reCalcMouseX(width - customIngameUI.boxWidth - CustomIngameUI.PADDING);
+            }
             offsetX = mouseX;
-            offsetY = mouseY;
-        }
-        if (mouseX > saveButton.xPosition && mouseX < saveButton.xPosition + saveButton.width && mouseY >
-                saveButton.yPosition && mouseY < saveButton.yPosition + saveButton.height) {  // has to be here, instead we won't be able to display the new Gui Screen
 
+            if (mouseY + customIngameUI.boxHeight - CustomIngameUI.PADDING >= height) {
+                mouseY = height - customIngameUI.boxHeight + CustomIngameUI.PADDING;
+            }
+            offsetY = mouseY;
         }
     }
 
@@ -91,15 +95,30 @@ public class MoveObjectOverlay extends AbstractOverlay {
             align = Align.nextAlign(align);
 
             customIngameUI.align(align);
+
+            if (align == Align.MIDDLE || align == Align.RIGHT) {
+                offsetX += customIngameUI.boxWidth / 2 + CustomIngameUI.PADDING + (align == Align.RIGHT ? 1 : 0);
+            } else {
+                offsetX -= customIngameUI.boxWidth + CustomIngameUI.PADDING * 2;
+            }
             button.displayString = "Align: " + Utils.toTitleCase(align.name());
         }
     }
 
     @Override
     public void mouseClickMove(int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick) {
+        mouseX = reCalcMouseX(mouseX);
+
         if (allowMove) {
-            offsetX = reCalcMouseX(mouseX);
-            offsetY = mouseY;
+            if (mouseX + customIngameUI.boxWidth + CustomIngameUI.PADDING >= reCalcMouseX(width)) {
+                mouseX = reCalcMouseX(width - customIngameUI.boxWidth - CustomIngameUI.PADDING);
+            }
+            offsetX = mouseX;
+
+            if (mouseY + customIngameUI.boxHeight - CustomIngameUI.PADDING >= height) {
+                mouseY = height - customIngameUI.boxHeight + CustomIngameUI.PADDING; // TODO rechts ist 1 oder 2 pixel mehr, unten unten glaub ich 1 pixel mehr wo man es schieben kann...
+            }
+            offsetY = mouseY; // TODO execute this in renderScreen if the Mouse.MOVE_METHODE() is true or something...
         }
     }
 
@@ -110,9 +129,9 @@ public class MoveObjectOverlay extends AbstractOverlay {
 
     private int reCalcMouseX(int mouseX) {
         if (align == Align.MIDDLE) {
-            return mouseX + customIngameUI.boxWidth / 2;
+            return mouseX + customIngameUI.boxWidth / 2 + CustomIngameUI.PADDING;
         } else if (align == Align.RIGHT) {
-            return mouseX + customIngameUI.boxWidth;
+            return mouseX + customIngameUI.boxWidth + CustomIngameUI.PADDING * 2;
         } else {
             return mouseX;
         }
