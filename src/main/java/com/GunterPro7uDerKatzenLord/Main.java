@@ -60,6 +60,7 @@ public class Main {
         MinecraftForge.EVENT_BUS.register(new InformationListener());
         MinecraftForge.EVENT_BUS.register(new TimeUtils());
         MinecraftForge.EVENT_BUS.register(new GemstoneDisplay());
+        MinecraftForge.EVENT_BUS.register(LagHandler.INSTANCE);
         //MinecraftForge.EVENT_BUS.register(new ItemLock());
         MinecraftForge.EVENT_BUS.register(new TextureLoader());
         MinecraftForge.EVENT_BUS.register(PreventLabymodUpdater.INSTANCE);

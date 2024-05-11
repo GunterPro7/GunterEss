@@ -26,8 +26,8 @@ import java.util.*;
 
 public class InformationListener {
 
-    private static final DecimalFormat DECIMAL_FORMAT_1 = new DecimalFormat("#.#");
-    private static final DecimalFormat DECIMAL_FORMAT_2 = new DecimalFormat("0.00");
+    private static final DecimalFormat DECIMAL_FORMAT_1 = new DecimalFormat("0.0;-0.0");
+    private static final DecimalFormat DECIMAL_FORMAT_2 = new DecimalFormat("0.00;-0.00");
 
     public static final Map<String, String> informationValues = new HashMap<>();
     private BlockPos lastPos;
@@ -37,7 +37,6 @@ public class InformationListener {
     private int lastDayOfYear = -1;
     private int lastPing = -2;
     private long lacyLastTime = System.currentTimeMillis();
-    private long lagLastTime = System.currentTimeMillis();
 
     private String lastDateFormat;
     private String lastTimeFormat;
@@ -157,7 +156,7 @@ public class InformationListener {
                         v = "<Invalid Format>";
                     }
 
-                    informationValues.put("Day", v);
+                    informationValues.put("Date", v);
                     lastDayOfYear = currentDate.getDayOfYear();
                     lastDateFormat = Setting.INFO_DATE_FORMAT;
                 }
@@ -168,19 +167,19 @@ public class InformationListener {
                     lastPing = curPing;
                 }
 
+                // Ingame Day
+                informationValues.put("Gameday", DECIMAL_FORMAT_2.format((double) Minecraft.getMinecraft().theWorld.getWorldTime() / 24_000));
+
                 lacyLastTime = System.currentTimeMillis();
-            }
-
-            if (System.currentTimeMillis() - lagLastTime >= 500) {
-                InformationListener.informationValues.put("Lag", DECIMAL_FORMAT_1.format(LagHandler.INSTANCE.curLatency() * 10) + "%");
-
-                lagLastTime = System.currentTimeMillis();
             }
 
             long curTime = System.currentTimeMillis();
             while (!blocksBrokenTimes.isEmpty() && curTime - blocksBrokenTimes.getFirst() > 1000) {
                 blocksBrokenTimes.removeFirst();
             }
+
+            // Calculating Lag
+            InformationListener.informationValues.put("Lag", DECIMAL_FORMAT_1.format(LagHandler.INSTANCE.curLatency()) + "%");
 
             informationValues.put("Blocks/s", String.valueOf(blocksBrokenTimes.size()));
         }

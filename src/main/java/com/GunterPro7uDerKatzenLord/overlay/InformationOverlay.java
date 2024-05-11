@@ -42,8 +42,8 @@ public class InformationOverlay extends AbstractOverlay {
         informationsAndButtonList = CollectionUtils.mapOf(
                 "Ping", CollectionUtils.listOf(new GuiCheckBox(100, 0, 0, "Ping Overlay Enabled", settings.get("Ping").isEnabled()),
                         new GuiButton(2, 0, 0, "Move Ping Overlay")),
-                "Day, Time", CollectionUtils.listOf(new GuiCheckBox(101, 0, 0, "Day Overlay Enabled", settings.get("Day").isEnabled()),
-                        new GuiButton(2, 0, 0, "Move Day Overlay"),
+                "Date, Time", CollectionUtils.listOf(new GuiCheckBox(101, 0, 0, "Date Overlay Enabled", settings.get("Date").isEnabled()),
+                        new GuiButton(2, 0, 0, "Move Date Overlay"),
                         labelDate,
                         textFieldDateFormat,
                         new GuiCheckBox(102, 0, 0, "Time Overlay Enabled", settings.get("Time").isEnabled()),
@@ -52,7 +52,7 @@ public class InformationOverlay extends AbstractOverlay {
                         textFieldTimeFormat),
                 "Position", CollectionUtils.listOf(new GuiCheckBox(103, 0, 0, "Position Overlay Enabled", settings.get("Position").isEnabled()),
                         new GuiButton(2, 0, 0, "Move X Overlay"),
-                        new GuiButton(2, 0, 0, "Move Y Overlay"),
+                        new GuiButton(2, 0, 0, "Move Y Overlay"), // TODO wenn links, vom links speichern, wenn nahe an rechts, von rechts aus speichern, das selbe von oben und unten
                         new GuiButton(2, 0, 0, "Move Z Overlay")),
                 "Fps", CollectionUtils.listOf(new GuiCheckBox(104, 0, 0, "Fps Overlay Enabled", settings.get("Fps").isEnabled()),
                         new GuiButton(2, 0, 0, "Move Fps Overlay")),
@@ -65,7 +65,9 @@ public class InformationOverlay extends AbstractOverlay {
                 "Blocks/s", CollectionUtils.listOf(new GuiCheckBox(108, 0, 0, "Blocks/s Overlay Enabled", settings.get("Blocks/s").isEnabled()),
                         new GuiButton(2, 0, 0, "Move Blocks/s Overlay")),
                 "Cps", CollectionUtils.listOf(new GuiCheckBox(109, 0, 0, "Cps Overlay Enabled", settings.get("Cps").isEnabled()),
-                        new GuiButton(2, 0, 0, "Move Cps Overlay"))
+                        new GuiButton(2, 0, 0, "Move Cps Overlay")),
+                "Gameday", CollectionUtils.listOf(new GuiCheckBox(110, 0, 0, "Gameday Overlay Enabled", settings.get("Gameday").isEnabled()),
+                        new GuiButton(2, 0, 0, "Move Gameday Overlay"))
 
         );
 

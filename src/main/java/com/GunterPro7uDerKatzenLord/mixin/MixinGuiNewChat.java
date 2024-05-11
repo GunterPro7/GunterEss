@@ -1,11 +1,15 @@
 package com.GunterPro7uDerKatzenLord.mixin;
 
 import com.GunterPro7uDerKatzenLord.listener.AdvancedChat;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiNewChat;
 import net.minecraft.util.IChatComponent;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(value = GuiNewChat.class, priority = 2147483647)
 public abstract class MixinGuiNewChat {
