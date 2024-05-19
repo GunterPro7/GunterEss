@@ -1,9 +1,6 @@
 package com.GunterPro7uDerKatzenLord.mixin;
 
-import com.GunterPro7uDerKatzenLord.LagHandler;
 import com.GunterPro7uDerKatzenLord.event.ClientPacketEvent;
-import com.GunterPro7uDerKatzenLord.listener.AdvancedChat;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.*;

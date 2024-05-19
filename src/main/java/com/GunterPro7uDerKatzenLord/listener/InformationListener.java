@@ -3,9 +3,8 @@ package com.GunterPro7uDerKatzenLord.listener;
 import com.GunterPro7uDerKatzenLord.Main;
 import com.GunterPro7uDerKatzenLord.event.ClientBlockChangeEvent;
 import com.GunterPro7uDerKatzenLord.event.ClientChangeWorldEvent;
-import com.GunterPro7uDerKatzenLord.event.ClientMouseEvent;
 import com.GunterPro7uDerKatzenLord.gui.CustomIngameUI;
-import com.GunterPro7uDerKatzenLord.LagHandler;
+import com.GunterPro7uDerKatzenLord.TpsHandler;
 import com.GunterPro7uDerKatzenLord.Setting;
 import com.GunterPro7uDerKatzenLord.utils.McUtils;
 import net.minecraft.client.Minecraft;
@@ -179,7 +178,7 @@ public class InformationListener {
             }
 
             // Calculating Lag
-            InformationListener.informationValues.put("Lag", DECIMAL_FORMAT_1.format(LagHandler.INSTANCE.curLatency()) + "%");
+            InformationListener.informationValues.put("Tps", DECIMAL_FORMAT_1.format(TpsHandler.INSTANCE.curTps()) + "%");
 
             informationValues.put("Blocks/s", String.valueOf(blocksBrokenTimes.size()));
         }
@@ -203,7 +202,7 @@ public class InformationListener {
 
     @SubscribeEvent
     public void onWorldChange(final ClientChangeWorldEvent event) {
-        LagHandler.INSTANCE.reset();
+        TpsHandler.INSTANCE.reset();
     }
 }
 
