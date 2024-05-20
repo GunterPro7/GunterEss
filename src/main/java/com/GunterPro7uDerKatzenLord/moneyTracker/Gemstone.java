@@ -1,8 +1,9 @@
-package com.GunterPro7uDerKatzenLord.hypixel;
+package com.GunterPro7uDerKatzenLord.moneyTracker;
 
+import com.GunterPro7uDerKatzenLord.hypixel.Collections;
 import net.minecraft.util.ResourceLocation;
 
-public enum Gemstone {
+public enum Gemstone implements SkyblockItem {
     RUBY("❤", 'c'),
     JADE("☘", 'a'),
     SAPPHIRE("✎", 'b'),
@@ -45,5 +46,10 @@ public enum Gemstone {
 
     public String getColorString() {
         return "§" + colorIndex;
+    }
+
+    @Override
+    public double getNpcPrice() {
+        return 3 * 80;
     }
 }

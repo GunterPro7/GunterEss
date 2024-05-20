@@ -12,6 +12,7 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.*;
@@ -151,5 +152,33 @@ public class Utils {
         return addSpaceBeforeUppercase(capitalizeFirstLetterAndLowercaseRest(input));
     }
 
+    public static String toIngameTimeFormat(long time) {
+        long days = time / 86400000, hours = (time % 86400000) / 3600000, minutes = (time % 3600000) / 60000, seconds = (time % 60000) / 1000;
+        return (days > 0 ? days + "d " : "") + (hours > 0 ? hours + "h " : "") + (minutes > 0 ? minutes + "m " : "") + (seconds > 0 ? seconds + "s" : "");
+    }
 
+    public static String toIngameMoneyFormat(long money) {
+        String prefix;
+        int div;
+
+        if (money >= 1e9) {
+            prefix = "b";
+            div = (int) 1e9;
+        } else if (money >= 1e6) {
+            prefix = "m";
+            div = (int) 1e6;
+        } else if (money >= 1e3) {
+            prefix = "k";
+            div = (int) 1e3;
+        } else {
+            prefix = "";
+            div = 1;
+        }
+
+        return roundToNDigits((double) money / div, 2) + prefix;
+    }
+
+    public static String roundToNDigits(double value, int digits) {
+        return String.format("%." + digits + "f", value);
+    }
 }

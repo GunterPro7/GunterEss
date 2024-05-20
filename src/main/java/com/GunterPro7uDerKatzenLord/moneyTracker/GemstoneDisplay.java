@@ -1,8 +1,7 @@
-package com.GunterPro7uDerKatzenLord.listener;
+package com.GunterPro7uDerKatzenLord.moneyTracker;
 
 import com.GunterPro7uDerKatzenLord.gui.CustomIngameUI;
 import com.GunterPro7uDerKatzenLord.Setting;
-import com.GunterPro7uDerKatzenLord.hypixel.Gemstone;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -10,13 +9,18 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import java.util.*;
 
 public class GemstoneDisplay {
-    public static final Map<Gemstone, Integer> gemstoneIntMap = new HashMap<>();
+    public static final Map<Gemstone, MoneyItem> gemstoneIntMap = new HashMap<>();
+
+    static {
+        MoneyHandler.getInstance().register(gemstoneIntMap);
+    }
 
     @SubscribeEvent
     public void onRender(RenderGameOverlayEvent.Text event) {
         if (Setting.GEMSTONE_DISPLAY.isEnabled()) {
             List<String> lines = new ArrayList<>();
-            gemstoneIntMap.forEach((gemstone, count) -> {
+            gemstoneIntMap.forEach((gemstone, moneyItem) -> {
+                int count = moneyItem.getCount();
                 String line = "";
                 if (count >= 32_000) {
                     line += "§b" + (count / 32_000) + " §6Perfect§f, ";
@@ -52,10 +56,11 @@ public class GemstoneDisplay {
             System.out.println(Arrays.deepToString(parts));
             Gemstone gemstone = Gemstone.valueOfShort(parts[2]);
             int count = Integer.parseInt(parts[3]);
+
             if (gemstoneIntMap.containsKey(gemstone)) {
-                gemstoneIntMap.put(gemstone, gemstoneIntMap.get(gemstone) + count);
+                gemstoneIntMap.get(gemstone).addCount(count);
             } else {
-                gemstoneIntMap.put(gemstone, count);
+                gemstoneIntMap.put(gemstone, new MoneyItem(gemstone, count));
             }
         }
     }

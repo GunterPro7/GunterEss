@@ -4,7 +4,8 @@ import com.GunterPro7uDerKatzenLord.event.ClientMouseEvent;
 import com.GunterPro7uDerKatzenLord.event.ClientFishingEvent;
 import com.GunterPro7uDerKatzenLord.listener.ItemLoreScroller;
 import com.GunterPro7uDerKatzenLord.listener.*;
-import com.GunterPro7uDerKatzenLord.listener.GemstoneDisplay;
+import com.GunterPro7uDerKatzenLord.moneyTracker.GemstoneDisplay;
+import com.GunterPro7uDerKatzenLord.moneyTracker.MoneyTrackerDisplay;
 import com.GunterPro7uDerKatzenLord.utils.JsonUtils;
 import com.GunterPro7uDerKatzenLord.utils.TimeUtils;
 import com.google.gson.Gson;
@@ -61,6 +62,7 @@ public class Main {
         MinecraftForge.EVENT_BUS.register(new TimeUtils());
         MinecraftForge.EVENT_BUS.register(new GemstoneDisplay());
         MinecraftForge.EVENT_BUS.register(TpsHandler.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(new MoneyTrackerDisplay());
         //MinecraftForge.EVENT_BUS.register(new ItemLock());
         MinecraftForge.EVENT_BUS.register(new TextureLoader());
         MinecraftForge.EVENT_BUS.register(PreventLabymodUpdater.INSTANCE);

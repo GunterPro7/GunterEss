@@ -54,13 +54,6 @@ public class MiscListener {
     @SubscribeEvent
     public void onFontRenderer(final RenderGameOverlayEvent.Post event) {
         if (event.type == RenderGameOverlayEvent.ElementType.TEXT) {
-            if (Setting.MONEY_OVERLAY.isEnabled()) {
-                FontRenderer fontRenderer = Minecraft.getMinecraft().fontRendererObj;
-                int scale = mc.gameSettings.guiScale;
-                //fontRenderer.drawString("Hello this is !", Mouse.getEventX() / scale, (Display.getHeight()-Mouse.getEventY()) / scale, 0x100000);
-                CustomIngameUI customIngameUI = new CustomIngameUI(0x80000000, 0xFF000000, "Mined Blocks: " + cropTimeList.size(), "Blocks / Second: " + Utils.getLengthPerSecond(cropTimeList), "Crops: " + totalCrops);
-                customIngameUI.drawInfoBox(Setting.MONEY_OVERLAY.getOffsetX(), Setting.MONEY_OVERLAY.getOffsetY(), true);
-            }
             if (Setting.COLLECTION_OVERLAY.isEnabled()) {
                 Collections collection = CURRENT_COLLECTION;
                 long collectionDropsPerHour = CURRENT_COLLECTION.getCollectionDropsPerHour();

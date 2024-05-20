@@ -37,10 +37,9 @@ public class GunterEssOverlay extends AbstractOverlay {
         title.func_175202_a("");
         title.func_175202_a("by GunterPro7 f. DerKatzenLord");
 
-        buttonRelations.put(new GuiButton(0, width / 2 - 100, pageContentHeight += BUTTON_HEIGHT, "Gemstone Tracker"), () -> new GemstoneTrackerOverlay(this));
         buttonRelations.put(new GuiButton(0, width / 2 - 100, pageContentHeight += BUTTON_HEIGHT, "Chat Features"), () -> new ChatOverlay(this));
         buttonRelations.put(new GuiButton(0, width / 2 - 100, pageContentHeight += BUTTON_HEIGHT, "Collection Tracker"), () -> null); // Not ready yet
-        buttonRelations.put(new GuiButton(0, width / 2 - 100, pageContentHeight += BUTTON_HEIGHT, "Money Tracker"), () -> new FarmingTrackerOverlay(this)); // Not ready yet
+        buttonRelations.put(new GuiButton(0, width / 2 - 100, pageContentHeight += BUTTON_HEIGHT, "Money Tracker"), () -> new MoneyTrackerOverlay(this)); // Not ready yet
         buttonRelations.put(new GuiButton(0, width / 2 - 100, pageContentHeight += BUTTON_HEIGHT, "Auto Kicker"), () -> new AutoKickOverlay(this));
         buttonRelations.put(new GuiButton(0, width / 2 - 100, pageContentHeight += BUTTON_HEIGHT, "Auto Harp"), () -> new AutoHarpOverlay(this));
         buttonRelations.put(new GuiButton(0, width / 2 - 100, pageContentHeight += BUTTON_HEIGHT, "Information Overlay"), () -> new InformationOverlay(this));
