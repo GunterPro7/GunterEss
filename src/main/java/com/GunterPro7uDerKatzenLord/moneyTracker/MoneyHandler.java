@@ -28,7 +28,9 @@ public class MoneyHandler {
 
     public void update(MoneyItem moneyItem, int c) {
         currentMoney += c;
-        activeTime += Math.min(System.currentTimeMillis() - lastUpdate, Setting.MONEY_PAUSE_AFTER.getValue() * 1000L);
+        if (started) {
+            activeTime += Math.min(System.currentTimeMillis() - lastUpdate, Setting.MONEY_PAUSE_AFTER.getValue() * 1000L);
+        }
 
         started = true;
         lastUpdate = System.currentTimeMillis();
