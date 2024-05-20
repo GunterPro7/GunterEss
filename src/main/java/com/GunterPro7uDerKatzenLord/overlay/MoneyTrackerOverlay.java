@@ -73,8 +73,9 @@ public class MoneyTrackerOverlay extends AbstractOverlay {
             Setting.MONEY_OVERLAY.switchEnabled();
             button.displayString = "Money Tracker: " + (Setting.MONEY_OVERLAY.isEnabled() ? "§a§lEnabled" : "§c§lDisabled");
         } else if (button == moveButton) {
-            mc.displayGuiScreen(new MoveObjectOverlay(new CustomIngameUI(0x00000000, 0x00000000,
-                    "Time: 0", "Money/h: 0", "Money: 0"), Setting.MONEY_OVERLAY, this));
+            mc.displayGuiScreen(new MoveObjectOverlay(new CustomIngameUI(0x501E1E1E, 0x501E1E1E,
+                    Utils.convertToColorString("Time: 1h"), Utils.convertToColorString("Money: 1m"),
+                    Utils.convertToColorString("Money/h: 1m")), Setting.MONEY_OVERLAY, this));
         }
 
         if (button.id == 1) {

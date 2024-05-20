@@ -76,8 +76,8 @@ public class CustomIngameUI {
             Gui.drawRect(boxX, boxY, boxX + boxWidth, boxY + boxHeight, backgroundColor); // Hintergrund zeichnen
             Gui.drawRect(boxX, boxY, boxX + boxWidth, boxY + 1, borderColor); // Oberer Rand zeichnen
             Gui.drawRect(boxX, boxY + boxHeight - 1, boxX + boxWidth, boxY + boxHeight, borderColor); // Unterer Rand zeichnen
-            Gui.drawRect(boxX, boxY, boxX + 1, boxY + boxHeight, borderColor); // Linker Rand zeichnen
-            Gui.drawRect(boxX + boxWidth - 1, boxY, boxX + boxWidth, boxY + boxHeight, borderColor); // Rechter Rand zeichnen
+            Gui.drawRect(boxX, boxY + 1, boxX + 1, boxY + boxHeight - 1, borderColor); // Linker Rand zeichnen
+            Gui.drawRect(boxX + boxWidth - 1, boxY + 1, boxX + boxWidth, boxY + boxHeight - 1, borderColor); // Rechter Rand zeichnen
         }
 
         int counter = 0;

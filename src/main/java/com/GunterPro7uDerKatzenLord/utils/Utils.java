@@ -1,5 +1,6 @@
 package com.GunterPro7uDerKatzenLord.utils;
 
+import com.GunterPro7uDerKatzenLord.Setting;
 import com.GunterPro7uDerKatzenLord.listener.AdvancedChat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -154,7 +155,7 @@ public class Utils {
 
     public static String toIngameTimeFormat(long time) {
         long days = time / 86400000, hours = (time % 86400000) / 3600000, minutes = (time % 3600000) / 60000, seconds = (time % 60000) / 1000;
-        return (days > 0 ? days + "d " : "") + (hours > 0 ? hours + "h " : "") + (minutes > 0 ? minutes + "m " : "") + (seconds > 0 ? seconds + "s" : "");
+        return (days > 0 ? days + "d " : "") + (hours > 0 ? hours + "h " : "") + (minutes > 0 ? minutes + "m " : "") + (time == 0 ? "0s" : seconds > 0 ? seconds + "s" : "");
     }
 
     public static String toIngameMoneyFormat(long money) {
@@ -192,5 +193,11 @@ public class Utils {
         }
 
         return number.length() <= 10 && number.length() > 0 ? Integer.parseInt(number.toString()) : -1;
+    }
+
+    public static String convertToColorString(String string) {
+        String[] parts = string.split(":");
+
+        return Setting.INFO_PREFIX_COLOR + parts[0] + Setting.INFO_SUFFIX_COLOR + ":" + Setting.INFO_VALUE_COLOR + parts[1];
     }
 }
