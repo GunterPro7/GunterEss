@@ -191,6 +191,6 @@ public class Utils {
             }
         }
 
-        return number.length() <= 10 ? Integer.parseInt(number.toString()) : -1;
+        return number.length() <= 10 && number.length() > 0 ? Integer.parseInt(number.toString()) : -1;
     }
 }
