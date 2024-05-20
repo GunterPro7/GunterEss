@@ -2,8 +2,12 @@ package com.GunterPro7uDerKatzenLord.overlay;
 
 import com.GunterPro7uDerKatzenLord.Setting;
 import com.GunterPro7uDerKatzenLord.gui.CustomIngameUI;
+import com.GunterPro7uDerKatzenLord.listener.AdvancedChat;
+import com.GunterPro7uDerKatzenLord.utils.Utils;
 import net.minecraft.client.gui.GuiButton;
+import net.minecraft.client.gui.GuiLabel;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.GuiTextField;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,6 +21,8 @@ public class MoneyTrackerOverlay extends AbstractOverlay {
 
     private GuiButton enabledButton;
     private GuiButton moveButton;
+    private GuiLabel pauseAfterLabel;
+    private GuiTextField pauseAfterTextField;
 
     public MoneyTrackerOverlay(GuiScreen lastScreen) {
         super(lastScreen);
@@ -34,6 +40,11 @@ public class MoneyTrackerOverlay extends AbstractOverlay {
         enabledButton = new GuiButton(0, width / 2 - 100, pageContentHeight += BUTTON_HEIGHT, "Money Tracker: " + (Setting.MONEY_OVERLAY.isEnabled() ? "§a§lEnabled" : "§c§lDisabled"));
         moveButton = new GuiButton(0, width / 2 - 100, pageContentHeight += BUTTON_HEIGHT, "Move Money Tracker Overlay");
 
+        pauseAfterLabel = new GuiLabel(fontRendererObj, 0, width / 2 - 100, pageContentHeight += BUTTON_HEIGHT, 100, 20, 0xFFFFFF);
+        pauseAfterLabel.func_175202_a("Pause after: (sec)");
+        pauseAfterTextField = new GuiTextField(0, fontRendererObj, width / 2, pageContentHeight, 100, 20);
+        pauseAfterTextField.setText(String.valueOf(Setting.MONEY_PAUSE_AFTER.getValue()));
+
         pageContentHeight += BUTTON_HEIGHT;
 
         buttonRelations.put(new GuiButton(1, width / 2 - 100, pageContentHeight += BUTTON_HEIGHT, "Gemstone Tracker"), () -> new GemstoneTrackerOverlay(this));
@@ -41,6 +52,19 @@ public class MoneyTrackerOverlay extends AbstractOverlay {
         buttonList.addAll(buttonRelations.keySet());
         buttonList.add(enabledButton);
         buttonList.add(moveButton);
+
+        labelList.add(pauseAfterLabel);
+        textFieldList.add(pauseAfterTextField);
+    }
+
+    @Override
+    protected void textFieldKeyTyped(GuiTextField guiTextField, char typedChar, int keyCode) {
+        super.textFieldKeyTyped(guiTextField, typedChar, keyCode);
+
+        int i = Utils.safeToInteger(guiTextField.getText());
+        if (i != -1) {
+            Setting.MONEY_PAUSE_AFTER.setValue(i);
+        }
     }
 
     @Override

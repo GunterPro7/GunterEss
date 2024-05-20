@@ -35,7 +35,15 @@ public abstract class AbstractOverlay extends GuiScreen {
             super.keyTyped(typedChar, keyCode);
         }
 
-        textFieldList.forEach(textField -> textField.textboxKeyTyped(typedChar, keyCode));
+        textFieldList.forEach(textField -> {
+            if (textField.isFocused()) {
+                textFieldKeyTyped(textField, typedChar, keyCode);
+            }
+        });
+    }
+
+    protected void textFieldKeyTyped(GuiTextField guiTextField, char typedChar, int keyCode) {
+        guiTextField.textboxKeyTyped(typedChar, keyCode);
     }
 
     @Override

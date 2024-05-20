@@ -12,6 +12,7 @@ import java.util.*;
 public class Setting {
     public static final Position COLLECTION_OVERLAY = new Position(false);
     public static final Position MONEY_OVERLAY = new Position(false);
+    public static final Value MONEY_PAUSE_AFTER = new Value(false, 30);
     public static final Setting AUTO_KICKER = new Setting(true);
     public static final Setting COPY_CHAT = new Setting(true);
     public static final Setting STACK_CHAT_MESSAGES = new Setting(true);
@@ -92,6 +93,7 @@ public class Setting {
     }
 
     public void update() {
+        // TODO we could only overwrite this one variable in the file?
         saveSettings();
     }
 
@@ -161,8 +163,18 @@ public class Setting {
             this.value = value;
         }
 
+        public void setValue(int value) {
+            this.value = value;
+            update();
+        }
+
         public int getValue() {
             return value;
+        }
+
+        @Override
+        public String toString() {
+            return super.toString() + ";" + this.value;
         }
     }
 

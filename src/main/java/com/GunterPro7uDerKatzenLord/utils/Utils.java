@@ -181,4 +181,16 @@ public class Utils {
     public static String roundToNDigits(double value, int digits) {
         return String.format("%." + digits + "f", value);
     }
+
+    public static int safeToInteger(String numberString) {
+        StringBuilder number = new StringBuilder();
+
+        for (char c : numberString.toCharArray()) {
+            if (Character.isDigit(c) || c == '.') {
+                number.append(c);
+            }
+        }
+
+        return number.length() <= 10 ? Integer.parseInt(number.toString()) : -1;
+    }
 }

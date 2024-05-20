@@ -1,5 +1,6 @@
 package com.GunterPro7uDerKatzenLord.moneyTracker;
 
+import com.GunterPro7uDerKatzenLord.Setting;
 import net.minecraftforge.common.MinecraftForge;
 
 import java.util.ArrayList;
@@ -10,7 +11,6 @@ import java.util.Map;
 public class MoneyHandler {
     private static final MoneyHandler INSTANCE = new MoneyHandler();
     /* Milliseconds */
-    private static final long TIME_BETWEEN_ACTIONS = 1000 * 30;
 
     private final List<MoneyItem> moneyItems = new ArrayList<>();
     private double currentMoney;
@@ -28,7 +28,7 @@ public class MoneyHandler {
 
     public void update(MoneyItem moneyItem, int c) {
         currentMoney += c;
-        activeTime += Math.min(System.currentTimeMillis() - lastUpdate, TIME_BETWEEN_ACTIONS);
+        activeTime += Math.min(System.currentTimeMillis() - lastUpdate, Setting.MONEY_PAUSE_AFTER.getValue() * 1000L);
 
         started = true;
         lastUpdate = System.currentTimeMillis();
@@ -51,7 +51,7 @@ public class MoneyHandler {
     }
 
     public long getActiveTime() {
-        return activeTime + (started ? Math.min(System.currentTimeMillis() - lastUpdate, TIME_BETWEEN_ACTIONS) : 0);
+        return activeTime + (started ? Math.min(System.currentTimeMillis() - lastUpdate, Setting.MONEY_PAUSE_AFTER.getValue() * 1000L) : 0);
     }
 
     public long getCurrentMoney() {
