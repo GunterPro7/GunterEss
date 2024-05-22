@@ -1,7 +1,6 @@
 package com.GunterPro7;
 
 import com.GunterPro7.event.BackendRecievedEvent;
-import com.GunterPro7.listener.Listener;
 import net.minecraftforge.common.MinecraftForge;
 
 import java.io.DataInputStream;
@@ -9,7 +8,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
-public class BackendService implements Listener {
+public class BackendService {
     private final Socket socket;
     private final DataOutputStream out;
     private final DataInputStream in;
