@@ -123,20 +123,12 @@ public class InformationListener implements Listener {
             BlockPos curPos = player.getPosition();
 
             // Position
-            if (lastPos == null || !lastPos.equals(curPos)) {
+            if (Setting.INFO_SETTINGS.get("Position").isEnabled() && (lastPos == null || !lastPos.equals(curPos))) {
                 lastPos = curPos;
 
-                if (Setting.INFO_SETTINGS.get("X").isEnabled()) {
-                    informationValues.put("X", String.valueOf(curPos.getX()));
-                }
-
-                if (Setting.INFO_SETTINGS.get("Y").isEnabled()) {
-                    informationValues.put("Y", String.valueOf(curPos.getY()));
-                }
-
-                if (Setting.INFO_SETTINGS.get("Z").isEnabled()) {
-                    informationValues.put("Z", String.valueOf(curPos.getZ()));
-                }
+                informationValues.put("X", String.valueOf(curPos.getX()));
+                informationValues.put("Y", String.valueOf(curPos.getY()));
+                informationValues.put("Z", String.valueOf(curPos.getZ()));
             }
 
             // Facing

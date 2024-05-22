@@ -56,10 +56,8 @@ public class Main {
 
 
     @Mod.EventHandler
-    public void serverStarting(final FMLInitializationEvent event) throws IllegalAccessException, IOException {
+    public void serverStarting(final FMLInitializationEvent event) {
         System.out.println("INITIALIZING GunterEss :D");
-
-        Setting.initSettings();
 
         List<Listener> listenersToRegister = CollectionUtils.listOf(new ClientBlockListener(), new MiscListener(),
                 new InformationListener(), new TimeUtils(), new GemstoneDisplay(), new MoneyTrackerDisplay(),

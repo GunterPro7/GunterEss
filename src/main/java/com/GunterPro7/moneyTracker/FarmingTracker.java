@@ -49,7 +49,7 @@ public class FarmingTracker implements Listener {
 
         EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
 
-        int fortune = 0;
+        int fortune = 500;
         int extraFortune = 0; // TODO not ready
         boolean bountifulReforge = true;
         Rarity farmingToolRarity = Rarity.MYTHIC;

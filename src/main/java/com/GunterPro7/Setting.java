@@ -63,6 +63,14 @@ public class Setting {
     private boolean enabled;
     protected boolean lacy;
 
+    static {
+        try {
+            initSettings();
+        } catch (IllegalAccessException | IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public Setting(boolean enabled) {
         this.enabled = enabled;
     }
