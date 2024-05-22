@@ -36,7 +36,7 @@ public class FarmingTrackerOverlay extends AbstractOverlay {
     @Override
     protected void actionPerformed(GuiButton button) {
         if (button == activeButton) {
-            Setting.GEMSTONE_DISPLAY.switchEnabled();
+            Setting.FARMING_OVERLAY.switchEnabled();
             button.displayString = Setting.FARMING_OVERLAY.isEnabled() ? "§a§lEnabled" : "§c§lDisabled";
         } else if (button == moveObjectButton) {
             mc.displayGuiScreen(new MoveObjectOverlay(new CustomIngameUI(0x00000000, 0x80000000,
