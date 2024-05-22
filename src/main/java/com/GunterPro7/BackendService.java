@@ -1,6 +1,7 @@
-package com.GunterPro7.listener;
+package com.GunterPro7;
 
 import com.GunterPro7.event.BackendRecievedEvent;
+import com.GunterPro7.listener.Listener;
 import net.minecraftforge.common.MinecraftForge;
 
 import java.io.DataInputStream;

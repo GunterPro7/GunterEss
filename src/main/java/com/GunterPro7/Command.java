@@ -2,7 +2,6 @@ package com.GunterPro7;
 
 import com.GunterPro7.overlay.AutoKickOverlay;
 import com.GunterPro7.listener.AdvancedChat;
-import com.GunterPro7.listener.BackendService;
 import com.GunterPro7.listener.MiscListener;
 import com.GunterPro7.utils.Utils;
 import net.minecraft.client.Minecraft;

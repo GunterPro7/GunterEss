@@ -1,7 +1,6 @@
 package com.GunterPro7;
 
 import com.GunterPro7.listener.AdvancedChat;
-import com.GunterPro7.listener.BackendService;
 import net.minecraft.client.Minecraft;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
