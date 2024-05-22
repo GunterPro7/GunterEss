@@ -44,6 +44,7 @@ public class MoneyTrackerOverlay extends AbstractOverlay {
         pageContentHeight += BUTTON_HEIGHT;
 
         buttonRelations.put(new GuiButton(1, width / 2 - 100, pageContentHeight += BUTTON_HEIGHT, "Gemstone Tracker"), () -> new GemstoneTrackerOverlay(this));
+        buttonRelations.put(new GuiButton(1, width / 2 - 100, pageContentHeight += BUTTON_HEIGHT, "Farming Tracker"), () -> new FarmingTrackerOverlay(this));
 
         buttonList.addAll(buttonRelations.keySet());
         buttonList.add(enabledButton);
