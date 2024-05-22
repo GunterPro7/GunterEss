@@ -34,7 +34,6 @@ public class InformationListener implements Listener {
     private float lastFacingY = 361f;
     private long lastTimeSec = -1;
     private int lastDayOfYear = -1;
-    private int lastPing = -2;
     private long lacyLastTime = System.currentTimeMillis();
 
     private String lastDateFormat;
@@ -52,30 +51,38 @@ public class InformationListener implements Listener {
         if (event.type == RenderGameOverlayEvent.ElementType.TEXT) {
 
             // Calculating Fps
-            long curTime = System.currentTimeMillis();
-            frameTimes.addLast(curTime);
+            if (Setting.INFO_SETTINGS.get("Fps").isEnabled()) {
+                long curTime = System.currentTimeMillis();
+                frameTimes.addLast(curTime);
 
-            while (!frameTimes.isEmpty() && curTime - frameTimes.getFirst() > 1000) {
-                frameTimes.removeFirst();
+                while (!frameTimes.isEmpty() && curTime - frameTimes.getFirst() > 1000) {
+                    frameTimes.removeFirst();
+                }
+
+                informationValues.put("Fps", String.valueOf(frameTimes.size()));
             }
 
-            informationValues.put("Fps", String.valueOf(frameTimes.size()));
+            // Calculating Cps
+            if (Setting.INFO_SETTINGS.get("Cps").isEnabled()) {
+                long curTime = System.currentTimeMillis();
 
-            // Calculating CPs
-            while (!leftClickTimes.isEmpty() && curTime - leftClickTimes.getFirst() > 1000) {
-                leftClickTimes.removeFirst();
-            }
-            while (!rightClickTimes.isEmpty() && curTime - rightClickTimes.getFirst() > 1000) {
-                rightClickTimes.removeFirst();
-            }
+                while (!leftClickTimes.isEmpty() && curTime - leftClickTimes.getFirst() > 1000) {
+                    leftClickTimes.removeFirst();
+                }
+                while (!rightClickTimes.isEmpty() && curTime - rightClickTimes.getFirst() > 1000) {
+                    rightClickTimes.removeFirst();
+                }
 
-            informationValues.put("Cps", leftClickTimes.size() + " | " + rightClickTimes.size());
+                informationValues.put("Cps", leftClickTimes.size() + " | " + rightClickTimes.size());
+            }
 
             // Calculating Walking Speed
-            double destX = Main.mc.thePlayer.posX - Main.mc.thePlayer.prevPosX;
-            double destY = Main.mc.thePlayer.posZ - Main.mc.thePlayer.prevPosZ;
+            if (Setting.INFO_SETTINGS.get("Speed").isEnabled()) {
+                double destX = Main.mc.thePlayer.posX - Main.mc.thePlayer.prevPosX;
+                double destY = Main.mc.thePlayer.posZ - Main.mc.thePlayer.prevPosZ;
 
-            informationValues.put("Speed", DECIMAL_FORMAT_2.format(MathHelper.sqrt_double(destX * destX + destY * destY) * 20));
+                informationValues.put("Speed", DECIMAL_FORMAT_2.format(MathHelper.sqrt_double(destX * destX + destY * destY) * 20));
+            }
 
             // Showing Information
             Setting.INFO_SETTINGS.forEach((key, value) -> {
@@ -115,14 +122,25 @@ public class InformationListener implements Listener {
 
             BlockPos curPos = player.getPosition();
 
+            // Position
             if (lastPos == null || !lastPos.equals(curPos)) {
                 lastPos = curPos;
 
-                informationValues.put("X", String.valueOf(curPos.getX()));
-                informationValues.put("Y", String.valueOf(curPos.getY()));
-                informationValues.put("Z", String.valueOf(curPos.getZ()));
+                if (Setting.INFO_SETTINGS.get("X").isEnabled()) {
+                    informationValues.put("X", String.valueOf(curPos.getX()));
+                }
+
+                if (Setting.INFO_SETTINGS.get("Y").isEnabled()) {
+                    informationValues.put("Y", String.valueOf(curPos.getY()));
+                }
+
+                if (Setting.INFO_SETTINGS.get("Z").isEnabled()) {
+                    informationValues.put("Z", String.valueOf(curPos.getZ()));
+                }
             }
-            if (lastFacingX != player.rotationYaw || lastFacingY != player.rotationPitch) {
+
+            // Facing
+            if (Setting.INFO_SETTINGS.get("Facing").isEnabled() && (lastFacingX != player.rotationYaw || lastFacingY != player.rotationPitch)) {
                 lastFacingX = player.rotationYaw;
                 lastFacingY = player.rotationPitch;
 
@@ -130,44 +148,52 @@ public class InformationListener implements Listener {
                 informationValues.put("Facing", DECIMAL_FORMAT_1.format(player.rotationYaw) + " / " + DECIMAL_FORMAT_1.format(player.rotationPitch));
             }
 
-            LocalTime currentTime = LocalTime.now();
-            if (lastTimeSec != currentTime.getSecond() || !lastTimeFormat.equals(Setting.INFO_TIME_FORMAT)) {
-                String v;
-                try {
-                    v = currentTime.format(DateTimeFormatter.ofPattern(Setting.INFO_TIME_FORMAT));
-                } catch (IllegalArgumentException | DateTimeException e) {
-                    v = "<Invalid Format>";
-                }
-
-                informationValues.put("Time", v);
-                lastTimeSec = currentTime.getSecond();
-                lastTimeFormat = Setting.INFO_TIME_FORMAT;
-            }
-
-            // Lacy Tasks
-            if (System.currentTimeMillis() - lacyLastTime >= 1000 || !lastDateFormat.equals(Setting.INFO_DATE_FORMAT)) {
-                LocalDate currentDate = LocalDate.now();
-                if (currentDate.getDayOfYear() != lastDayOfYear || !lastDateFormat.equals(Setting.INFO_DATE_FORMAT)) {
+            // Time
+            if (Setting.INFO_SETTINGS.get("Time").isEnabled()) {
+                LocalTime currentTime = LocalTime.now();
+                if (lastTimeSec != currentTime.getSecond() || !lastTimeFormat.equals(Setting.INFO_TIME_FORMAT)) {
                     String v;
                     try {
-                        v = currentDate.format(DateTimeFormatter.ofPattern(Setting.INFO_DATE_FORMAT));
+                        v = currentTime.format(DateTimeFormatter.ofPattern(Setting.INFO_TIME_FORMAT));
                     } catch (IllegalArgumentException | DateTimeException e) {
                         v = "<Invalid Format>";
                     }
 
-                    informationValues.put("Date", v);
-                    lastDayOfYear = currentDate.getDayOfYear();
-                    lastDateFormat = Setting.INFO_DATE_FORMAT;
+                    informationValues.put("Time", v);
+                    lastTimeSec = currentTime.getSecond();
+                    lastTimeFormat = Setting.INFO_TIME_FORMAT;
+                }
+            }
+
+            // Lacy Tasks
+            if (System.currentTimeMillis() - lacyLastTime >= 1000 || !lastDateFormat.equals(Setting.INFO_DATE_FORMAT)) {
+
+                // Date
+                if (Setting.INFO_SETTINGS.get("Date").isEnabled()) {
+                    LocalDate currentDate = LocalDate.now();
+                    if (currentDate.getDayOfYear() != lastDayOfYear || !lastDateFormat.equals(Setting.INFO_DATE_FORMAT)) {
+                        String v;
+                        try {
+                            v = currentDate.format(DateTimeFormatter.ofPattern(Setting.INFO_DATE_FORMAT));
+                        } catch (IllegalArgumentException | DateTimeException e) {
+                            v = "<Invalid Format>";
+                        }
+
+                        informationValues.put("Date", v);
+                        lastDayOfYear = currentDate.getDayOfYear();
+                        lastDateFormat = Setting.INFO_DATE_FORMAT;
+                    }
                 }
 
-                int curPing = McUtils.getPing();
-                if (lastPing != curPing) {
-                    informationValues.put("Ping", String.valueOf(curPing));
-                    lastPing = curPing;
+                // Ping
+                if (Setting.INFO_SETTINGS.get("Ping").isEnabled()) {
+                    informationValues.put("Ping", String.valueOf(McUtils.getPing()));
                 }
 
                 // Ingame Day
-                informationValues.put("Gameday", DECIMAL_FORMAT_2.format((double) Minecraft.getMinecraft().theWorld.getWorldTime() / 24_000));
+                if (Setting.INFO_SETTINGS.get("Gameday").isEnabled()) {
+                    informationValues.put("Gameday", DECIMAL_FORMAT_2.format((double) Minecraft.getMinecraft().theWorld.getWorldTime() / 24_000));
+                }
 
                 lacyLastTime = System.currentTimeMillis();
             }
@@ -186,12 +212,14 @@ public class InformationListener implements Listener {
 
     @SubscribeEvent
     public void onBlockBreak(final ClientBlockChangeEvent event) {
-        blocksBrokenTimes.add(System.currentTimeMillis());
+        if (Setting.INFO_SETTINGS.get("Blocks/s").isEnabled()) {
+            blocksBrokenTimes.add(System.currentTimeMillis());
+        }
     }
 
     @SubscribeEvent
     public void onMouse(final MouseEvent e) {
-        if (e.buttonstate) {
+        if (Setting.INFO_SETTINGS.get("Cps").isEnabled() && e.buttonstate) {
             if (e.button == 0) {
                 leftClickTimes.addLast(System.currentTimeMillis());
             } else if (e.button == 1) {
@@ -202,7 +230,9 @@ public class InformationListener implements Listener {
 
     @SubscribeEvent
     public void onWorldChange(final ClientChangeWorldEvent event) {
-        TpsHandler.getInstance().reset();
+        if (Setting.INFO_SETTINGS.get("Tps").isEnabled()) {
+            TpsHandler.getInstance().reset();
+        }
     }
 }
 
