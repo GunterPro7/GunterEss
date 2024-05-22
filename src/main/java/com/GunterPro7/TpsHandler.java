@@ -33,7 +33,7 @@ public class TpsHandler implements Listener {
             receivedTicks.addFirst(receivedSinceLastTick);
 
             receivedSinceLastTick = false;
-            if (receivedTicks.size() >= TPS_COUNT_TICKS) {
+            if (receivedTicks.size() > TPS_COUNT_TICKS) {
                 receivedTicks.removeLast();
             }
         }

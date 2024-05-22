@@ -23,7 +23,7 @@ public class Command extends CommandBase {
 
     @Override
     public String getCommandUsage(ICommandSender sender) {
-        return NAME + "";
+        return NAME + " <help|copy|msg|party>";
     }
 
     public static boolean enableSearchChat = false;
