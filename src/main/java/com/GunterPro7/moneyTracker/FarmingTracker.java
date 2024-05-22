@@ -9,7 +9,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,16 +31,16 @@ public class FarmingTracker implements Listener {
         return INSTANCE;
     }
 
-    public static double calculateProfits(Crop crop, int fortune, int extraFortune, boolean bountifulReforge, Rarity farmingToolRarity, FarmingArmor armor) {
+    public static double calculateProfits(@NotNull Crop crop, int fortune, int extraFortune, boolean bountifulReforge, @Nullable Rarity farmingToolRarity, @Nullable FarmingArmor armor) {
         double basePrice = crop.getNpcPrice();
         double baseDrop = crop.getBaseDrop();
 
         double bountifulReforgeCount = bountifulReforge ? 0.2 : 0;
-        int bountifulRarityFactor = bountifulReforge ? farmingToolRarity.getBountifulRarityFactor() : 0;
+        int bountifulRarityFactor = bountifulReforge ? (farmingToolRarity != null ? farmingToolRarity.getBountifulRarityFactor() : 0) : 0;
 
         double dropAmount = baseDrop * (1 + (((fortune + extraFortune) + bountifulRarityFactor) * 0.01));
 
-        return dropAmount * basePrice + (dropAmount * bountifulReforgeCount) + (armor.getFarmingChance() * armor.getFarmingReward());
+        return dropAmount * basePrice + (dropAmount * bountifulReforgeCount) + (armor != null ? armor.getFarmingChance() * armor.getFarmingReward() : 0);
     }
 
     @SubscribeEvent
@@ -51,7 +53,7 @@ public class FarmingTracker implements Listener {
         int extraFortune = 0; // TODO not ready
         boolean bountifulReforge = true;
         Rarity farmingToolRarity = Rarity.MYTHIC;
-        FarmingArmor armor = FarmingArmor.NONE;
+        FarmingArmor armor = FarmingArmor.fromPlayer(player);
 
         if (crop != null) {
             double profits = calculateProfits(crop, fortune, extraFortune, bountifulReforge, farmingToolRarity, armor);
