@@ -1,5 +1,6 @@
 package com.GunterPro7.gui;
 
+import com.GunterPro7.Setting;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 
@@ -43,6 +44,10 @@ public class CustomIngameUI {
 
     public void align(Align align) {
         this.align = align;
+    }
+
+    public void drawInfoBox(Setting.Position position, boolean background) {
+        drawInfoBox(position.getOffsetX(), position.getOffsetY(), background);
     }
 
     public void drawInfoBox(int offsetX, int offsetY, boolean background) {

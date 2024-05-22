@@ -1,10 +1,10 @@
 package com.GunterPro7.moneyTracker;
 
 public class MoneyItem {
-    private int count;
+    private double count;
     private final SkyblockItem skyblockItem;
 
-    public MoneyItem(SkyblockItem skyblockItem, int count) {
+    public MoneyItem(SkyblockItem skyblockItem, double count) {
         this.skyblockItem = skyblockItem;
         this.count = count;
         if (count != 0) {
@@ -12,26 +12,30 @@ public class MoneyItem {
         }
     }
 
-    private void execEvent(int c) {
-        MoneyHandler.getInstance().update(this, (int) (c * getNpcPrice()));
+    private void execEvent(double c) {
+        MoneyHandler.getInstance().update(this, c * getNpcPrice());
     }
 
-    public void setCount(int count) {
-        int oldCount = this.count;
+    public void setCount(double count) {
+        double oldCount = this.count;
         this.count = count;
         execEvent(count - oldCount);
     }
 
-    public void addCount(int count) {
+    public void addCount(double count) {
         this.count += count;
         execEvent(count);
     }
 
-    public int getCount() {
+    public double getCount() {
         return count;
     }
 
     public double getNpcPrice() {
         return skyblockItem.getNpcPrice();
+    }
+
+    public SkyblockItem getItem() {
+        return skyblockItem;
     }
 }

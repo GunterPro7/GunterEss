@@ -30,6 +30,7 @@ public enum Gemstone implements SkyblockItem {
         return null;
     }
 
+    @Override
     public String shortName() {
         return name().charAt(0) + name().substring(1).toLowerCase();
     }

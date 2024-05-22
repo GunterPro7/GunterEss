@@ -21,7 +21,7 @@ public class GemstoneDisplay implements Listener {
         if (Setting.GEMSTONE_DISPLAY.isEnabled()) {
             List<String> lines = new ArrayList<>();
             gemstoneIntMap.forEach((gemstone, moneyItem) -> {
-                int count = moneyItem.getCount();
+                int count = (int) moneyItem.getCount();
                 String line = "";
                 if (count >= 32_000) {
                     line += "§b" + (count / 32_000) + " §6Perfect§f, ";
@@ -42,9 +42,8 @@ public class GemstoneDisplay implements Listener {
             });
 
             if (lines.size() > 0) {
-                Setting.Position pos = Setting.GEMSTONE_DISPLAY;
                 CustomIngameUI ingameUI = new CustomIngameUI(0x00000000, 0xFF000000, lines);
-                ingameUI.drawInfoBox(pos.getOffsetX(), pos.getOffsetY(), false);
+                ingameUI.drawInfoBox(Setting.GEMSTONE_DISPLAY, false);
             }
         }
     }

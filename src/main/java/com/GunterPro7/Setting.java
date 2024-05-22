@@ -12,6 +12,7 @@ import java.util.*;
 public class Setting {
     public static final Position COLLECTION_OVERLAY = new Position(false);
     public static final Position MONEY_OVERLAY = new Position(false);
+    public static final Position FARMING_OVERLAY = new Position(false);
     public static final Value MONEY_PAUSE_AFTER = new Value(false, 30);
     public static final Setting AUTO_KICKER = new Setting(true);
     public static final Setting COPY_CHAT = new Setting(true);

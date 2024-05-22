@@ -4,6 +4,7 @@ import com.GunterPro7.event.ClientMouseEvent;
 import com.GunterPro7.event.ClientFishingEvent;
 import com.GunterPro7.listener.ItemLoreScroller;
 import com.GunterPro7.listener.*;
+import com.GunterPro7.moneyTracker.FarmingTracker;
 import com.GunterPro7.moneyTracker.GemstoneDisplay;
 import com.GunterPro7.moneyTracker.MoneyTrackerDisplay;
 import com.GunterPro7.utils.CollectionUtils;
@@ -63,7 +64,8 @@ public class Main {
         List<Listener> listenersToRegister = CollectionUtils.listOf(new ClientBlockListener(), new MiscListener(),
                 new InformationListener(), new TimeUtils(), new GemstoneDisplay(), new MoneyTrackerDisplay(),
                 TpsHandler.getInstance(), PreventLabymodUpdater.getInstance(), new ClientMouseEvent(0),
-                new ClientFishingEvent(null), AdvancedChat.getInstance(), new ItemLoreScroller()
+                new ClientFishingEvent(null), AdvancedChat.getInstance(), new ItemLoreScroller(),
+                FarmingTracker.getInstance()
                 /*, new ItemLock(), new HarpListener(), QuiverEmptyChecker.getInstance() */);
 
         for (Listener listener : listenersToRegister) {

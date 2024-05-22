@@ -151,7 +151,7 @@ public class Utils {
         return (days > 0 ? days + "d " : "") + (hours > 0 ? hours + "h " : "") + (minutes > 0 ? minutes + "m " : "") + (time == 0 ? "0s" : seconds > 0 ? seconds + "s" : "");
     }
 
-    public static String toIngameMoneyFormat(long money) {
+    public static String toIngameNumberFormat(long money) {
         String prefix;
         int div;
 

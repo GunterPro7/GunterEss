@@ -14,7 +14,8 @@ public class MinecraftBlock {
             127, 351,        // Cocoa
             142, 392,        // Potato
             83, 338,         // Sugar Cane
-            115, 372         // Nether wart
+            115, 372,        // Nether wart
+            103, 360        // Melon
     );
 
     private static final Item DEFAULT_ITEM = Items.name_tag;
