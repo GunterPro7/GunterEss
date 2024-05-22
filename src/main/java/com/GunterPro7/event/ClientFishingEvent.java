@@ -1,6 +1,7 @@
 package com.GunterPro7.event;
 
 import com.GunterPro7.Setting;
+import com.GunterPro7.listener.Listener;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.projectile.EntityFishHook;
@@ -15,7 +16,7 @@ import java.util.List;
 
 import static com.GunterPro7.Main.mc;
 
-public class ClientFishingEvent extends Event {
+public class ClientFishingEvent extends Event implements Listener {
     private final Entity entity;
 
     private static boolean onlineOnHypixelSkyblock = true;

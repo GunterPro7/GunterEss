@@ -4,6 +4,7 @@ import com.GunterPro7.event.ClientBlockChangeEvent;
 import com.GunterPro7.event.ClientChangeWorldEvent;
 import com.GunterPro7.event.ClientFishingEvent;
 import com.GunterPro7.gui.CustomIngameUI;
+import com.GunterPro7.gui.SearchChatGui;
 import com.GunterPro7.overlay.AutoKickOverlay;
 import com.GunterPro7.overlay.CollectionOverlay;
 import com.GunterPro7.overlay.GunterEssOverlay;
@@ -34,7 +35,7 @@ import java.util.concurrent.Executors;
 import static com.GunterPro7.Command.enableSearchChat;
 import static com.GunterPro7.Main.mc;
 
-public class MiscListener {
+public class MiscListener implements Listener {
     public static final ExecutorService POOL = Executors.newCachedThreadPool();
     public static Long time = System.currentTimeMillis();
     public static final List<Long> cropTimeList = new ArrayList<>();

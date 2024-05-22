@@ -6,6 +6,7 @@ import com.GunterPro7.listener.ItemLoreScroller;
 import com.GunterPro7.listener.*;
 import com.GunterPro7.moneyTracker.GemstoneDisplay;
 import com.GunterPro7.moneyTracker.MoneyTrackerDisplay;
+import com.GunterPro7.utils.CollectionUtils;
 import com.GunterPro7.utils.JsonUtils;
 import com.GunterPro7.utils.TimeUtils;
 import com.google.gson.Gson;
@@ -22,12 +23,14 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
+import net.minecraftforge.fml.common.eventhandler.ListenerList;
 import org.spongepowered.asm.launch.MixinBootstrap;
 import org.spongepowered.asm.mixin.Mixins;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 import static com.GunterPro7.listener.MiscListener.collectionJson;
@@ -57,22 +60,16 @@ public class Main {
 
         Setting.initSettings();
 
-        MinecraftForge.EVENT_BUS.register(new ClientBlockListener());
-        MinecraftForge.EVENT_BUS.register(new MiscListener());
-        MinecraftForge.EVENT_BUS.register(new InformationListener());
-        MinecraftForge.EVENT_BUS.register(new TimeUtils());
-        MinecraftForge.EVENT_BUS.register(new GemstoneDisplay());
-        MinecraftForge.EVENT_BUS.register(TpsHandler.INSTANCE);
-        MinecraftForge.EVENT_BUS.register(new MoneyTrackerDisplay());
-        //MinecraftForge.EVENT_BUS.register(new ItemLock());
-        MinecraftForge.EVENT_BUS.register(new TextureLoader());
-        MinecraftForge.EVENT_BUS.register(PreventLabymodUpdater.INSTANCE);
-        MinecraftForge.EVENT_BUS.register(new ClientMouseEvent(0));
-        MinecraftForge.EVENT_BUS.register(new ClientFishingEvent(null));
-        MinecraftForge.EVENT_BUS.register(AdvancedChat.getInstance());
-        MinecraftForge.EVENT_BUS.register(new ItemLoreScroller());
-        //MinecraftForge.EVENT_BUS.register(new HarpListener());
-        //MinecraftForge.EVENT_BUS.register(QuiverEmptyChecker.getInstance());
+        List<Listener> listenersToRegister = CollectionUtils.listOf(new ClientBlockListener(), new MiscListener(),
+                new InformationListener(), new TimeUtils(), new GemstoneDisplay(), new MoneyTrackerDisplay(),
+                TpsHandler.getInstance(), PreventLabymodUpdater.getInstance(), new ClientMouseEvent(0),
+                new ClientFishingEvent(null), AdvancedChat.getInstance(), new ItemLoreScroller()
+                /*, new ItemLock(), new HarpListener(), QuiverEmptyChecker.getInstance() */);
+
+        for (Listener listener : listenersToRegister) {
+            MinecraftForge.EVENT_BUS.register(listener);
+        }
+
         ClientCommandHandler.instance.registerCommand(new Command());
         if (Setting.COLLECTION_OVERLAY.isEnabled()) {
             JsonUtils.fetch("https://api.hypixel.net/resources/skyblock/collections", response -> {

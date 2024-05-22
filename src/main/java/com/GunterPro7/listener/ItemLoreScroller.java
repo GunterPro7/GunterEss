@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.GunterPro7.Main.mc;
 
-public class ItemLoreScroller {
+public class ItemLoreScroller implements Listener {
     private static final Map<ItemStack, Integer> TOOLTIP_SCROLLS = new HashMap<>();
     private static final Map<ItemStack, Integer> ITEM_TOOLTIP_LENGTH = new HashMap<>();
     private static int lastGuiScale = mc.gameSettings.guiScale;

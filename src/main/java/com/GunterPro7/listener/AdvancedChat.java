@@ -29,7 +29,7 @@ import java.util.Map;
 
 import static com.GunterPro7.Main.mc;
 
-public class AdvancedChat {
+public class AdvancedChat implements Listener {
     public static int current_id = 1;
     public static String lastJson;
     public static final Map<String, Long> jsonList = new HashMap<>();

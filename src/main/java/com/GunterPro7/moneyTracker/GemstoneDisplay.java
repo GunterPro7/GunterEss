@@ -2,13 +2,14 @@ package com.GunterPro7.moneyTracker;
 
 import com.GunterPro7.gui.CustomIngameUI;
 import com.GunterPro7.Setting;
+import com.GunterPro7.listener.Listener;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.*;
 
-public class GemstoneDisplay {
+public class GemstoneDisplay implements Listener {
     public static final Map<Gemstone, MoneyItem> gemstoneIntMap = new HashMap<>();
 
     static {

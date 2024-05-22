@@ -1,5 +1,6 @@
 package com.GunterPro7.listener;
 
+import com.GunterPro7.gui.SearchChatGui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.entity.player.EntityPlayer;
@@ -11,7 +12,7 @@ import java.io.IOException;
 
 import static com.GunterPro7.Command.enableSearchChat;
 
-public class GunterGuiChat extends GuiChat {
+public class GunterGuiChat extends GuiChat implements Listener {
     private final SearchChatGui searchChat;
 
     public GunterGuiChat(SearchChatGui searchChat) {

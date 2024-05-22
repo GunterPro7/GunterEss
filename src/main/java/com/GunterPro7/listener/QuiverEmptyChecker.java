@@ -21,7 +21,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.Random;
 
-public class QuiverEmptyChecker {
+public class QuiverEmptyChecker implements Listener {
     private static final QuiverEmptyChecker INSTANCE = new QuiverEmptyChecker();
 
     private int arrows;

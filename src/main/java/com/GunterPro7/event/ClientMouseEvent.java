@@ -1,5 +1,6 @@
 package com.GunterPro7.event;
 
+import com.GunterPro7.listener.Listener;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -9,7 +10,7 @@ import org.lwjgl.input.Mouse;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ClientMouseEvent extends Event {
+public class ClientMouseEvent extends Event implements Listener {
     public final int key;
 
     public ClientMouseEvent(int key) {

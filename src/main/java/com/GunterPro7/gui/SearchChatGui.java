@@ -1,5 +1,7 @@
-package com.GunterPro7.listener;
+package com.GunterPro7.gui;
 
+import com.GunterPro7.listener.AdvancedChat;
+import com.GunterPro7.listener.GunterGuiChat;
 import com.google.common.collect.Lists;
 
 import java.util.Iterator;

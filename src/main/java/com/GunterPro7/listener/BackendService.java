@@ -8,7 +8,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
-public class BackendService {
+public class BackendService implements Listener {
     private final Socket socket;
     private final DataOutputStream out;
     private final DataInputStream in;

@@ -14,7 +14,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ClientBlockListener {
+public class ClientBlockListener implements Listener {
     // Minecraft Ingame Sound needs to be turned on for this to work!
     private static final List<BlockCheckTask> tasksNextTick = new ArrayList<>();
 

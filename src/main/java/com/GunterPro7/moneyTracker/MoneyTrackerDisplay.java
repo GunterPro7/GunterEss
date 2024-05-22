@@ -2,11 +2,12 @@ package com.GunterPro7.moneyTracker;
 
 import com.GunterPro7.Setting;
 import com.GunterPro7.gui.CustomIngameUI;
+import com.GunterPro7.listener.Listener;
 import com.GunterPro7.utils.Utils;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-public class MoneyTrackerDisplay {
+public class MoneyTrackerDisplay implements Listener {
 
     private final MoneyHandler moneyHandler = MoneyHandler.getInstance();
     private final CustomIngameUI customIngameUI = new CustomIngameUI(0x501E1E1E, 0x501E1E1E, "");

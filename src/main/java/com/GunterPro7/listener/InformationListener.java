@@ -23,7 +23,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-public class InformationListener {
+public class InformationListener implements Listener {
 
     private static final DecimalFormat DECIMAL_FORMAT_1 = new DecimalFormat("0.0;-0.0");
     private static final DecimalFormat DECIMAL_FORMAT_2 = new DecimalFormat("0.00;-0.00");
@@ -178,7 +178,7 @@ public class InformationListener {
             }
 
             // Calculating Lag
-            InformationListener.informationValues.put("Tps", DECIMAL_FORMAT_1.format(TpsHandler.INSTANCE.curTps()) + "%");
+            InformationListener.informationValues.put("Tps", DECIMAL_FORMAT_1.format(TpsHandler.getInstance().curTps()) + "%");
 
             informationValues.put("Blocks/s", String.valueOf(blocksBrokenTimes.size()));
         }
@@ -190,7 +190,7 @@ public class InformationListener {
     }
 
     @SubscribeEvent
-    public void onMouse(MouseEvent e) {
+    public void onMouse(final MouseEvent e) {
         if (e.buttonstate) {
             if (e.button == 0) {
                 leftClickTimes.addLast(System.currentTimeMillis());
@@ -202,7 +202,7 @@ public class InformationListener {
 
     @SubscribeEvent
     public void onWorldChange(final ClientChangeWorldEvent event) {
-        TpsHandler.INSTANCE.reset();
+        TpsHandler.getInstance().reset();
     }
 }
 

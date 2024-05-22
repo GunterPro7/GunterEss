@@ -1,6 +1,7 @@
 package com.GunterPro7.utils;
 
 import com.GunterPro7.listener.AdvancedChat;
+import com.GunterPro7.listener.Listener;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.IChatComponent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -11,7 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TimeUtils {
+public class TimeUtils implements Listener {
     private static final Map<Long, List<Runnable>> map = new HashMap<>();
     private static final List<IChatComponent> messagesToChat = new ArrayList<>();
 

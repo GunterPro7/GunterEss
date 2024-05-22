@@ -17,7 +17,7 @@ import org.lwjgl.input.Keyboard;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HarpListener {
+public class HarpListener implements Listener {
     private static boolean inHarpGui = false;
 
     /** Effective when 'inHarpGui' is true */

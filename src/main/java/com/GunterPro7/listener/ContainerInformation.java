@@ -9,7 +9,7 @@ import net.minecraft.network.play.client.C0EPacketClickWindow;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ContainerInformation {
+public class ContainerInformation implements Listener {
     public List<ItemContainerInformation> getContainerInformation(Container container) {
         List<ItemContainerInformation> list = new ArrayList<>();
         for (Slot slot : container.inventorySlots) {

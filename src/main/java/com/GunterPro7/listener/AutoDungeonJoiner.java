@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 
 import static com.GunterPro7.Main.mc;
 
-public class AutoDungeonJoiner extends ContainerInformation {
+public class AutoDungeonJoiner extends ContainerInformation implements Listener {
     public AutoDungeonJoiner() {
         Container container = mc.thePlayer.openContainer;
         List<DungeonInformation> list = getDungeonPageInformation(container);

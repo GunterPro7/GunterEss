@@ -1,13 +1,14 @@
 package com.GunterPro7;
 
 import com.GunterPro7.event.ClientPacketEvent;
+import com.GunterPro7.listener.Listener;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.LinkedList;
 
-public class TpsHandler {
-    public static final TpsHandler INSTANCE = new TpsHandler();
+public class TpsHandler implements Listener {
+    private static final TpsHandler INSTANCE = new TpsHandler();
     private static final int TPS_COUNT_TICKS = 60;
 
     private final LinkedList<Boolean> receivedTicks = new LinkedList<>();
@@ -15,6 +16,10 @@ public class TpsHandler {
 
 
     private TpsHandler() {
+    }
+
+    public static TpsHandler getInstance() {
+        return INSTANCE;
     }
 
     @SubscribeEvent
