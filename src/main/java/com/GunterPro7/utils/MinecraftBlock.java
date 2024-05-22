@@ -25,7 +25,8 @@ public class MinecraftBlock {
     private final ItemStack itemStack;
 
     public MinecraftBlock(Block block, int dataValue) {
-        this.id = Block.getIdFromBlock(block);
+        int id = Block.getIdFromBlock(block);
+        this.id = RE_MAP.getOrDefault(id, id);
         this.dataValue = dataValue;
 
         Item item = Item.getItemFromBlock(block);

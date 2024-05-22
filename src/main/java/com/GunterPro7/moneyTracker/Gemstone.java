@@ -1,5 +1,6 @@
 package com.GunterPro7.moneyTracker;
 
+import com.GunterPro7.utils.Utils;
 import net.minecraft.util.ResourceLocation;
 
 public enum Gemstone implements SkyblockItem {
@@ -32,7 +33,7 @@ public enum Gemstone implements SkyblockItem {
 
     @Override
     public String shortName() {
-        return name().charAt(0) + name().substring(1).toLowerCase();
+        return Utils.toTitleCase2(name());
     }
 
     public String getSign() {

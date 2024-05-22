@@ -3,6 +3,7 @@ package com.GunterPro7.moneyTracker;
 import com.GunterPro7.Setting;
 import com.GunterPro7.event.ClientBlockChangeEvent;
 import com.GunterPro7.gui.CustomIngameUI;
+import com.GunterPro7.listener.AdvancedChat;
 import com.GunterPro7.listener.Listener;
 import com.GunterPro7.utils.Utils;
 import net.minecraft.client.Minecraft;
@@ -40,12 +41,13 @@ public class FarmingTracker implements Listener {
 
         double dropAmount = baseDrop * (1 + (((fortune + extraFortune) + bountifulRarityFactor) * 0.01));
 
-        return dropAmount * basePrice + (dropAmount * bountifulReforgeCount) + (armor != null ? armor.getFarmingChance() * armor.getFarmingReward() : 0);
+        return (dropAmount * basePrice + (dropAmount * bountifulReforgeCount) + (armor != null ? armor.getFarmingChance() * armor.getFarmingReward() : 0)) / basePrice;
     }
 
     @SubscribeEvent
     public void onBlockBreak(ClientBlockChangeEvent event) {
         Crop crop = Crop.valueOf(event.getMinecraftBlock());
+        AdvancedChat.sendPrivateMessage(crop == null ? "null" : crop.name());
 
         EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
 
@@ -61,7 +63,7 @@ public class FarmingTracker implements Listener {
                 moneyItems.get(crop).addCount(profits);
             } else {
                 moneyItems.put(crop, new MoneyItem(crop, profits));
-            }
+            } // TODO make Boxes e.g with background and border configureable
 
         }
     }

@@ -1,6 +1,7 @@
 package com.GunterPro7.moneyTracker;
 
 import com.GunterPro7.utils.MinecraftBlock;
+import com.GunterPro7.utils.Utils;
 
 public enum Crop implements SkyblockItem {
     SUGAR_CANE(4, 2),
@@ -53,7 +54,7 @@ public enum Crop implements SkyblockItem {
 
     @Override
     public String shortName() {
-        return name().charAt(0) + name().substring(1).toLowerCase();
+        return Utils.toTitleCase2(name());
     }
 
     @Override

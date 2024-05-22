@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.*;
+import java.util.stream.Collectors;
 
 // This Class if for Utils related to basic Java
 public class Utils {
@@ -144,6 +145,12 @@ public class Utils {
 
     public static String toTitleCase(String input) {
         return addSpaceBeforeUppercase(capitalizeFirstLetterAndLowercaseRest(input));
+    }
+
+    public static String toTitleCase2(String uppercaseInput) {
+        return Arrays.stream(uppercaseInput.split("_"))
+                .map(i -> i.substring(0, 1).toUpperCase() + i.substring(1).toLowerCase())
+                .collect(Collectors.joining(" "));
     }
 
     public static String toIngameTimeFormat(long time) {

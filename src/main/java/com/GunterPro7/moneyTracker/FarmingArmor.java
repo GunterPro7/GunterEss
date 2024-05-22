@@ -35,19 +35,21 @@ public enum FarmingArmor {
                 CollectionUtils.listOf(() -> new AtomicInteger(0), 4));
 
         for (ItemStack itemStack : armorInventory) {
-            String name = itemStack.getDisplayName().toLowerCase();
-            armorCounts.forEach((armorName, times) -> {
-                if (name.contains(armorName)) { // TODO check if contains lore "Required Farming Skill .."
-                    times.addAndGet(1);
-                }
-            });
+            if (itemStack != null) {
+                String name = itemStack.getDisplayName().toLowerCase();
+                armorCounts.forEach((armorName, times) -> {
+                    if (name.contains(armorName)) { // TODO check if contains lore "Required Farming Skill .."
+                        times.addAndGet(1);
+                    }
+                });
+            }
         }
 
         for (Map.Entry<String, AtomicInteger> entry : armorCounts.entrySet()) {
-            int v = entry.getValue().intValue();
-            if (v == 4) {
+            int value = entry.getValue().intValue();
+            if (value == 4) {
                 return valueOf(entry.getKey().toUpperCase() + "44");
-            } else if (v == 3) {
+            } else if (value == 3) {
                 return valueOf(entry.getKey().toUpperCase() + "34");
             }
         }
