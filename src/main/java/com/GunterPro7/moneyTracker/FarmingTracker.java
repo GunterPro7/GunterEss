@@ -3,7 +3,6 @@ package com.GunterPro7.moneyTracker;
 import com.GunterPro7.Setting;
 import com.GunterPro7.event.ClientBlockChangeEvent;
 import com.GunterPro7.gui.CustomIngameUI;
-import com.GunterPro7.listener.AdvancedChat;
 import com.GunterPro7.listener.Listener;
 import com.GunterPro7.utils.Utils;
 import net.minecraft.client.Minecraft;
@@ -47,7 +46,6 @@ public class FarmingTracker implements Listener {
     @SubscribeEvent
     public void onBlockBreak(ClientBlockChangeEvent event) {
         Crop crop = Crop.valueOf(event.getMinecraftBlock());
-        AdvancedChat.sendPrivateMessage(crop == null ? "null" : crop.name());
 
         EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
 

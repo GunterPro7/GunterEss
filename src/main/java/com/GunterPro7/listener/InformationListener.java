@@ -158,6 +158,9 @@ public class InformationListener implements Listener {
             }
 
             // Lacy Tasks
+            if (lastDateFormat == null) {
+                lastDateFormat = Setting.INFO_DATE_FORMAT;
+            }
             if (System.currentTimeMillis() - lacyLastTime >= 1000 || !lastDateFormat.equals(Setting.INFO_DATE_FORMAT)) {
 
                 // Date

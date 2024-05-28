@@ -194,6 +194,8 @@ public class Setting {
 
     private static Map<String, String> initSettingsFile(File settingsFile) throws IOException {
         if (!settingsFile.exists()) {
+            File folder = new File(settingsFile.getAbsolutePath().replace("settings.txt", ""));
+            folder.mkdirs();
             settingsFile.createNewFile();
             return new HashMap<>();
         }
