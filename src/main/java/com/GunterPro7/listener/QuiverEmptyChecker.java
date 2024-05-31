@@ -3,7 +3,6 @@ package com.GunterPro7.listener;
 import com.GunterPro7.event.ClientMouseEvent;
 import com.GunterPro7.event.EnteredSkyblockEvent;
 import com.GunterPro7.gui.CustomIngameUI;
-import com.GunterPro7.gui.Side;
 import com.GunterPro7.utils.Utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;

@@ -4,7 +4,6 @@ import com.GunterPro7.Main;
 import com.GunterPro7.Setting;
 import com.GunterPro7.gui.Align;
 import com.GunterPro7.gui.CustomIngameUI;
-import com.GunterPro7.gui.Side;
 import com.GunterPro7.utils.Utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
