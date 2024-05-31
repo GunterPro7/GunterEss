@@ -11,9 +11,12 @@ import java.util.regex.Pattern;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.MathHelper;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -31,9 +34,6 @@ public class SearchChatGui extends Gui {
     }
 
     public void drawChat(int updateCounter) {
-        FontRenderer fontRenderer = Minecraft.getMinecraft().fontRendererObj;
-        int offsetY = (int) (this.mc.displayHeight / (this.mc.gameSettings.guiScale == 0 ? 4 : this.mc.gameSettings.guiScale) - (this.mc.fontRendererObj.FONT_HEIGHT * 5.25));
-        int offsetX = 1;
         int i = this.getLineCount();
         boolean bl = false;
         int j = 0;
@@ -58,38 +58,44 @@ public class SearchChatGui extends Gui {
                 ChatLine chatLine = (ChatLine) this.drawnChatLines.get(m + this.scrollPos);
                 if (chatLine != null) {
                     n = updateCounter - chatLine.getUpdatedCounter();
-                    double d = (double) n / 200.0;
-                    d = 1.0 - d;
-                    d *= 10.0;
-                    d = MathHelper.clamp_double(d, 0.0, 1.0);
-                    d *= d;
-                    o = (int) (255.0 * d);
-                    if (bl) {
-                        o = 255;
-                    }
-
-                    o = (int) ((float) o * f);
-                    ++j;
-                    if (o > 3) {
-                        p = 0;
-                        int q = -m * 9;
-                        drawRect(p, offsetY + q - 9, p + l + 4, offsetY + q, 0x7F000000);
-                        String string = chatLine.getChatComponent().getFormattedText();
-                        String quote = Pattern.quote(sortValue);
-                        String[] parts = string.split("((?<=(?i)" + quote + ")|(?=(?i)" + quote + "))");
-
-                        StringBuilder stringBuilder = new StringBuilder();
-                        for (String part : parts) {
-                            if (sortValue.equalsIgnoreCase(part)) {
-                                int left = fontRenderer.getStringWidth(stringBuilder.toString());
-                                int right = fontRenderer.getStringWidth(stringBuilder.append(part).toString());
-                                drawRect(left, offsetY + (q - 8), right, offsetY + (q - 8) + fontRenderer.FONT_HEIGHT, 0xA7f9da15);
-                            } else {
-                                stringBuilder.append(part);
-                            }
+                    if (n < 200 || bl) {
+                        double d = (double) n / 200.0;
+                        d = 1.0 - d;
+                        d *= 10.0;
+                        d = MathHelper.clamp_double(d, 0.0, 1.0);
+                        d *= d;
+                        o = (int) (255.0 * d);
+                        if (bl) {
+                            o = 255;
                         }
 
-                        this.mc.fontRendererObj.drawStringWithShadow(string, offsetX + (float) p, offsetY + (float) (q - 8), 16777215 + (o << 24));
+                        o = (int) ((float) o * f);
+                        ++j;
+                        if (o > 3) {
+                            p = 0;
+                            int q = -m * 9;
+                            drawRect(p, q - 9, p + l + 4, q, 0x7F000000);
+                            String string = chatLine.getChatComponent().getFormattedText();
+                            GlStateManager.enableBlend();
+                            String quote = Pattern.quote(sortValue);
+                            String[] parts = string.split("((?<=(?i)" + quote + ")|(?=(?i)" + quote + "))");
+
+                            StringBuilder stringBuilder = new StringBuilder();
+                            FontRenderer fontRenderer = Minecraft.getMinecraft().fontRendererObj;
+                            for (String part : parts) {
+                                if (sortValue.equalsIgnoreCase(part)) {
+                                    int left = fontRenderer.getStringWidth(stringBuilder.toString());
+                                    int right = fontRenderer.getStringWidth(stringBuilder.append(part).toString());
+                                    drawRect(left, q - 8, right, q - 8 + fontRenderer.FONT_HEIGHT, 0xA7f9da15);
+                                } else {
+                                    stringBuilder.append(part);
+                                }
+                            }
+
+                            this.mc.fontRendererObj.drawStringWithShadow(string, (float) p, (float) (q - 8), 16777215 + (o << 24));
+                            GlStateManager.disableAlpha();
+                            GlStateManager.disableBlend();
+                        }
                     }
                 }
             }
@@ -142,7 +148,7 @@ public class SearchChatGui extends Gui {
 
         ChatLine chatLine = new ChatLine(updateCounter, chatComponent, chatLineId);
 
-        sortChatLine(chatLine, this.sortValue, MathHelper.floor_float((float) this.getChatWidth() / this.getChatScale())+1);
+        sortChatLine(chatLine, this.sortValue, MathHelper.floor_float((float) this.getChatWidth() / this.getChatScale()) + 1);
         this.chatLines.add(chatLine);
     }
 

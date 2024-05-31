@@ -16,6 +16,7 @@ import com.google.gson.JsonObject;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.network.NetworkPlayerInfo;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
@@ -187,7 +188,7 @@ public class MiscListener implements Listener {
     public static final SearchChatGui searchChat = new SearchChatGui(Minecraft.getMinecraft());
 
     @SubscribeEvent
-    public void searchInChat(RenderGameOverlayEvent.Post event) {
+    public void searchInChat(RenderGameOverlayEvent.Chat event) {
         if (event.type == RenderGameOverlayEvent.ElementType.CHAT) {
             if (enableSearchChat) {
                 if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
@@ -195,7 +196,12 @@ public class MiscListener implements Listener {
                     mc.gameSettings.chatVisibility = EntityPlayer.EnumChatVisibility.FULL;
                     return;
                 }
+
+                GlStateManager.pushMatrix();
+                GlStateManager.translate((float)event.posX, (float)event.posY, 0.0F);
                 searchChat.drawChat(0);
+                GlStateManager.popMatrix();
+
                 if (!(Minecraft.getMinecraft().currentScreen instanceof GunterGuiChat)) {
                     mc.gameSettings.chatVisibility = EntityPlayer.EnumChatVisibility.HIDDEN;
                     searchChat.sortChatLines("");

@@ -155,7 +155,8 @@ public class Utils {
 
     public static String toIngameTimeFormat(long time) {
         long days = time / 86400000, hours = (time % 86400000) / 3600000, minutes = (time % 3600000) / 60000, seconds = (time % 60000) / 1000;
-        return (days > 0 ? days + "d " : "") + (hours > 0 ? hours + "h " : "") + (minutes > 0 ? minutes + "m " : "") + (time == 0 ? "0s" : seconds > 0 ? seconds + "s" : "");
+        return (days > 0 ? days + "d " : "") + (hours == 0 && time >= 3600000 ? "0s" : hours > 0 ? hours + "h " : "") +
+                (minutes == 0 && time >= 60000 ? "0s" : minutes > 0 ? minutes + "m " : "") + (seconds == 0 ? "0s" : seconds > 0 ? seconds + "s" : "");
     }
 
     public static String toIngameNumberFormat(long money) {

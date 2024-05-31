@@ -1,5 +1,6 @@
 package com.GunterPro7.overlay;
 
+import com.GunterPro7.Main;
 import com.GunterPro7.Setting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -33,7 +34,7 @@ public class GunterEssOverlay extends AbstractOverlay {
         super.initGui();
         buttonRelations.clear();
 
-        title.func_175202_a("§lGunter Essentials");
+        title.func_175202_a("§lGunter Essentials " + Main.VERSION);
         title.func_175202_a("");
         title.func_175202_a("by GunterPro7 f. DerKatzenLord");
 

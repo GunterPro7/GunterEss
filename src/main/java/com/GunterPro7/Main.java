@@ -13,6 +13,7 @@ import com.GunterPro7.utils.TimeUtils;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiNewChat;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
 import net.minecraft.util.ChatComponentText;
@@ -36,12 +37,12 @@ import java.util.Optional;
 
 import static com.GunterPro7.listener.MiscListener.collectionJson;
 
-@Mod(modid = "GunterEss", useMetadata = true)
+@Mod(modid = Main.MODID, useMetadata = true, version = Main.VERSION, guiFactory = "com.GunterPro7.GunterEssGuiFactory")
 public class Main {
-    public static final String MOD_ID = "GunterEss";
+    public static final String MODID = "GunterEss";
+    public static final String VERSION = "1.4.1";
     public static final Minecraft mc = Minecraft.getMinecraft();
     public static boolean starting = true;
-    public static final String VERSION = "1.4.1";
     public static final boolean DEV = false;
     public static File configDirectory;
     public boolean updateAvailable;
@@ -103,7 +104,7 @@ public class Main {
         JsonUtils.fetch("http://49.12.101.156/GunterEss/VersionCheck.php?VERSION=" + VERSION + "&DEV=" + DEV, response -> {
             if (Boolean.parseBoolean(response.split("\"update_available\":")[1].split(",")[0])) {
                 if (!Setting.AUTO_UPDATES.isEnabled()) {
-                    sendUpdateAvailable();
+                    TimeUtils.addToQueue(1500, this::sendUpdateAvailable);
                 } else {
                     updateAvailable = true;
                     Optional<ByteArrayOutputStream> optionalData = JsonUtils.downloadFile("http://49.12.101.156/GunterEss/latest.jar");
@@ -111,7 +112,7 @@ public class Main {
                         gunterEssByteData = optionalData.get();
                         System.out.println("Newest Version of GunterEss downloaded!");
                     } else {
-                        sendUpdateAvailable();
+                        TimeUtils.addToQueue(1500, this::sendUpdateAvailable);
                     }
                 }
             }

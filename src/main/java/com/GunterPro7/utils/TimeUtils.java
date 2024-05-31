@@ -57,7 +57,7 @@ public class TimeUtils implements Listener {
             map.remove(key);
         }
 
-        if (messagesToChat.size() > 0 && Minecraft.getMinecraft().thePlayer != null) {
+        if (!messagesToChat.isEmpty() && Minecraft.getMinecraft().thePlayer != null) {
             for (IChatComponent iChatComponent : messagesToChat) {
                 AdvancedChat.sendPrivateMessage(iChatComponent, true);
             }

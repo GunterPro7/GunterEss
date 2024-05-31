@@ -79,4 +79,8 @@ public class FarmingTracker implements Listener {
             ingameUI.drawInfoBox(Setting.FARMING_OVERLAY, false);
         }
     }
+
+    public static void resetAll() {
+        moneyItems.clear();
+    }
 }

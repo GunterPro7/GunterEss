@@ -41,7 +41,7 @@ public class GemstoneDisplay implements Listener {
                 lines.add(line);
             });
 
-            if (lines.size() > 0) {
+            if (!lines.isEmpty()) {
                 CustomIngameUI ingameUI = new CustomIngameUI(0x00000000, 0xFF000000, lines);
                 ingameUI.drawInfoBox(Setting.GEMSTONE_DISPLAY, false);
             }
@@ -63,5 +63,13 @@ public class GemstoneDisplay implements Listener {
                 gemstoneIntMap.put(gemstone, new MoneyItem(gemstone, count));
             }
         }
+    }
+
+    public static void resetGemstone(Gemstone gemstone) {
+        gemstoneIntMap.remove(gemstone);
+    }
+
+    public static void resetAll() {
+        gemstoneIntMap.clear();
     }
 }

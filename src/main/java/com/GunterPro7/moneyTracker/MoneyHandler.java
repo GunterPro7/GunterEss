@@ -34,6 +34,12 @@ public class MoneyHandler {
         lastUpdate = System.currentTimeMillis();
     }
 
+    public void reset() {
+        currentMoney = 0;
+        started = false;
+        activeTime = 0;
+    }
+
     public void register(Map<? extends SkyblockItem, MoneyItem> map) {
         moneyItems.addAll(map.values());
     }
