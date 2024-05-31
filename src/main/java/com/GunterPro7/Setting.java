@@ -23,7 +23,7 @@ public class Setting {
     public static final Setting SEND_CHECK_FOR_7MESSAGE = new Setting(true);
     public static final Setting AUTO_FISHING = new Setting(false);
     public static final Setting ITEM_LORE_SCROLL = new Setting(true);
-    public static final Position GEMSTONE_DISPLAY = new Position(true, 50, 200);
+    public static final Position GEMSTONE_DISPLAY = new Position(true, 0.1, 0.4);
     public static final Setting AUTO_UPDATES = new Setting(true);
     public static final Value AUTO_HARP = new Value(true, 250);
     public static final Map<String, Setting> INFO_SETTINGS = CollectionUtils.mapOf(
@@ -107,40 +107,40 @@ public class Setting {
     }
 
     public static class Position extends Setting {
-        private int offsetX;
-        private int offsetY;
+        private double offsetX;
+        private double offsetY;
         private Align align = Align.LEFT;
 
-        public Position(boolean enabled, int offsetX, int offsetY) {
+        public Position(boolean enabled, double offsetX, double offsetY) {
             super(enabled);
             this.offsetX = offsetX;
             this.offsetY = offsetY;
         }
 
-        public Position(int offsetX, int offsetY) {
+        public Position(double offsetX, double offsetY) {
             this(true, offsetX, offsetY);
         }
 
         public Position(boolean enabled) {
-            this(enabled, 50, 50);
+            this(enabled, 0.15, 0.15);
         }
 
-        public int getOffsetX() {
+        public double getOffsetX() {
             return offsetX;
         }
 
-        public void setOffsetX(int offsetX) {
+        public void setOffsetX(double offsetX) {
             this.offsetX = offsetX;
             if (!lacy) {
                 update();
             }
         }
 
-        public int getOffsetY() {
+        public double getOffsetY() {
             return offsetY;
         }
 
-        public void setOffsetY(int offsetY) {
+        public void setOffsetY(double offsetY) {
             this.offsetY = offsetY;
             if (!lacy) {
                 update();
@@ -264,8 +264,8 @@ public class Setting {
                     if (setting instanceof Position) {
                         Position pos = (Position) setting;
                         if (parts.length > 2) {
-                            pos.offsetX = Integer.parseInt(parts[1]);
-                            pos.offsetY = Integer.parseInt(parts[2]);
+                            pos.offsetX = Double.parseDouble(parts[1]);
+                            pos.offsetY = Double.parseDouble(parts[2]);
                             pos.align = Align.valueOf(parts[3]);
                         }
 
@@ -301,8 +301,8 @@ public class Setting {
                                         if (parts.length > 2) {
                                             Position position = (Position) entry.getValue();
 
-                                            position.offsetX = Integer.parseInt(parts[1]);
-                                            position.offsetY = Integer.parseInt(parts[2]);
+                                            position.offsetX = Double.parseDouble(parts[1]);
+                                            position.offsetY = Double.parseDouble(parts[2]);
                                             position.align = Align.valueOf(parts[3]);
                                         }
                                     }

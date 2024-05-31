@@ -1,7 +1,9 @@
 package com.GunterPro7.utils;
 
+import com.GunterPro7.Main;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -51,7 +53,18 @@ public class McUtils {
     }
 
     public static int getGuiScale() {
-        return mc.gameSettings.guiScale == 0 ? getMaxGuiScale() : mc.gameSettings.guiScale;
+        int maxGuiScale = getMaxGuiScale();
+        int guiScale = mc.gameSettings.guiScale == 0 ? maxGuiScale : mc.gameSettings.guiScale;
+
+        return Math.min(maxGuiScale, guiScale);
+    }
+
+    public static int getScaleWidth() {
+        return mc.displayWidth / getGuiScale();
+    }
+
+    public static int getScaleHeight() {
+        return mc.displayHeight / getGuiScale();
     }
 
     public static int getPing() {

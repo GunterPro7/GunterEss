@@ -14,6 +14,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiNewChat;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
 import net.minecraft.util.ChatComponentText;
@@ -42,6 +43,7 @@ public class Main {
     public static final String MODID = "GunterEss";
     public static final String VERSION = "1.4.1";
     public static final Minecraft mc = Minecraft.getMinecraft();
+    public static final ScaledResolution scaledResolution = new ScaledResolution(mc);
     public static boolean starting = true;
     public static final boolean DEV = false;
     public static File configDirectory;

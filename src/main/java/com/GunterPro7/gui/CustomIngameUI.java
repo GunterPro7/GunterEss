@@ -1,5 +1,6 @@
 package com.GunterPro7.gui;
 
+import com.GunterPro7.Main;
 import com.GunterPro7.Setting;
 import com.GunterPro7.listener.AdvancedChat;
 import com.GunterPro7.utils.McUtils;
@@ -52,11 +53,12 @@ public class CustomIngameUI {
         drawInfoBox(position.getOffsetX(), position.getOffsetY(), background);
     }
 
+    public void drawInfoBox(double offsetX, double offsetY, boolean background) {
+        drawInfoBox((int) (McUtils.getScaleWidth() * offsetX), (int) (McUtils.getScaleHeight() * offsetY), background);
+    }
+
     public void drawInfoBox(int offsetX, int offsetY, boolean background) {
         FontRenderer fontRenderer = mc.fontRendererObj;
-
-        int boxX = offsetX;
-        int boxY = offsetY;
 
         int textHeight = fontRenderer.FONT_HEIGHT;
         int currentHeight = textHeight + PADDING * 2;
@@ -71,6 +73,12 @@ public class CustomIngameUI {
 
         int boxWidth = maxWidth + PADDING * 2;
         int boxHeight = currentHeight * lines.length;
+
+        int scaleWidth = McUtils.getScaleWidth();
+        int scaleHeight = McUtils.getScaleHeight();
+
+        int boxX = offsetX;
+        int boxY = offsetY + fontRenderer.FONT_HEIGHT > scaleHeight ? scaleHeight - fontRenderer.FONT_HEIGHT : offsetY;
 
         if (align == Align.MIDDLE) {
             boxX -= boxWidth / 2;

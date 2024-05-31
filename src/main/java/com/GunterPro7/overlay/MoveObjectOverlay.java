@@ -4,6 +4,7 @@ import com.GunterPro7.Main;
 import com.GunterPro7.Setting;
 import com.GunterPro7.gui.Align;
 import com.GunterPro7.gui.CustomIngameUI;
+import com.GunterPro7.utils.McUtils;
 import com.GunterPro7.utils.Utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -31,16 +32,16 @@ public class MoveObjectOverlay extends AbstractOverlay {
         this.position = position;
         position.setLacy(true);
 
-        this.offsetX = position.getOffsetX();
-        this.offsetY = position.getOffsetY();
-
         this.align = position.getAlign();
         customIngameUI.align(align);
     }
 
     @Override
-    public void initGui() {
+    public void initGui() { // TODO when resizing save to "offsetX" the latest location, dont just reset it with the setting value
         super.initGui();
+
+        this.offsetX = (int) (position.getOffsetX() * McUtils.getScaleWidth());
+        this.offsetY = (int) (position.getOffsetY() * McUtils.getScaleHeight());
 
         saveButton = new GuiButton(0, width / 2 - 100, (int) (height / 1.25), "Save");
         alignButton = new GuiButton(0, width / 2 - 100, (int) (height / 1.25) - BUTTON_HEIGHT, "Align: " + Utils.toTitleCase(align.name()));
@@ -91,8 +92,8 @@ public class MoveObjectOverlay extends AbstractOverlay {
         super.actionPerformed(button);
 
         if (button == saveButton) {
-            position.setOffsetX(offsetX);
-            position.setOffsetY(offsetY);
+            position.setOffsetX((double) offsetX / McUtils.getScaleWidth());
+            position.setOffsetY((double) offsetY / McUtils.getScaleHeight());
             position.setAlign(align);
             position.update();
             position.setLacy(false);
@@ -110,7 +111,7 @@ public class MoveObjectOverlay extends AbstractOverlay {
             button.displayString = "Align: " + Utils.toTitleCase(align.name());
         } else if (button == resetButton) {
             align = Align.LEFT;
-            offsetX = 50;
+            offsetX = reCalcMouseX(50);
             offsetY = 50;
         }
     }
