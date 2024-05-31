@@ -110,7 +110,8 @@ public class InformationListener implements Listener {
         CustomIngameUI customIngameUI = new CustomIngameUI(0x00000000, 0x00000000,
                 Setting.INFO_PREFIX_COLOR + key + Setting.INFO_SUFFIX_COLOR + ": " + Setting.INFO_VALUE_COLOR + v);
         customIngameUI.align(position.getAlign());
-        customIngameUI.drawInfoBox(position.getOffsetX(), position.getOffsetY(), true);
+
+        customIngameUI.drawInfoBox(position, true);
     }
 
 

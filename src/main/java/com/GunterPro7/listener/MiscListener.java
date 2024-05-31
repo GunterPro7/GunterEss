@@ -70,7 +70,7 @@ public class MiscListener implements Listener {
                 args.add("§f" + collection.getSimpleName() + "/ h: " + collectionDropsPerHour);
 
                 CustomIngameUI customIngameUI = new CustomIngameUI(0x501E1E1E, 0x501E1E1E, args);
-                customIngameUI.drawInfoBox(Setting.COLLECTION_OVERLAY.getOffsetX(), Setting.COLLECTION_OVERLAY.getOffsetY(), true);
+                customIngameUI.drawInfoBox(Setting.COLLECTION_OVERLAY, true);
             }
         }
     }

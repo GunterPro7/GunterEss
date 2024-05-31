@@ -1,14 +1,18 @@
 package com.GunterPro7.overlay;
 
+import com.GunterPro7.Main;
 import com.GunterPro7.Setting;
 import com.GunterPro7.gui.Align;
 import com.GunterPro7.gui.CustomIngameUI;
+import com.GunterPro7.gui.Side;
 import com.GunterPro7.utils.Utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 
 import java.io.IOException;
+
+import static com.GunterPro7.Main.mc;
 
 public class MoveObjectOverlay extends AbstractOverlay {
     private final CustomIngameUI customIngameUI;
@@ -17,6 +21,7 @@ public class MoveObjectOverlay extends AbstractOverlay {
     private boolean allowMove;
     private GuiButton saveButton;
     private GuiButton alignButton;
+    private GuiButton resetButton;
     private final Setting.Position position;
 
     private Align align;
@@ -40,8 +45,11 @@ public class MoveObjectOverlay extends AbstractOverlay {
 
         saveButton = new GuiButton(0, width / 2 - 100, (int) (height / 1.25), "Save");
         alignButton = new GuiButton(0, width / 2 - 100, (int) (height / 1.25) - BUTTON_HEIGHT, "Align: " + Utils.toTitleCase(align.name()));
+        resetButton = new GuiButton(0, width / 2 - 100, (int) (height / 1.25) - BUTTON_HEIGHT * 2, "Reset");
+
         buttonList.add(saveButton);
         buttonList.add(alignButton);
+        buttonList.add(resetButton);
     }
 
 
@@ -89,7 +97,7 @@ public class MoveObjectOverlay extends AbstractOverlay {
             position.setAlign(align);
             position.update();
             position.setLacy(false);
-            Minecraft.getMinecraft().displayGuiScreen(lastScreen);
+            mc.displayGuiScreen(lastScreen);
         } else if (button == alignButton) {
             align = Align.nextAlign(align);
 
@@ -101,6 +109,10 @@ public class MoveObjectOverlay extends AbstractOverlay {
                 offsetX -= customIngameUI.boxWidth + CustomIngameUI.PADDING * 2;
             }
             button.displayString = "Align: " + Utils.toTitleCase(align.name());
+        } else if (button == resetButton) {
+            align = Align.LEFT;
+            offsetX = 50;
+            offsetY = 50;
         }
     }
 

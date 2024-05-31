@@ -1,6 +1,8 @@
 package com.GunterPro7.gui;
 
 import com.GunterPro7.Setting;
+import com.GunterPro7.listener.AdvancedChat;
+import com.GunterPro7.utils.McUtils;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 
@@ -53,9 +55,8 @@ public class CustomIngameUI {
     public void drawInfoBox(int offsetX, int offsetY, boolean background) {
         FontRenderer fontRenderer = mc.fontRendererObj;
 
-        //String text = "Crops: " + MiscListener.cropTimeList.size();
-        int boxX = offsetX; // X-Position des GUI, hier 12 Pixel rechts von der Maus
-        int boxY = offsetY; // Y-Position des GUI, hier 12 Pixel unter der Maus
+        int boxX = offsetX;
+        int boxY = offsetY;
 
         int textHeight = fontRenderer.FONT_HEIGHT;
         int currentHeight = textHeight + PADDING * 2;

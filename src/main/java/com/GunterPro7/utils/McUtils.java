@@ -10,6 +10,8 @@ import net.minecraft.nbt.NBTTagList;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.GunterPro7.Main.mc;
+
 // This Class if for Utils related to Minecraft
 public class McUtils {
     private static final List<String> ignoredMessages = new ArrayList<>();
@@ -37,7 +39,7 @@ public class McUtils {
         return Minecraft.getMinecraft().thePlayer != null;
     }
 
-    public static int getMaxGuiScale() {
+    private static int getMaxGuiScale() {
         Minecraft mc = Minecraft.getMinecraft();
         int scaleFactor = 1;
 
@@ -46,6 +48,10 @@ public class McUtils {
         }
 
         return scaleFactor;
+    }
+
+    public static int getGuiScale() {
+        return mc.gameSettings.guiScale == 0 ? getMaxGuiScale() : mc.gameSettings.guiScale;
     }
 
     public static int getPing() {

@@ -87,7 +87,7 @@ public class ItemLoreScroller implements Listener {
     }
 
     private static int getMaxLines() {
-        int scaling = mc.gameSettings.guiScale == 0 ? McUtils.getMaxGuiScale() : mc.gameSettings.guiScale;
+        int scaling = McUtils.getGuiScale();
         int fontHeight = mc.fontRendererObj.FONT_HEIGHT + 1;
 
         return mc.displayHeight / scaling / fontHeight - 3;

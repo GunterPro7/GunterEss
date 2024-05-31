@@ -19,7 +19,7 @@ public class MoneyTrackerDisplay implements Listener {
                     Utils.convertToColorString("Money: " + Utils.toIngameNumberFormat(moneyHandler.getCurrentMoney())),
                     Utils.convertToColorString("Money/h: " + Utils.toIngameNumberFormat((long) moneyHandler.getMoneyPerHour()))};
 
-            customIngameUI.drawInfoBox(Setting.MONEY_OVERLAY.getOffsetX(), Setting.MONEY_OVERLAY.getOffsetY(), true);
+            customIngameUI.drawInfoBox(Setting.MONEY_OVERLAY, true);
         }
     }
 }

@@ -248,7 +248,7 @@ public class Setting {
         try {
             initSetting(object, name, settings, field);
         } catch (Exception e) {
-            System.out.println("GunterEss > Exception occured while reading Settings file:");
+            System.out.println("GunterEss > Exception occurred while reading Settings file:");
             e.printStackTrace();
         }
     }

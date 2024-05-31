@@ -378,6 +378,8 @@ public class AdvancedChat implements Listener {
     }
 
     public static void sendPrivateMessage(IChatComponent iChatComponent, boolean geMark) {
+        if (mc.thePlayer == null) return;
+
         if (geMark) {
             iChatComponent = new ChatComponentText("§a§lGunterEss > §r").appendSibling(iChatComponent);
         }

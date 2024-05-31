@@ -11,10 +11,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Callable;
 
 public class TimeUtils implements Listener {
     private static final Map<Long, List<Runnable>> map = new HashMap<>();
     private static final List<IChatComponent> messagesToChat = new ArrayList<>();
+    private static final List<Callable<Boolean>> actionsWhenLoaded = new ArrayList<>();
 
     public TimeUtils() {
 
@@ -40,8 +42,12 @@ public class TimeUtils implements Listener {
         runnables.add(f);
     }
 
+    public static void addToWaitingQueue(Callable<Boolean> callable) {
+        actionsWhenLoaded.add(callable);
+    }
+
     @SubscribeEvent
-    public void onTick(TickEvent.ClientTickEvent event) {
+    public void onTick(TickEvent.ClientTickEvent event) throws Exception {
         List<Long> keysToRemove = new ArrayList<>();
 
         for (Map.Entry<Long, List<Runnable>> entry : map.entrySet()) {
@@ -62,6 +68,16 @@ public class TimeUtils implements Listener {
                 AdvancedChat.sendPrivateMessage(iChatComponent, true);
             }
             messagesToChat.clear();
+        }
+
+        if (!actionsWhenLoaded.isEmpty() && Minecraft.getMinecraft().thePlayer != null) {
+            actionsWhenLoaded.removeIf(callable -> {
+                try {
+                    return callable.call();
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            });
         }
     }
 }
