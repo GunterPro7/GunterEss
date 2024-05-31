@@ -64,7 +64,7 @@ public class McUtils {
     }
 
     public static int getScaleHeight() {
-        return mc.displayHeight / getGuiScale();
+        return mc.displayHeight / getGuiScale(); // TODO ganz unten ist da bissl fläche, wsh is es zu groß wegen der leiste oben ig?
     }
 
     public static int getPing() {
