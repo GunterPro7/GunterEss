@@ -1,5 +1,6 @@
 package com.GunterPro7.utils;
 
+import com.GunterPro7.listener.AdvancedChat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.network.NetworkPlayerInfo;
@@ -64,5 +65,19 @@ public class McUtils {
 
     public static boolean isUselessMessage(String text) {
         return text.matches("▬+|-+") || ignoredMessages.contains(text);
+    }
+
+    public static String readRowFromTabList(String containingText) {
+        for (final NetworkPlayerInfo info : mc.getNetHandler().getPlayerInfoMap()) {
+            if (info != null && info.getDisplayName() != null) {
+                String text = info.getDisplayName().getFormattedText();
+                if (text.contains(containingText)) {
+                    return text;
+                }
+            }
+
+        }
+
+        return "";
     }
 }
