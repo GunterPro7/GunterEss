@@ -8,6 +8,7 @@
   "client": [
     "MixinGuiMainMenu",
     "MixinGuiNewChat",
-    "MixinNetHandlerPlayClient"
+    "MixinNetHandlerPlayClient",
+    "MixinSoundManager"
   ]
 }

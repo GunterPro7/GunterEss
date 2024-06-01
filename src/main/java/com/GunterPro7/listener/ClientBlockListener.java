@@ -4,6 +4,7 @@ import com.GunterPro7.event.ClientBlockChangeEvent;
 import com.GunterPro7.utils.MinecraftBlock;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.ISound;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraftforge.client.event.sound.SoundEvent;
@@ -18,10 +19,9 @@ public class ClientBlockListener implements Listener {
     // Minecraft Ingame Sound needs to be turned on for this to work!
     private static final List<BlockCheckTask> tasksNextTick = new ArrayList<>();
 
-    @SubscribeEvent
-    public void onSound(final SoundEvent.SoundSourceEvent event) {
-        if (event.name.startsWith("dig.")) {
-            BlockPos blockPos = new BlockPos(event.sound.getXPosF(), event.sound.getYPosF(), event.sound.getZPosF());
+    public static void onSound(final ISound sound) {
+        if (sound.getSoundLocation().getResourcePath().startsWith("dig.")) {
+            BlockPos blockPos = new BlockPos(sound.getXPosF(), sound.getYPosF(), sound.getZPosF());
 
             MovingObjectPosition lookingAt = Minecraft.getMinecraft().objectMouseOver;
             if (lookingAt != null && lookingAt.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
