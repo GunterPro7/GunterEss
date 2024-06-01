@@ -31,9 +31,9 @@ public class AutoDungeonJoiner extends ContainerInformation implements Listener 
     public List<DungeonInformation> getDungeonPageInformation(Container container) {
         List<ItemContainerInformation> information = getContainerInformation(container);
         List<DungeonInformation> dungeonInformation = new ArrayList<>();
-        //container.slotClick(2, 0, 0, Minecraft.getMinecraft().thePlayer);
+        //container.slotClick(2, 0, 0, mc.thePlayer);
 
-        GuiScreen currentScreen = Minecraft.getMinecraft().currentScreen;
+        GuiScreen currentScreen = mc.currentScreen;
         int slot = 2;
         sendClickPacket(container.windowId, slot, 0, 0, container.getSlot(slot));
 

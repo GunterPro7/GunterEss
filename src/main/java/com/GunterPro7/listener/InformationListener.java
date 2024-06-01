@@ -23,6 +23,8 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
+import static com.GunterPro7.Main.mc;
+
 public class InformationListener implements Listener {
 
     private static final DecimalFormat DECIMAL_FORMAT_1 = new DecimalFormat("0.0;-0.0");
@@ -78,8 +80,8 @@ public class InformationListener implements Listener {
 
             // Calculating Walking Speed
             if (Setting.INFO_SETTINGS.get("Speed").isEnabled()) {
-                double destX = Main.mc.thePlayer.posX - Main.mc.thePlayer.prevPosX;
-                double destY = Main.mc.thePlayer.posZ - Main.mc.thePlayer.prevPosZ;
+                double destX = mc.thePlayer.posX - mc.thePlayer.prevPosX;
+                double destY = mc.thePlayer.posZ - mc.thePlayer.prevPosZ;
 
                 informationValues.put("Speed", DECIMAL_FORMAT_2.format(MathHelper.sqrt_double(destX * destX + destY * destY) * 20));
             }
@@ -118,8 +120,8 @@ public class InformationListener implements Listener {
     // Set Information
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
-        if (Minecraft.getMinecraft().thePlayer != null) {
-            EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
+        if (mc.thePlayer != null) {
+            EntityPlayerSP player = mc.thePlayer;
 
             BlockPos curPos = player.getPosition();
 
@@ -188,7 +190,7 @@ public class InformationListener implements Listener {
 
                 // Ingame Day
                 if (Setting.INFO_SETTINGS.get("Gameday").isEnabled()) {
-                    informationValues.put("Gameday", DECIMAL_FORMAT_2.format((double) Minecraft.getMinecraft().theWorld.getWorldTime() / 24_000));
+                    informationValues.put("Gameday", DECIMAL_FORMAT_2.format((double) mc.theWorld.getWorldTime() / 24_000));
                 }
 
                 lacyLastTime = System.currentTimeMillis();

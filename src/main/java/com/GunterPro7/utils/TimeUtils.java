@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
+import static com.GunterPro7.Main.mc;
+
 public class TimeUtils implements Listener {
     private static final Map<Long, List<Runnable>> map = new HashMap<>();
     private static final List<IChatComponent> messagesToChat = new ArrayList<>();
@@ -63,14 +65,14 @@ public class TimeUtils implements Listener {
             map.remove(key);
         }
 
-        if (!messagesToChat.isEmpty() && Minecraft.getMinecraft().thePlayer != null) {
+        if (!messagesToChat.isEmpty() && mc.thePlayer != null) {
             for (IChatComponent iChatComponent : messagesToChat) {
                 AdvancedChat.sendPrivateMessage(iChatComponent, true);
             }
             messagesToChat.clear();
         }
 
-        if (!actionsWhenLoaded.isEmpty() && Minecraft.getMinecraft().thePlayer != null) {
+        if (!actionsWhenLoaded.isEmpty() && mc.thePlayer != null) {
             actionsWhenLoaded.removeIf(callable -> {
                 try {
                     return callable.call();

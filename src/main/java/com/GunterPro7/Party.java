@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.GunterPro7.Main.mc;
+
 public class Party {
     public static final List<Party> parties = new ArrayList<>();
     private static Party lastParty;
@@ -97,12 +99,12 @@ public class Party {
     }
 
     public boolean isOwner() {
-        return Minecraft.getMinecraft().thePlayer.getGameProfile().getName().equals(owner);
+        return mc.thePlayer.getGameProfile().getName().equals(owner);
     }
 
     public void sendMessage(String message) throws IOException {
         BackendService.getInstance().send("party;" + getName() + ";msg;" + message);
-        AdvancedChat.sendPrivateMessage(getName() + " > " + Minecraft.getMinecraft().thePlayer.getGameProfile().getName() + ": " + message);
+        AdvancedChat.sendPrivateMessage(getName() + " > " + mc.thePlayer.getGameProfile().getName() + ": " + message);
     }
 
     public void leave() throws IOException {
@@ -200,7 +202,7 @@ public class Party {
     public static void processCommand(String[] command) throws IOException {
         String com = command[0];
         if (com.equalsIgnoreCase("create")) {
-            Party.create(command[1], Minecraft.getMinecraft().thePlayer.getGameProfile().getName());
+            Party.create(command[1], mc.thePlayer.getGameProfile().getName());
             // TODO BACKEND-SIDE: a party can be created with the same name again. that results in messages sent to that party via a "solo" party. Always check this on backend side, and send an error as result to the client if it exists
         } else if (com.equalsIgnoreCase("help")) {
             AdvancedChat.sendPrivateMessage("§e§lGunterEss party System!§r Available Commands: \n-> §a§lchat§r <party-name> <message>\n" +

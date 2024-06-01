@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Objects;
 
+import static com.GunterPro7.Main.mc;
+
 public class Command extends CommandBase {
     private static final String NAME = "gunteress";
 
@@ -44,7 +46,7 @@ public class Command extends CommandBase {
                 AutoKickOverlay.addIgnoredPlayer(args[1]);
             }
             if (args[0].equalsIgnoreCase("msg")) {
-                String playerFrom = Minecraft.getMinecraft().thePlayer.getGameProfile().getName();
+                String playerFrom = mc.thePlayer.getGameProfile().getName();
                 String playerTo = args[1];
                 String message = String.join(" ", Arrays.copyOfRange(args, 2, args.length));
                 try {

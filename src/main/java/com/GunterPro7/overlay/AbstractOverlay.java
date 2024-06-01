@@ -1,5 +1,6 @@
 package com.GunterPro7.overlay;
 
+import com.GunterPro7.Main;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiLabel;
@@ -30,7 +31,7 @@ public abstract class AbstractOverlay extends GuiScreen {
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
         if (keyCode == 1 && lastScreen != null) {
-            Minecraft.getMinecraft().displayGuiScreen(lastScreen);
+            Main.mc.displayGuiScreen(lastScreen);
         } else {
             super.keyTyped(typedChar, keyCode);
         }

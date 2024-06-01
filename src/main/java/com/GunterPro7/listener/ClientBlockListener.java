@@ -15,6 +15,8 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.GunterPro7.Main.mc;
+
 public class ClientBlockListener implements Listener {
     // Minecraft Ingame Sound needs to be turned on for this to work!
     private static final List<BlockCheckTask> tasksNextTick = new ArrayList<>();
@@ -23,7 +25,7 @@ public class ClientBlockListener implements Listener {
         if (sound.getSoundLocation().getResourcePath().startsWith("dig.")) {
             BlockPos blockPos = new BlockPos(sound.getXPosF(), sound.getYPosF(), sound.getZPosF());
 
-            MovingObjectPosition lookingAt = Minecraft.getMinecraft().objectMouseOver;
+            MovingObjectPosition lookingAt = mc.objectMouseOver;
             if (lookingAt != null && lookingAt.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
                 BlockPos pos = lookingAt.getBlockPos();
                 if (!pos.equals(blockPos)) {
@@ -31,15 +33,15 @@ public class ClientBlockListener implements Listener {
                 }
             }
 
-            if (!Minecraft.getMinecraft().thePlayer.isSwingInProgress) {
+            if (!mc.thePlayer.isSwingInProgress) {
                 return;
             }
 
-            int id = Block.getIdFromBlock(Minecraft.getMinecraft().theWorld.getBlockState(blockPos).getBlock());
-            int dataValue = Minecraft.getMinecraft().theWorld.getBlockState(blockPos).getBlock().getMetaFromState(Minecraft.getMinecraft().theWorld.getBlockState(blockPos));
+            int id = Block.getIdFromBlock(mc.theWorld.getBlockState(blockPos).getBlock());
+            int dataValue = mc.theWorld.getBlockState(blockPos).getBlock().getMetaFromState(mc.theWorld.getBlockState(blockPos));
 
-            tasksNextTick.add(new BlockCheckTask(blockPos, Minecraft.getMinecraft().theWorld.getBlockState(blockPos).getBlock().getLocalizedName(),
-                    new MinecraftBlock(Minecraft.getMinecraft().theWorld.getBlockState(blockPos).getBlock(), dataValue)));
+            tasksNextTick.add(new BlockCheckTask(blockPos, mc.theWorld.getBlockState(blockPos).getBlock().getLocalizedName(),
+                    new MinecraftBlock(mc.theWorld.getBlockState(blockPos).getBlock(), dataValue)));
         }
     }
 
@@ -48,7 +50,7 @@ public class ClientBlockListener implements Listener {
         while (!tasksNextTick.isEmpty()) {
             BlockCheckTask blockCheckTask = tasksNextTick.get(0);
             tasksNextTick.remove(0);
-            String newBlock = Minecraft.getMinecraft().theWorld.getBlockState(blockCheckTask.getBlockPos()).getBlock().getLocalizedName();
+            String newBlock = mc.theWorld.getBlockState(blockCheckTask.getBlockPos()).getBlock().getLocalizedName();
             if (!newBlock.equals(blockCheckTask.getOldBlock())) {
                 MinecraftForge.EVENT_BUS.post(new ClientBlockChangeEvent(blockCheckTask.getBlockPos(), blockCheckTask.getMinecraftBlock()));
             }

@@ -1,5 +1,6 @@
 package com.GunterPro7.listener;
 
+import com.GunterPro7.Main;
 import com.GunterPro7.gui.SearchChatGui;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiChat;
@@ -21,7 +22,7 @@ public class GunterGuiChat extends GuiChat implements Listener {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        drawString(fontRendererObj, "Search:", 1, (int) (this.mc.displayHeight / (this.mc.gameSettings.guiScale == 0 ? 4 : this.mc.gameSettings.guiScale) - Minecraft.getMinecraft().fontRendererObj.FONT_HEIGHT * 2.75), 0xFFFFFF);
+        drawString(fontRendererObj, "Search:", 1, (int) (this.mc.displayHeight / (this.mc.gameSettings.guiScale == 0 ? 4 : this.mc.gameSettings.guiScale) - Main.mc.fontRendererObj.FONT_HEIGHT * 2.75), 0xFFFFFF);
 
         IChatComponent ichatcomponent = searchChat.getChatComponent(Mouse.getX(), Mouse.getY());
         if (ichatcomponent != null && ichatcomponent.getChatStyle().getChatHoverEvent() != null) {

@@ -17,6 +17,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.GunterPro7.Main.mc;
+
 public class FarmingTracker implements Listener {
     private static final FarmingTracker INSTANCE = new FarmingTracker();
     private static final Map<Crop, MoneyItem> moneyItems = new HashMap<>();
@@ -47,7 +49,7 @@ public class FarmingTracker implements Listener {
     public void onBlockBreak(ClientBlockChangeEvent event) {
         Crop crop = Crop.valueOf(event.getMinecraftBlock());
 
-        EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
+        EntityPlayerSP player = mc.thePlayer;
 
         int fortune = 500;
         int extraFortune = 0; // TODO not ready

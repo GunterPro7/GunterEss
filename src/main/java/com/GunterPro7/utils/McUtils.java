@@ -36,11 +36,10 @@ public class McUtils {
     }
 
     public static boolean mcLoaded() {
-        return Minecraft.getMinecraft().thePlayer != null;
+        return mc.thePlayer != null;
     }
 
     private static int getMaxGuiScale() {
-        Minecraft mc = Minecraft.getMinecraft();
         int scaleFactor = 1;
 
         while (mc.displayWidth / (scaleFactor + 1) >= 320 && mc.displayHeight / (scaleFactor + 1) >= 240) {
@@ -55,7 +54,7 @@ public class McUtils {
     }
 
     public static int getPing() {
-        NetworkPlayerInfo networkPlayerInfo = Minecraft.getMinecraft().getNetHandler().getPlayerInfo(Minecraft.getMinecraft().thePlayer.getUniqueID());
+        NetworkPlayerInfo networkPlayerInfo = mc.getNetHandler().getPlayerInfo(mc.thePlayer.getUniqueID());
         if (networkPlayerInfo != null) {
             return networkPlayerInfo.getResponseTime();
         } else {

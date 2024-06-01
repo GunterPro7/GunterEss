@@ -1,5 +1,6 @@
 package com.GunterPro7.overlay;
 
+import com.GunterPro7.Main;
 import com.GunterPro7.listener.AdvancedChat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -15,7 +16,7 @@ public class AutoKickOverlay extends AbstractOverlay {
     private GuiTextField textField0;
     private final List<GuiButton> localButtonList = new ArrayList<>();
     public final static boolean[] values = new boolean[]{false, false, false, false, false};
-    private static GuiTextField textField1 = new GuiTextField(0, Minecraft.getMinecraft().fontRendererObj, 0, 0, 200, 20);
+    private static GuiTextField textField1 = new GuiTextField(0, Main.mc.fontRendererObj, 0, 0, 200, 20);
 
     public AutoKickOverlay(GuiScreen lastScreen) {
         super(lastScreen);

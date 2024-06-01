@@ -133,7 +133,7 @@ public class AdvancedChat implements Listener {
         if (!text.trim().isEmpty() && false) {
             event.setText(text + "|GunterEss");
 
-            //String playerName = Minecraft.getMinecraft().thePlayer.getGameProfile().getName();
+            //String playerName = mc.thePlayer.getGameProfile().getName();
             //BackendService.getInstance().send(String.format("gmsg;%s;%s;%s" , playerName, System.currentTimeMillis(), text));
             // Syntax: gmsg | playername | timestamp | message
         }

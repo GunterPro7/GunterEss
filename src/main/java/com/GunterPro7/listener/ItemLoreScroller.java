@@ -25,8 +25,8 @@ public class ItemLoreScroller implements Listener {
     @SubscribeEvent
     public void onScroll(ClientMouseEvent.Scroll event) {
         if (McUtils.mcLoaded()) {
-            if (Minecraft.getMinecraft().currentScreen instanceof GuiContainer) {
-                Slot slot = ((GuiContainer) Minecraft.getMinecraft().currentScreen).getSlotUnderMouse();
+            if (mc.currentScreen instanceof GuiContainer) {
+                Slot slot = ((GuiContainer) mc.currentScreen).getSlotUnderMouse();
                 if (slot != null) {
                     ItemStack item = slot.getStack();
                     if (item != null && TOOLTIP_SCROLLS.containsKey(item) && ITEM_TOOLTIP_LENGTH.containsKey(item)) {

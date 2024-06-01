@@ -9,6 +9,8 @@ import net.minecraft.network.play.client.C0EPacketClickWindow;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.GunterPro7.Main.mc;
+
 public class ContainerInformation implements Listener {
     public List<ItemContainerInformation> getContainerInformation(Container container) {
         List<ItemContainerInformation> list = new ArrayList<>();
@@ -24,7 +26,7 @@ public class ContainerInformation implements Listener {
     public void sendClickPacket(int windowId, int slotIndex, int mouseButton, int actionNumber, Slot slot) {
         C0EPacketClickWindow packet = new C0EPacketClickWindow(windowId, slotIndex, mouseButton, actionNumber, slot.getStack(), (short) 0);
         // Sende das Paket an den Server
-        Minecraft.getMinecraft().getNetHandler().getNetworkManager().sendPacket(packet);
+        mc.getNetHandler().getNetworkManager().sendPacket(packet);
     }
 
     public static class ItemContainerInformation {

@@ -78,7 +78,7 @@ public class MiscListener implements Listener {
     @SubscribeEvent
     public void onTick(final TickEvent.ClientTickEvent event) {
         if (setGunterOverlayNextTick) {
-            Minecraft.getMinecraft().displayGuiScreen(new GunterEssOverlay(null));
+            mc.displayGuiScreen(new GunterEssOverlay(null));
             setGunterOverlayNextTick = false;
         }
         if (Setting.COLLECTION_OVERLAY.isEnabled() && System.currentTimeMillis() - time > 180000) {
@@ -124,7 +124,7 @@ public class MiscListener implements Listener {
         cropTimeList.add(System.currentTimeMillis());
         if (cropTimeList.size() % 25 == 0) {
             try {
-                for (final NetworkPlayerInfo info : Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap()) {
+                for (final NetworkPlayerInfo info : mc.getNetHandler().getPlayerInfoMap()) {
                     try {
                         String text = info.getDisplayName().getFormattedText();
                         if (text.contains("Farming Fortune:")) {
@@ -166,7 +166,7 @@ public class MiscListener implements Listener {
                     String level = message.substring(index + 6, message.length() - 1);
                     String player = message.split("Party Finder > ")[1].split(" ")[0];
                     if (AutoKickOverlay.getIgnoredPlayers().contains(player)) {
-                        TimeUtils.addToQueue(350, () -> Minecraft.getMinecraft().thePlayer.sendChatMessage("/p kick " + player));
+                        TimeUtils.addToQueue(350, () -> mc.thePlayer.sendChatMessage("/p kick " + player));
                         return;
                     }
                     String gameClass = message.split(" Level")[0].split("\\(")[1];
@@ -175,7 +175,7 @@ public class MiscListener implements Listener {
                         if (b) {
                             String curClass = classList[i];
                             if (Objects.equals(gameClass, curClass)) {
-                                TimeUtils.addToQueue(350, () -> Minecraft.getMinecraft().thePlayer.sendChatMessage("/p kick " + player));
+                                TimeUtils.addToQueue(350, () -> mc.thePlayer.sendChatMessage("/p kick " + player));
                                 return;
                             }
                         }
@@ -185,7 +185,7 @@ public class MiscListener implements Listener {
         }
     }
 
-    public static final SearchChatGui searchChat = new SearchChatGui(Minecraft.getMinecraft());
+    public static final SearchChatGui searchChat = new SearchChatGui(mc);
 
     @SubscribeEvent
     public void searchInChat(RenderGameOverlayEvent.Chat event) {
@@ -202,7 +202,7 @@ public class MiscListener implements Listener {
                 searchChat.drawChat(0);
                 GlStateManager.popMatrix();
 
-                if (!(Minecraft.getMinecraft().currentScreen instanceof GunterGuiChat)) {
+                if (!(mc.currentScreen instanceof GunterGuiChat)) {
                     mc.gameSettings.chatVisibility = EntityPlayer.EnumChatVisibility.HIDDEN;
                     searchChat.sortChatLines("");
                     mc.displayGuiScreen(new GunterGuiChat(searchChat));
@@ -213,7 +213,7 @@ public class MiscListener implements Listener {
 
     @SubscribeEvent
     public void listenOnKeyboardClick(GuiScreenEvent.KeyboardInputEvent event) {
-        if (Minecraft.getMinecraft().ingameGUI.getChatGUI().getChatOpen()) {
+        if (mc.ingameGUI.getChatGUI().getChatOpen()) {
             if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL)) {
                 if (Keyboard.isKeyDown(Keyboard.KEY_F)) {
                     enableSearchChat = true;
@@ -235,7 +235,7 @@ public class MiscListener implements Listener {
     @SubscribeEvent
     public void fishingTick(TickEvent.ClientTickEvent event) {
         if (fishingRCDuration > 0) {
-            KeyBinding.setKeyBindState(Minecraft.getMinecraft().gameSettings.keyBindUseItem.getKeyCode(), fishingRCDuration != 1);
+            KeyBinding.setKeyBindState(mc.gameSettings.keyBindUseItem.getKeyCode(), fishingRCDuration != 1);
 
             fishingRCDuration--;
         }
@@ -245,7 +245,7 @@ public class MiscListener implements Listener {
 //
     //@SubscribeEvent
     //public void tickEventForDanceRoom(TickEvent.ClientTickEvent event) throws IllegalAccessException {
-    //    String title = (String) ReflectionHelper.findField(GuiIngame.class, "displayedTitle", "field_175201_x").get(Minecraft.getMinecraft().ingameGUI);
+    //    String title = (String) ReflectionHelper.findField(GuiIngame.class, "displayedTitle", "field_175201_x").get(mc.ingameGUI);
     //    if (title != null && !title.isEmpty()) {
     //        lastTitle = title;
     //    }

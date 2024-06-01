@@ -1,5 +1,6 @@
 package com.GunterPro7.gui;
 
+import com.GunterPro7.Main;
 import com.GunterPro7.listener.AdvancedChat;
 import com.GunterPro7.listener.GunterGuiChat;
 import com.google.common.collect.Lists;
@@ -81,7 +82,7 @@ public class SearchChatGui extends Gui {
                             String[] parts = string.split("((?<=(?i)" + quote + ")|(?=(?i)" + quote + "))");
 
                             StringBuilder stringBuilder = new StringBuilder();
-                            FontRenderer fontRenderer = Minecraft.getMinecraft().fontRendererObj;
+                            FontRenderer fontRenderer = Main.mc.fontRendererObj;
                             for (String part : parts) {
                                 if (sortValue.equalsIgnoreCase(part)) {
                                     int left = fontRenderer.getStringWidth(stringBuilder.toString());

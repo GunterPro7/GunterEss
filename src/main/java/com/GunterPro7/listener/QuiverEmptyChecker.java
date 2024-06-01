@@ -21,6 +21,8 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import java.util.Random;
 
+import static com.GunterPro7.Main.mc;
+
 public class QuiverEmptyChecker implements Listener {
     private static final QuiverEmptyChecker INSTANCE = new QuiverEmptyChecker();
 
@@ -68,9 +70,9 @@ public class QuiverEmptyChecker implements Listener {
 
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
-        if (Minecraft.getMinecraft().thePlayer != null) {
-            if (Minecraft.getMinecraft().thePlayer.openContainer != null) {
-                Container container = Minecraft.getMinecraft().thePlayer.openContainer;
+        if (mc.thePlayer != null) {
+            if (mc.thePlayer.openContainer != null) {
+                Container container = mc.thePlayer.openContainer;
 
                 if (container instanceof ContainerChest) {
                     IChatComponent displayName = ((ContainerChest) container).getLowerChestInventory().getDisplayName();
@@ -97,7 +99,7 @@ public class QuiverEmptyChecker implements Listener {
     }
 
     private void bowUse() {
-        EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+        EntityPlayer player = mc.thePlayer;
         ItemStack item = player.getHeldItem();
 
         if (item != null && item.getItem() instanceof ItemBow) {

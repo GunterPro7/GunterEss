@@ -26,7 +26,7 @@ public class GunterEssOverlay extends AbstractOverlay {
     }
 
     public GunterEssOverlay() {
-        this(Minecraft.getMinecraft().currentScreen);
+        this(Main.mc.currentScreen);
     }
 
     @Override

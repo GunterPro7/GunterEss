@@ -17,6 +17,8 @@ import org.lwjgl.input.Keyboard;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.GunterPro7.Main.mc;
+
 public class HarpListener implements Listener {
     private static boolean inHarpGui = false;
 
@@ -60,8 +62,8 @@ public class HarpListener implements Listener {
     @SubscribeEvent
     public void onTick(TickEvent.ClientTickEvent event) {
         if (inHarpGui && Setting.AUTO_HARP.isEnabled() && harpSong != null) {
-            if (Minecraft.getMinecraft().currentScreen instanceof GuiChest) {
-                GuiChest chest = (GuiChest) Minecraft.getMinecraft().currentScreen;
+            if (mc.currentScreen instanceof GuiChest) {
+                GuiChest chest = (GuiChest) mc.currentScreen;
 
                 if (lastChest != null) {
                     AdvancedChat.sendPrivateMessage(chest.inventorySlots.inventoryItemStacks.toString());
@@ -80,7 +82,7 @@ public class HarpListener implements Listener {
                             final int finalI = i;
                             Runnable runnable = () -> {
                                 if (inHarpGui) {
-                                    chest.inventorySlots.slotClick(finalI, 0, 0, Minecraft.getMinecraft().thePlayer);
+                                    chest.inventorySlots.slotClick(finalI, 0, 0, mc.thePlayer);
                                 }
                             };
 

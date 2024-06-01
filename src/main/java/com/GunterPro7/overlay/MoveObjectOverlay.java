@@ -66,15 +66,7 @@ public class MoveObjectOverlay extends AbstractOverlay {
 
         if (mouseX > offsetX && mouseX < offsetX + customIngameUI.boxWidth && mouseY > offsetY && mouseY < offsetY + customIngameUI.boxHeight) {
             allowMove = true;
-            if (mouseX + customIngameUI.boxWidth + CustomIngameUI.PADDING >= reCalcMouseX(width)) { // TODO split this into 2 methods
-                mouseX = reCalcMouseX(width - customIngameUI.boxWidth - CustomIngameUI.PADDING);
-            }
-            offsetX = mouseX;
-
-            if (mouseY + customIngameUI.boxHeight - CustomIngameUI.PADDING >= height) {
-                mouseY = height - customIngameUI.boxHeight + CustomIngameUI.PADDING;
-            }
-            offsetY = mouseY;
+            moveOffset(mouseX, mouseY);
         }
     }
 
@@ -117,18 +109,8 @@ public class MoveObjectOverlay extends AbstractOverlay {
 
     @Override
     public void mouseClickMove(int mouseX, int mouseY, int clickedMouseButton, long timeSinceLastClick) {
-        mouseX = reCalcMouseX(mouseX);
-
         if (allowMove) {
-            if (mouseX + customIngameUI.boxWidth + CustomIngameUI.PADDING >= reCalcMouseX(width)) {
-                mouseX = reCalcMouseX(width - customIngameUI.boxWidth - CustomIngameUI.PADDING);
-            }
-            offsetX = mouseX;
-
-            if (mouseY + customIngameUI.boxHeight - CustomIngameUI.PADDING >= height) {
-                mouseY = height - customIngameUI.boxHeight + CustomIngameUI.PADDING; // TODO rechts ist 1 oder 2 pixel mehr, unten unten glaub ich 1 pixel mehr wo man es schieben kann...
-            }
-            offsetY = mouseY; // TODO execute this in renderScreen if the Mouse.MOVE_METHODE() is true or something...
+            moveOffset(reCalcMouseX(mouseX), mouseY);
         }
     }
 
@@ -145,5 +127,17 @@ public class MoveObjectOverlay extends AbstractOverlay {
         } else {
             return mouseX;
         }
+    }
+
+    private void moveOffset(int mouseX, int mouseY) {
+        if (mouseX + customIngameUI.boxWidth + CustomIngameUI.PADDING >= reCalcMouseX(width)) {
+            mouseX = reCalcMouseX(width - customIngameUI.boxWidth - CustomIngameUI.PADDING);
+        }
+        offsetX = mouseX;
+
+        if (mouseY + customIngameUI.boxHeight - CustomIngameUI.PADDING >= height) {
+            mouseY = height - customIngameUI.boxHeight + CustomIngameUI.PADDING;
+        }
+        offsetY = mouseY; // TODO execute this in renderScreen if the Mouse.MOVE_METHODE() is true or something...
     }
 }

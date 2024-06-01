@@ -1,5 +1,6 @@
 package com.GunterPro7.overlay;
 
+import com.GunterPro7.Main;
 import com.GunterPro7.Setting;
 import com.GunterPro7.gui.CustomIngameUI;
 import com.GunterPro7.utils.CollectionUtils;
@@ -29,14 +30,14 @@ public class InformationOverlay extends AbstractOverlay {
     static {
         Map<String, Setting> settings = Setting.INFO_SETTINGS;
 
-        GuiLabel labelTime = new GuiLabel(Minecraft.getMinecraft().fontRendererObj, 0, 0, 0, 60, 20, 0xFFFFFF).setCentered();
+        GuiLabel labelTime = new GuiLabel(Main.mc.fontRendererObj, 0, 0, 0, 60, 20, 0xFFFFFF).setCentered();
         labelTime.func_175202_a("Time Format:");
-        GuiLabel labelDate = new GuiLabel(Minecraft.getMinecraft().fontRendererObj, 0, 0, 0, 60, 20, 0xFFFFFF).setCentered();
+        GuiLabel labelDate = new GuiLabel(Main.mc.fontRendererObj, 0, 0, 0, 60, 20, 0xFFFFFF).setCentered();
         labelDate.func_175202_a("Date Format:");
 
-        GuiTextField textFieldDateFormat = new GuiTextField(1, Minecraft.getMinecraft().fontRendererObj, 0, 0, 100, 20);
+        GuiTextField textFieldDateFormat = new GuiTextField(1, Main.mc.fontRendererObj, 0, 0, 100, 20);
         textFieldDateFormat.setText(Setting.INFO_DATE_FORMAT);
-        GuiTextField textFieldTimeFormat = new GuiTextField(2, Minecraft.getMinecraft().fontRendererObj, 0, 0, 100, 20);
+        GuiTextField textFieldTimeFormat = new GuiTextField(2, Main.mc.fontRendererObj, 0, 0, 100, 20);
         textFieldTimeFormat.setText(Setting.INFO_TIME_FORMAT);
 
         informationsAndButtonList = CollectionUtils.mapOf(
@@ -175,7 +176,7 @@ public class InformationOverlay extends AbstractOverlay {
                 dropdownButtonsOpened.set(index, !dropdownButtonsOpened.get(index));
                 InformationOverlay informationOverlay = new InformationOverlay(lastScreen);
                 informationOverlay.scrollOffset = this.scrollOffset;
-                Minecraft.getMinecraft().displayGuiScreen(informationOverlay);
+                Main.mc.displayGuiScreen(informationOverlay);
                 return;
             }
             index++;
@@ -191,7 +192,7 @@ public class InformationOverlay extends AbstractOverlay {
             MoveObjectOverlay moveObjectOverlay = new MoveObjectOverlay(new CustomIngameUI(0x00000000, 0x00000000,
                     Setting.INFO_PREFIX_COLOR + key + Setting.INFO_SUFFIX_COLOR + ": " + Setting.INFO_VALUE_COLOR + "<Value>"), Setting.INFO_POSITIONS.get(key), this);
 
-            Minecraft.getMinecraft().displayGuiScreen(moveObjectOverlay);
+            Main.mc.displayGuiScreen(moveObjectOverlay);
         }
     }
 }
