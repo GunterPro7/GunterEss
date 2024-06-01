@@ -77,14 +77,14 @@ public class CustomIngameUI {
         int scaleWidth = McUtils.getScaleWidth();
         int scaleHeight = McUtils.getScaleHeight();
 
-        int boxX = offsetX;
-        int boxY = offsetY + fontRenderer.FONT_HEIGHT > scaleHeight ? scaleHeight - fontRenderer.FONT_HEIGHT : offsetY;
+        int boxX = offsetX + boxWidth - PADDING > reCalcMouseX(scaleWidth) ? reCalcMouseX(scaleWidth - boxWidth + PADDING) : offsetX;
+        int boxY = offsetY + fontRenderer.FONT_HEIGHT + PADDING > scaleHeight ? scaleHeight - fontRenderer.FONT_HEIGHT - PADDING : offsetY;
 
         if (align == Align.MIDDLE) {
             boxX -= boxWidth / 2;
         } else if (align == Align.RIGHT) {
             boxX -= boxWidth;
-        }
+        } // TODO beim "reset" button spawnt der dreck ausserhalb, erst nach klick auf "links" wieder "verwendbar"
 
         if (background) {
             Gui.drawRect(boxX, boxY, boxX + boxWidth, boxY + boxHeight, backgroundColor); // Hintergrund zeichnen
@@ -97,6 +97,16 @@ public class CustomIngameUI {
         int counter = 0;
         for (String line : lines) {
             fontRenderer.drawStringWithShadow(line, boxX + PADDING, boxY + PADDING + currentHeight * counter++, -1); // Text zeichnen
+        }
+    }
+
+    private int reCalcMouseX(int mouseX) {
+        if (align == Align.MIDDLE) {
+            return mouseX + boxWidth / 2 + PADDING;
+        } else if (align == Align.RIGHT) {
+            return mouseX + boxWidth + PADDING * 2;
+        } else {
+            return mouseX;
         }
     }
 }
