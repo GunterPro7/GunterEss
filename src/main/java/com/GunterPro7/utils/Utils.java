@@ -193,7 +193,7 @@ public class Utils {
             }
         }
 
-        return number.length() <= 10 && number.length() > 0 ? Integer.parseInt(number.toString()) : -1; // TODO number.length <= 10 could go over int. limit
+        return number.length() <= 10 && number.length() > 0 ? Integer.parseInt(number.toString()) : 0; // TODO number.length <= 10 could go over int. limit
     }
 
     public static String convertToColorString(String string) {

@@ -23,13 +23,15 @@ public class McUtils {
     }
 
     public static NBTTagList getItemLore(ItemStack itemStack) {
-        NBTTagCompound nbt = itemStack.getTagCompound();
+        if (itemStack != null && itemStack.hasTagCompound()) {
+            NBTTagCompound nbt = itemStack.getTagCompound();
 
-        if (nbt != null && nbt.hasKey("display", 10)) {
-            NBTTagCompound display = nbt.getCompoundTag("display");
+            if (nbt != null && nbt.hasKey("display", 10)) {
+                NBTTagCompound display = nbt.getCompoundTag("display");
 
-            if (display.hasKey("Lore", 9)) {
-                return display.getTagList("Lore", 8);
+                if (display != null && display.hasKey("Lore", 9)) {
+                    return display.getTagList("Lore", 8);
+                }
             }
         }
 
@@ -67,10 +69,10 @@ public class McUtils {
         return text.matches("▬+|-+") || ignoredMessages.contains(text);
     }
 
-    public static String readRowFromTabList(String containingText) {
+    public static String readRowFromTabList(String containingText, boolean clearChatComponent) {
         for (final NetworkPlayerInfo info : mc.getNetHandler().getPlayerInfoMap()) {
             if (info != null && info.getDisplayName() != null) {
-                String text = info.getDisplayName().getFormattedText();
+                String text = clearChatComponent ? AdvancedChat.clearChatMessage(info.getDisplayName().getFormattedText()) : info.getDisplayName().getFormattedText();
                 if (text.contains(containingText)) {
                     return text;
                 }

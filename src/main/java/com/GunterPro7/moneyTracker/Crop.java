@@ -4,7 +4,7 @@ import com.GunterPro7.utils.MinecraftBlock;
 import com.GunterPro7.utils.Utils;
 
 public enum Crop implements SkyblockItem {
-    SUGAR_CANE(4, 2),
+    SUGAR_CANE(4, 1),
     NETHER_WART(4, 3),
     WHEAT(6, 1),
     MUSHROOM(10, 1),

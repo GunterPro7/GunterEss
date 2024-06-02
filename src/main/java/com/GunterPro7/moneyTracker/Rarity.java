@@ -15,6 +15,17 @@ public enum Rarity {
         this.bountifulRarityFactor = bountifulRarityFactor;
     }
 
+    public static Rarity valueOfContaining(String line) {
+        line = line.toUpperCase();
+        for (Rarity rarity : Rarity.values()) {
+            if (line.contains(rarity.name())) {
+                return rarity;
+            }
+        }
+
+        return null;
+    }
+
     public int getBountifulRarityFactor() {
         return bountifulRarityFactor;
     }

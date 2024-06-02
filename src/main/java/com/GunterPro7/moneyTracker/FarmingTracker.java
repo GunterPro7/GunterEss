@@ -10,6 +10,7 @@ import com.GunterPro7.utils.Utils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.BlockPos;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -50,6 +51,8 @@ public class FarmingTracker implements Listener {
         return ((dropAmount * basePrice + (dropAmount * bountifulReforgeCount) + (armor != null ? armor.getFarmingChance() * armor.getFarmingReward() : 0)) / basePrice) * multiplier;
     }
 
+    // TODO calcDrops
+
     @SubscribeEvent
     public void onBlockBreak(ClientBlockChangeEvent event) { // TODO bei sugar cane is der block drüber problematisch
         Crop crop = Crop.valueOf(event.getMinecraftBlock());
@@ -66,14 +69,33 @@ public class FarmingTracker implements Listener {
 
         EntityPlayerSP player = mc.thePlayer;
 
-        String row = McUtils.readRowFromTabList("Farming Fortune: ");
+        String row = McUtils.readRowFromTabList("Farming Fortune: ", true);
         int fortune = Utils.safeToInteger(row);
 
-        int extraFortune = 0; // TODO not ready
+        String specificRow = McUtils.readRowFromTabList(crop.shortName() + " Fortune: ", true);
+        int extraFortune = Utils.safeToInteger(specificRow);
 
-        boolean bountifulReforge = true;
-        Rarity farmingToolRarity = Rarity.MYTHIC;
+        boolean bountifulReforge = false;
+        Rarity farmingToolRarity = Rarity.COMMON;
+
+        NBTTagList lore = McUtils.getItemLore(mc.thePlayer.getHeldItem());
+        if (lore != null) {
+            for (int i = 0; i < lore.tagCount(); i++) {
+                String line = lore.getStringTagAt(i);
+                if (line.contains("Bountiful Bonus")) {
+                    bountifulReforge = true;
+                } if (lore.tagCount() - 1 == i) {
+                    farmingToolRarity = Rarity.valueOfContaining(line);
+                    if (farmingToolRarity == null) {
+                        farmingToolRarity = Rarity.COMMON;
+                    }
+                }
+            }
+        }
+
         FarmingArmor armor = FarmingArmor.fromPlayer(player);
+
+        //AdvancedChat.sendPrivateMessage("fortune: " + fortune + " extraFortune: " + extraFortune + " bountifulReforge" + bountifulReforge + " farmingToolRarity: " + farmingToolRarity + " farmingArmor: " + (armor != null ? armor.name() : "null"));
 
         double profits = calculateProfits(crop, fortune, extraFortune, bountifulReforge, farmingToolRarity, armor, multiplier);
         if (moneyItems.containsKey(crop)) {
