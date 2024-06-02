@@ -54,7 +54,7 @@ public class FarmingTracker implements Listener {
     // TODO calcDrops
 
     @SubscribeEvent
-    public void onBlockBreak(ClientBlockChangeEvent event) { // TODO bei sugar cane is der block drüber problematisch
+    public void onBlockBreak(ClientBlockChangeEvent event) {
         Crop crop = Crop.valueOf(event.getMinecraftBlock());
         if (crop == null) return;
 
