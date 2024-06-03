@@ -108,15 +108,17 @@ public class FarmingTracker implements Listener {
 
     @SubscribeEvent
     public void onRenderGameOverlay(RenderGameOverlayEvent.Post event) {
-        if (Setting.FARMING_OVERLAY.isEnabled()) {
-            List<String> lines = new ArrayList<>();
-            for (MoneyItem moneyItem : moneyItems.values()) {
-                Crop crop = (Crop) moneyItem.getItem();
-                lines.add(Utils.convertToColorString(crop.shortName() + ": " + Utils.toIngameNumberFormat((long) (crop.getNpcPrice() * moneyItem.getCount()))));
-            }
+        if (event.type == RenderGameOverlayEvent.ElementType.TEXT) {
+            if (Setting.FARMING_OVERLAY.isEnabled()) {
+                List<String> lines = new ArrayList<>();
+                for (MoneyItem moneyItem : moneyItems.values()) {
+                    Crop crop = (Crop) moneyItem.getItem();
+                    lines.add(Utils.convertToColorString(crop.shortName() + ": " + Utils.toIngameNumberFormat((long) (crop.getNpcPrice() * moneyItem.getCount()))));
+                }
 
-            CustomIngameUI ingameUI = new CustomIngameUI(0x00000000, 0xFF000000, lines);
-            ingameUI.drawInfoBox(Setting.FARMING_OVERLAY, false);
+                CustomIngameUI ingameUI = new CustomIngameUI(0x00000000, 0xFF000000, lines);
+                ingameUI.drawInfoBox(Setting.FARMING_OVERLAY, false);
+            }
         }
     }
 

@@ -5,21 +5,22 @@ import com.GunterPro7.listener.AdvancedChat;
 import com.GunterPro7.listener.GunterGuiChat;
 import com.google.common.collect.Lists;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.MathHelper;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.NotNull;
 
 @SideOnly(Side.CLIENT)
 public class SearchChatGui extends Gui {
@@ -78,18 +79,18 @@ public class SearchChatGui extends Gui {
                             drawRect(p, q - 9, p + l + 4, q, 0x7F000000);
                             String string = chatLine.getChatComponent().getFormattedText();
                             GlStateManager.enableBlend();
-                            String quote = Pattern.quote(sortValue);
-                            String[] parts = string.split("((?<=(?i)" + quote + ")|(?=(?i)" + quote + "))");
 
-                            StringBuilder stringBuilder = new StringBuilder();
+                            List<String> parts = getSearchingParts(string, sortValue, true); // TODo make a sort like switch, like intellij has
+
+                            StringBuilder stringBuilder2 = new StringBuilder();
                             FontRenderer fontRenderer = Main.mc.fontRendererObj;
                             for (String part : parts) {
-                                if (sortValue.equalsIgnoreCase(part)) {
-                                    int left = fontRenderer.getStringWidth(stringBuilder.toString());
-                                    int right = fontRenderer.getStringWidth(stringBuilder.append(part).toString());
+                                if (AdvancedChat.clearChatMessage(part).equalsIgnoreCase(sortValue)) {
+                                    int left = fontRenderer.getStringWidth(stringBuilder2.toString());
+                                    int right = fontRenderer.getStringWidth(stringBuilder2.append(part).toString());
                                     drawRect(left, q - 8, right, q - 8 + fontRenderer.FONT_HEIGHT, 0xA7f9da15);
                                 } else {
-                                    stringBuilder.append(part);
+                                    stringBuilder2.append(part);
                                 }
                             }
 
@@ -118,6 +119,57 @@ public class SearchChatGui extends Gui {
 
             GlStateManager.popMatrix();
         }
+    }
+
+    @NotNull
+    private List<String> getSearchingParts(String string, String sortValue, boolean ignoreCase) {
+        if (ignoreCase) {
+            sortValue = sortValue.toLowerCase();
+        }
+
+        String[] strings = (ignoreCase ? AdvancedChat.clearChatMessage(string).toLowerCase() : AdvancedChat.clearChatMessage(string)).split(Pattern.quote((ignoreCase ? sortValue.toLowerCase() : sortValue)));
+
+        List<String> parts = new ArrayList<>();
+
+        boolean skippingNext = false;
+
+        StringBuilder stringBuilder = new StringBuilder();
+        StringBuilder clearStringBuilder = new StringBuilder();
+
+        int stringIdx = 0;
+
+        for (char c : string.toCharArray()) {
+            if (!skippingNext) {
+                if (c == '§') {
+                    skippingNext = true;
+                } else {
+
+                    boolean stringEqual = stringIdx < strings.length && strings[stringIdx].contentEquals(clearStringBuilder);
+                    if (stringEqual || sortValue.contentEquals(clearStringBuilder)) {
+                        parts.add(stringBuilder.toString());
+
+                        if (stringEqual) {
+                            stringIdx++;
+                        }
+                        stringBuilder.setLength(0);
+                        clearStringBuilder.setLength(0);
+                    }
+                    clearStringBuilder.append(ignoreCase ? Character.toLowerCase(c) : c);
+                }
+
+            } else {
+                skippingNext = false;
+            }
+
+            stringBuilder.append(c);
+        }
+
+        // Reihenfolge nicht ändern
+        if (sortValue.contentEquals(clearStringBuilder) || strings[stringIdx].contentEquals(clearStringBuilder)) {
+            parts.add(stringBuilder.toString());
+        }
+
+        return parts;
     }
 
     public void sortChatLines(String s) {
