@@ -3,12 +3,10 @@ package com.GunterPro7.gui;
 import com.GunterPro7.Main;
 import com.GunterPro7.listener.AdvancedChat;
 import com.GunterPro7.listener.GunterGuiChat;
+import com.GunterPro7.utils.MessageInformation;
 import com.google.common.collect.Lists;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -80,17 +78,22 @@ public class SearchChatGui extends Gui {
                             String string = chatLine.getChatComponent().getFormattedText();
                             GlStateManager.enableBlend();
 
-                            List<String> parts = getSearchingParts(string, sortValue, true); // TODo make a sort like switch, like intellij has
+                            String fullString = MessageInformation.getById(chatLine.getChatLineID()).getMcMessage();
+                            System.out.println(fullString);
+
+
+                            Map<String, Boolean> parts = getSearchingPartsForSpecificLine(string, fullString, sortValue, true); // TODo make a sort like switch, like intellij has
+                            System.out.println(parts);
 
                             StringBuilder stringBuilder2 = new StringBuilder();
                             FontRenderer fontRenderer = Main.mc.fontRendererObj;
-                            for (String part : parts) {
-                                if (AdvancedChat.clearChatMessage(part).equalsIgnoreCase(sortValue)) {
+                            for (Map.Entry<String, Boolean> part : parts.entrySet()) {
+                                if (part.getValue()) {
                                     int left = fontRenderer.getStringWidth(stringBuilder2.toString());
-                                    int right = fontRenderer.getStringWidth(stringBuilder2.append(part).toString());
+                                    int right = fontRenderer.getStringWidth(stringBuilder2.append(part.getKey()).toString());
                                     drawRect(left, q - 8, right, q - 8 + fontRenderer.FONT_HEIGHT, 0xA7f9da15);
                                 } else {
-                                    stringBuilder2.append(part);
+                                    stringBuilder2.append(part.getKey());
                                 }
                             }
 
@@ -122,14 +125,40 @@ public class SearchChatGui extends Gui {
     }
 
     @NotNull
-    private List<String> getSearchingParts(String string, String sortValue, boolean ignoreCase) {
+    private static Map<String, Boolean> getSearchingPartsForSpecificLine(String string, String fullString, String sortValue, boolean ignoreCase) {
+        Map<String, Boolean> result = new LinkedHashMap<>();
+        Map<String, Boolean> list = getSearchingParts(fullString, sortValue, ignoreCase);
+
+        int index = fullString.indexOf(string); // multiple indexes in the list are allowed, because it'll have the same output
+
+        int curLength = 0;
+
+        for (Map.Entry<String, Boolean> entry : list.entrySet()) {
+            int length = entry.getKey().length();
+
+            if (curLength + length >= index) {
+                String part = entry.getKey().substring(Math.max(0, index - curLength), Math.min(Math.max(index - curLength + string.length(), 0), length));
+                //System.out.println(part);
+                //System.out.println(entry.getValue().toString());
+
+                result.put(part, entry.getValue());
+            }
+
+            curLength += length;
+        }
+
+        return result;
+    }
+
+    @NotNull
+    private static Map<String, Boolean> getSearchingParts(String string, String sortValue, boolean ignoreCase) {
         if (ignoreCase) {
             sortValue = sortValue.toLowerCase();
         }
 
         String[] strings = (ignoreCase ? AdvancedChat.clearChatMessage(string).toLowerCase() : AdvancedChat.clearChatMessage(string)).split(Pattern.quote((ignoreCase ? sortValue.toLowerCase() : sortValue)));
 
-        List<String> parts = new ArrayList<>();
+        Map<String, Boolean> parts = new LinkedHashMap<>();
 
         boolean skippingNext = false;
 
@@ -146,7 +175,7 @@ public class SearchChatGui extends Gui {
 
                     boolean stringEqual = stringIdx < strings.length && strings[stringIdx].contentEquals(clearStringBuilder);
                     if (stringEqual || sortValue.contentEquals(clearStringBuilder)) {
-                        parts.add(stringBuilder.toString());
+                        parts.put(stringBuilder.toString(), !stringEqual);
 
                         if (stringEqual) {
                             stringIdx++;
@@ -165,8 +194,10 @@ public class SearchChatGui extends Gui {
         }
 
         // Reihenfolge nicht ändern
-        if (sortValue.contentEquals(clearStringBuilder) || strings[stringIdx].contentEquals(clearStringBuilder)) {
-            parts.add(stringBuilder.toString());
+        boolean sortValueEqual = sortValue.contentEquals(clearStringBuilder);
+
+        if (sortValueEqual || strings[stringIdx].contentEquals(clearStringBuilder)) {
+            parts.put(stringBuilder.toString(), sortValueEqual);
         }
 
         return parts;
