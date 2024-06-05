@@ -29,6 +29,9 @@ public class SearchChatGui extends Gui {
     private int scrollPos;
     private boolean isScrolled;
 
+    private final List<Map.Entry<String, Boolean>> searchingParts = new ArrayList<>();
+    private boolean reloadSearch = true;
+
     public SearchChatGui(Minecraft minecraft) {
         this.mc = minecraft;
     }
@@ -76,23 +79,24 @@ public class SearchChatGui extends Gui {
                             int q = -m * 9;
                             drawRect(p, q - 9, p + l + 4, q, 0x7F000000);
                             String string = chatLine.getChatComponent().getFormattedText();
-                            String string2 = chatLine.getChatComponent().getUnformattedText();
+
                             GlStateManager.enableBlend();
 
-                            String fullString = MessageInformation.getById(chatLine.getChatLineID()).getMcMessage(); // TODO wir könnten versuchen, einfach das was fett geschrieben ist durch § zu erstezen, und den algorithmus anzupassen, weil dann muss ich nicht mehr angst haben wegen den mittleren und unteren component das es den nicht findet, da ich zuerst alles clearen kann und danach das fettgeschreibene so erwsetezn kann: §lqwe§r -> §q§w§e
+                            if (reloadSearch) { // TODO "reloadSearch" was obv. a bad idea because we would ne a list with every element then. WORKING FOR NOW; BUT WASTES HALF OF THE FPS!!!
+                                String string2 = AdvancedChat.clearChatMessageToOnlyThickness(chatLine.getChatComponent().getFormattedText());
+                                String fullString = MessageInformation.getById(chatLine.getChatLineID()).getMessageWithOnlyThickness();
 
-
-                            System.out.println("string: " + string + ", fullString: " + fullString + ", sortValue: " + sortValue);
-                            List<Map.Entry<String, Boolean>> parts = getSearchingPartsForSpecificLine(string, fullString, sortValue, true); // TODo make a sort like switch, like intellij has
-                            System.out.println(parts);
+                                searchingParts.clear();
+                                searchingParts.addAll(getSearchingPartsForSpecificLine(string2, fullString, sortValue, true)); // TODo make a sort like switch, like intellij has
+                            }
 
                             StringBuilder stringBuilder2 = new StringBuilder();
-                            FontRenderer fontRenderer = Main.mc.fontRendererObj;
-                            for (Map.Entry<String, Boolean> part : parts) {
+
+                            for (Map.Entry<String, Boolean> part : searchingParts) {
                                 if (part.getValue()) {
-                                    int left = fontRenderer.getStringWidth(stringBuilder2.toString());
-                                    int right = fontRenderer.getStringWidth(stringBuilder2.append(part.getKey()).toString());
-                                    drawRect(left, q - 8, right, q - 8 + fontRenderer.FONT_HEIGHT, 0xA7f9da15);
+                                    int left = mc.fontRendererObj.getStringWidth(stringBuilder2.toString());
+                                    int right = mc.fontRendererObj.getStringWidth(stringBuilder2.append(part.getKey()).toString());
+                                    drawRect(left, q - 8, right, q - 8 + mc.fontRendererObj.FONT_HEIGHT, 0xA7f9da15);
                                 } else {
                                     stringBuilder2.append(part.getKey());
                                 }
@@ -140,7 +144,7 @@ public class SearchChatGui extends Gui {
             if (curLength + length >= index) {
                 String part = entry.getKey().substring(Math.max(0, index - curLength), Math.min(Math.max(index - curLength + string.length(), 0), length));
                 if (!part.isEmpty()) {
-                    result.add(new AbstractMap.SimpleEntry<>(part, entry.getValue()));
+                    result.add(new AbstractMap.SimpleEntry<>(AdvancedChat.convertChatMessageWithOnlyThickness(part), entry.getValue()));
                 }
             }
 
@@ -156,11 +160,9 @@ public class SearchChatGui extends Gui {
             sortValue = sortValue.toLowerCase();
         }
 
-        String[] strings = (ignoreCase ? AdvancedChat.clearChatMessage(string).toLowerCase() : AdvancedChat.clearChatMessage(string)).split(Pattern.quote((ignoreCase ? sortValue.toLowerCase() : sortValue)));
+        String[] strings = (ignoreCase ? string.replaceAll("§", "").toLowerCase() : string.replaceAll("§", "")).split(Pattern.quote((ignoreCase ? sortValue.toLowerCase() : sortValue)));
 
         List<Map.Entry<String, Boolean>> parts = new ArrayList<>();
-
-        boolean skippingNext = false;
 
         StringBuilder stringBuilder = new StringBuilder();
         StringBuilder clearStringBuilder = new StringBuilder();
@@ -168,26 +170,18 @@ public class SearchChatGui extends Gui {
         int stringIdx = 0;
 
         for (char c : string.toCharArray()) {
-            if (!skippingNext) {
-                if (c == '§') {
-                    skippingNext = true;
-                } else {
+            if (c != '§') {
+                boolean stringEqual = stringIdx < strings.length && strings[stringIdx].contentEquals(clearStringBuilder);
+                if (stringEqual || sortValue.contentEquals(clearStringBuilder)) {
+                    parts.add(new AbstractMap.SimpleEntry<>(stringBuilder.toString(), !stringEqual));
 
-                    boolean stringEqual = stringIdx < strings.length && strings[stringIdx].contentEquals(clearStringBuilder);
-                    if (stringEqual || sortValue.contentEquals(clearStringBuilder)) {
-                        parts.add(new AbstractMap.SimpleEntry<>(stringBuilder.toString(), !stringEqual));
-
-                        if (stringEqual) {
-                            stringIdx++;
-                        }
-                        stringBuilder.setLength(0);
-                        clearStringBuilder.setLength(0);
+                    if (stringEqual) {
+                        stringIdx++;
                     }
-                    clearStringBuilder.append(ignoreCase ? Character.toLowerCase(c) : c);
+                    stringBuilder.setLength(0);
+                    clearStringBuilder.setLength(0);
                 }
-
-            } else {
-                skippingNext = false;
+                clearStringBuilder.append(ignoreCase ? Character.toLowerCase(c) : c);
             }
 
             stringBuilder.append(c);
@@ -209,6 +203,7 @@ public class SearchChatGui extends Gui {
         int i = MathHelper.floor_float((float) this.getChatWidth() / this.getChatScale()) + 1;
 
         this.chatLines.forEach((chatLine) -> sortChatLine(chatLine, s, i));
+        this.reloadSearch = true;
     }
 
     private void sortChatLine(ChatLine chatLine, String s, int i) {
@@ -234,14 +229,17 @@ public class SearchChatGui extends Gui {
 
         sortChatLine(chatLine, this.sortValue, MathHelper.floor_float((float) this.getChatWidth() / this.getChatScale()) + 1);
         this.chatLines.add(chatLine);
+        this.reloadSearch = true;
     }
 
     public void resetScroll() {
+        this.reloadSearch = true;
         this.scrollPos = 0;
         this.isScrolled = false;
     }
 
     public void scroll(int amount) {
+        int oldScroll = this.scrollPos;
         this.scrollPos += amount;
         int i = this.drawnChatLines.size();
         if (this.scrollPos > i - this.getLineCount()) {
@@ -253,6 +251,9 @@ public class SearchChatGui extends Gui {
             this.isScrolled = false;
         }
 
+        if (oldScroll != this.scrollPos) {
+            this.reloadSearch = true;
+        }
     }
 
     public IChatComponent getChatComponent(int mouseX, int mouseY) {

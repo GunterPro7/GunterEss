@@ -1,6 +1,7 @@
 package com.GunterPro7.utils;
 
 import com.GunterPro7.gui.CustomIngameUI;
+import com.GunterPro7.listener.AdvancedChat;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -70,5 +71,9 @@ public class MessageInformation {
 
     public String getMcMessage() {
         return colorMessage.replaceAll("\\$", "§").replaceAll("\\\\$", "$");
+    }
+
+    public String getMessageWithOnlyThickness() {
+        return AdvancedChat.clearChatMessageToOnlyThickness(getMcMessage());
     }
 }

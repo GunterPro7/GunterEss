@@ -50,26 +50,6 @@ public class AdvancedChat implements Listener {
         return instance;
     }
 
-    public static int getParagraphesAtStartOfChatComponent(String string) {
-        for (int i = 0; i < string.length(); i += 2) {
-            if (string.charAt(i) != '§') {
-                return i / 2;
-            }
-        }
-
-        return 0;
-    }
-
-    public static String removeParagraphesAtStartOfChatComponent(String string) {
-        for (int i = 0; i < string.length(); i += 2) {
-            if (string.charAt(i) != '§') {
-                return string.substring(i);
-            }
-        }
-
-        return string;
-    }
-
     @SubscribeEvent
     public void onChatMessage(final ClientChatReceivedEvent event) {
         String unformattedText = event.message.getUnformattedText();
@@ -391,6 +371,48 @@ public class AdvancedChat implements Listener {
 
     public static String clearChatMessage(String text) {
         return text.replaceAll("§[0-9a-zA-Z]", "");
+    }
+
+    public static String clearChatMessageToOnlyThickness(String formattedText) {
+        StringBuilder newString = new StringBuilder();
+
+        boolean thick = false;
+        boolean paragraph = false;
+
+        for (char c : formattedText.toCharArray()) {
+            if (c == '§') {
+                paragraph = true;
+            } else if (paragraph && Character.toLowerCase(c) == 'l') {
+                thick = true;
+                paragraph = false;
+            } else if (paragraph && Character.toLowerCase(c) == 'r') {
+                thick = false;
+                paragraph = false;
+            } else if (!paragraph) {
+                if (thick) {
+                    newString.append('§');
+                }
+                newString.append(c);
+            } else {
+                paragraph = false;
+            }
+        }
+
+        return newString.toString();
+    }
+
+    public static String convertChatMessageWithOnlyThickness(String message) {
+        StringBuilder newString = new StringBuilder();
+
+        for (char c : message.toCharArray()) {
+            if (c == '§') {
+                newString.append("§l");
+            } else {
+                newString.append(c).append("§r"); // TODO improve this so at the start there is a "§l" and at the end is a "§r"
+            }
+        }
+
+        return newString.toString();
     }
 
     public static void sendPrivateMessage(String text) {
