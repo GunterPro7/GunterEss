@@ -29,10 +29,9 @@ public class SearchChatGui extends Gui {
     private int scrollPos;
     private boolean isScrolled;
 
-    private final List<Map.Entry<String, Boolean>> searchingParts = new ArrayList<>();
-    private boolean reloadSearch = true;
+    private final Map<ChatLine, List<Map.Entry<String, Boolean>>> searchingParts = new HashMap<>();
 
-    public SearchChatGui(Minecraft minecraft) {
+    public SearchChatGui(Minecraft minecraft) { // TODO using the hover event thing, so we can hover over everything... not the frkn chat lol
         this.mc = minecraft;
     }
 
@@ -82,17 +81,17 @@ public class SearchChatGui extends Gui {
 
                             GlStateManager.enableBlend();
 
-                            if (reloadSearch) { // TODO "reloadSearch" was obv. a bad idea because we would ne a list with every element then. WORKING FOR NOW; BUT WASTES HALF OF THE FPS!!!
+                            if (!searchingParts.containsKey(chatLine)) {
                                 String string2 = AdvancedChat.clearChatMessageToOnlyThickness(chatLine.getChatComponent().getFormattedText());
                                 String fullString = MessageInformation.getById(chatLine.getChatLineID()).getMessageWithOnlyThickness();
 
-                                searchingParts.clear();
-                                searchingParts.addAll(getSearchingPartsForSpecificLine(string2, fullString, sortValue, true)); // TODo make a sort like switch, like intellij has
+                                searchingParts.put(chatLine, getSearchingPartsForSpecificLine(string2, fullString, sortValue, true, false)); // TODO make a sort like switch, like intellij has
                             }
 
                             StringBuilder stringBuilder2 = new StringBuilder();
 
-                            for (Map.Entry<String, Boolean> part : searchingParts) {
+
+                            for (Map.Entry<String, Boolean> part : searchingParts.get(chatLine)) {
                                 if (part.getValue()) {
                                     int left = mc.fontRendererObj.getStringWidth(stringBuilder2.toString());
                                     int right = mc.fontRendererObj.getStringWidth(stringBuilder2.append(part.getKey()).toString());
@@ -130,9 +129,9 @@ public class SearchChatGui extends Gui {
     }
 
     @NotNull
-    private static List<Map.Entry<String, Boolean>> getSearchingPartsForSpecificLine(String string, String fullString, String sortValue, boolean ignoreCase) {
+    private static List<Map.Entry<String, Boolean>> getSearchingPartsForSpecificLine(String string, String fullString, String sortValue, boolean ignoreCase, boolean regex) {
         List<Map.Entry<String, Boolean>> result = new ArrayList<>();
-        List<Map.Entry<String, Boolean>> list = getSearchingParts(fullString, sortValue, ignoreCase);
+        List<Map.Entry<String, Boolean>> list = getSearchingParts(fullString, sortValue, ignoreCase, regex);
 
         int index = fullString.indexOf(string); // multiple indexes in the list are allowed, because it'll have the same output
 
@@ -155,12 +154,12 @@ public class SearchChatGui extends Gui {
     }
 
     @NotNull
-    private static List<Map.Entry<String, Boolean>> getSearchingParts(String string, String sortValue, boolean ignoreCase) {
+    private static List<Map.Entry<String, Boolean>> getSearchingParts(String string, String sortValue, boolean ignoreCase, boolean regex) {
         if (ignoreCase) {
             sortValue = sortValue.toLowerCase();
         }
 
-        String[] strings = (ignoreCase ? string.replaceAll("§", "").toLowerCase() : string.replaceAll("§", "")).split(Pattern.quote((ignoreCase ? sortValue.toLowerCase() : sortValue)));
+        String[] strings = (ignoreCase && !regex ? string.replaceAll("§", "").toLowerCase() : string.replaceAll("§", "")).split(regex ? sortValue : Pattern.quote((ignoreCase ? sortValue.toLowerCase() : sortValue)));
 
         List<Map.Entry<String, Boolean>> parts = new ArrayList<>();
 
@@ -172,7 +171,7 @@ public class SearchChatGui extends Gui {
         for (char c : string.toCharArray()) {
             if (c != '§') {
                 boolean stringEqual = stringIdx < strings.length && strings[stringIdx].contentEquals(clearStringBuilder);
-                if (stringEqual || sortValue.contentEquals(clearStringBuilder)) {
+                if (stringEqual || (regex ? clearStringBuilder.toString().matches(sortValue) : sortValue.contentEquals(clearStringBuilder))) { // TODO when we use regex, we need to do "clearStringBuilder.toString().matches()"
                     parts.add(new AbstractMap.SimpleEntry<>(stringBuilder.toString(), !stringEqual));
 
                     if (stringEqual) {
@@ -188,7 +187,7 @@ public class SearchChatGui extends Gui {
         }
 
         // Reihenfolge nicht ändern
-        boolean sortValueEqual = sortValue.contentEquals(clearStringBuilder);
+        boolean sortValueEqual = !regex ? sortValue.contentEquals(clearStringBuilder) : clearStringBuilder.toString().matches(sortValue); // TODO when we use regex, we need to do "clearStringBuilder.toString().matches()"
 
         if (sortValueEqual || strings[stringIdx].contentEquals(clearStringBuilder)) {
             parts.add(new AbstractMap.SimpleEntry<>(stringBuilder.toString(), sortValueEqual));
@@ -203,7 +202,7 @@ public class SearchChatGui extends Gui {
         int i = MathHelper.floor_float((float) this.getChatWidth() / this.getChatScale()) + 1;
 
         this.chatLines.forEach((chatLine) -> sortChatLine(chatLine, s, i));
-        this.reloadSearch = true;
+        this.searchingParts.clear();
     }
 
     private void sortChatLine(ChatLine chatLine, String s, int i) {
@@ -229,11 +228,11 @@ public class SearchChatGui extends Gui {
 
         sortChatLine(chatLine, this.sortValue, MathHelper.floor_float((float) this.getChatWidth() / this.getChatScale()) + 1);
         this.chatLines.add(chatLine);
-        this.reloadSearch = true;
+        this.searchingParts.clear();
     }
 
     public void resetScroll() {
-        this.reloadSearch = true;
+        this.searchingParts.clear();
         this.scrollPos = 0;
         this.isScrolled = false;
     }
@@ -252,7 +251,7 @@ public class SearchChatGui extends Gui {
         }
 
         if (oldScroll != this.scrollPos) {
-            this.reloadSearch = true;
+            this.searchingParts.clear();
         }
     }
 
