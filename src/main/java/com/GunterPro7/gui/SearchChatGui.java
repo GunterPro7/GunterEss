@@ -76,18 +76,19 @@ public class SearchChatGui extends Gui {
                             int q = -m * 9;
                             drawRect(p, q - 9, p + l + 4, q, 0x7F000000);
                             String string = chatLine.getChatComponent().getFormattedText();
+                            String string2 = chatLine.getChatComponent().getUnformattedText();
                             GlStateManager.enableBlend();
 
-                            String fullString = MessageInformation.getById(chatLine.getChatLineID()).getMcMessage();
-                            System.out.println(fullString);
+                            String fullString = MessageInformation.getById(chatLine.getChatLineID()).getMcMessage(); // TODO wir könnten versuchen, einfach das was fett geschrieben ist durch § zu erstezen, und den algorithmus anzupassen, weil dann muss ich nicht mehr angst haben wegen den mittleren und unteren component das es den nicht findet, da ich zuerst alles clearen kann und danach das fettgeschreibene so erwsetezn kann: §lqwe§r -> §q§w§e
 
 
-                            Map<String, Boolean> parts = getSearchingPartsForSpecificLine(string, fullString, sortValue, true); // TODo make a sort like switch, like intellij has
+                            System.out.println("string: " + string + ", fullString: " + fullString + ", sortValue: " + sortValue);
+                            List<Map.Entry<String, Boolean>> parts = getSearchingPartsForSpecificLine(string, fullString, sortValue, true); // TODo make a sort like switch, like intellij has
                             System.out.println(parts);
 
                             StringBuilder stringBuilder2 = new StringBuilder();
                             FontRenderer fontRenderer = Main.mc.fontRendererObj;
-                            for (Map.Entry<String, Boolean> part : parts.entrySet()) {
+                            for (Map.Entry<String, Boolean> part : parts) {
                                 if (part.getValue()) {
                                     int left = fontRenderer.getStringWidth(stringBuilder2.toString());
                                     int right = fontRenderer.getStringWidth(stringBuilder2.append(part.getKey()).toString());
@@ -125,23 +126,22 @@ public class SearchChatGui extends Gui {
     }
 
     @NotNull
-    private static Map<String, Boolean> getSearchingPartsForSpecificLine(String string, String fullString, String sortValue, boolean ignoreCase) {
-        Map<String, Boolean> result = new LinkedHashMap<>();
-        Map<String, Boolean> list = getSearchingParts(fullString, sortValue, ignoreCase);
+    private static List<Map.Entry<String, Boolean>> getSearchingPartsForSpecificLine(String string, String fullString, String sortValue, boolean ignoreCase) {
+        List<Map.Entry<String, Boolean>> result = new ArrayList<>();
+        List<Map.Entry<String, Boolean>> list = getSearchingParts(fullString, sortValue, ignoreCase);
 
         int index = fullString.indexOf(string); // multiple indexes in the list are allowed, because it'll have the same output
 
         int curLength = 0;
 
-        for (Map.Entry<String, Boolean> entry : list.entrySet()) {
+        for (Map.Entry<String, Boolean> entry : list) {
             int length = entry.getKey().length();
 
             if (curLength + length >= index) {
                 String part = entry.getKey().substring(Math.max(0, index - curLength), Math.min(Math.max(index - curLength + string.length(), 0), length));
-                //System.out.println(part);
-                //System.out.println(entry.getValue().toString());
-
-                result.put(part, entry.getValue());
+                if (!part.isEmpty()) {
+                    result.add(new AbstractMap.SimpleEntry<>(part, entry.getValue()));
+                }
             }
 
             curLength += length;
@@ -151,14 +151,14 @@ public class SearchChatGui extends Gui {
     }
 
     @NotNull
-    private static Map<String, Boolean> getSearchingParts(String string, String sortValue, boolean ignoreCase) {
+    private static List<Map.Entry<String, Boolean>> getSearchingParts(String string, String sortValue, boolean ignoreCase) {
         if (ignoreCase) {
             sortValue = sortValue.toLowerCase();
         }
 
         String[] strings = (ignoreCase ? AdvancedChat.clearChatMessage(string).toLowerCase() : AdvancedChat.clearChatMessage(string)).split(Pattern.quote((ignoreCase ? sortValue.toLowerCase() : sortValue)));
 
-        Map<String, Boolean> parts = new LinkedHashMap<>();
+        List<Map.Entry<String, Boolean>> parts = new ArrayList<>();
 
         boolean skippingNext = false;
 
@@ -175,7 +175,7 @@ public class SearchChatGui extends Gui {
 
                     boolean stringEqual = stringIdx < strings.length && strings[stringIdx].contentEquals(clearStringBuilder);
                     if (stringEqual || sortValue.contentEquals(clearStringBuilder)) {
-                        parts.put(stringBuilder.toString(), !stringEqual);
+                        parts.add(new AbstractMap.SimpleEntry<>(stringBuilder.toString(), !stringEqual));
 
                         if (stringEqual) {
                             stringIdx++;
@@ -197,7 +197,7 @@ public class SearchChatGui extends Gui {
         boolean sortValueEqual = sortValue.contentEquals(clearStringBuilder);
 
         if (sortValueEqual || strings[stringIdx].contentEquals(clearStringBuilder)) {
-            parts.put(stringBuilder.toString(), sortValueEqual);
+            parts.add(new AbstractMap.SimpleEntry<>(stringBuilder.toString(), sortValueEqual));
         }
 
         return parts;

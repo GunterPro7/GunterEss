@@ -50,6 +50,26 @@ public class AdvancedChat implements Listener {
         return instance;
     }
 
+    public static int getParagraphesAtStartOfChatComponent(String string) {
+        for (int i = 0; i < string.length(); i += 2) {
+            if (string.charAt(i) != '§') {
+                return i / 2;
+            }
+        }
+
+        return 0;
+    }
+
+    public static String removeParagraphesAtStartOfChatComponent(String string) {
+        for (int i = 0; i < string.length(); i += 2) {
+            if (string.charAt(i) != '§') {
+                return string.substring(i);
+            }
+        }
+
+        return string;
+    }
+
     @SubscribeEvent
     public void onChatMessage(final ClientChatReceivedEvent event) {
         String unformattedText = event.message.getUnformattedText();
@@ -95,7 +115,7 @@ public class AdvancedChat implements Listener {
 
         // Change message so they can be copied afterwards
 
-        MessageInformation messageInformation = MessageInformation.getInstances().computeIfAbsent(text, key -> new MessageInformation(key, formattedText.replaceAll("\\$", "\\$").replaceAll("§", "\\$"), current_id++));
+        MessageInformation messageInformation = MessageInformation.getInstances().computeIfAbsent(text, key -> new MessageInformation(key, formattedText.replaceAll("\\$", "\\$").replaceAll("§", "\\$"), unformattedText, current_id++));
         messageInformation.count();
 
         final IChatComponent iChatComponent = formatChatComponentForCopy(event.message, text, checkColors);

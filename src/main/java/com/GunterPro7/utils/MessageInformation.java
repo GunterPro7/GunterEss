@@ -10,13 +10,15 @@ public class MessageInformation {
     private static final Map<Integer, MessageInformation> instancesById = new HashMap<>();
     private final String message;
     private final String colorMessage;
+    private final String unformattedText;
     private final int id;
     private int count;
     private long time;
 
-    public MessageInformation(String message, String colorMessage, int id) {
+    public MessageInformation(String message, String colorMessage, String unformattedText, int id) {
         this.message = message;
         this.colorMessage = colorMessage;
+        this.unformattedText = unformattedText;
         this.id = id;
         count = 0;
         time = System.currentTimeMillis();
