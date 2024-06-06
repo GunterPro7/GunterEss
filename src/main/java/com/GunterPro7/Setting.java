@@ -52,6 +52,8 @@ public class Setting {
             "Blocks/s", new Position(false),
             "Cps", new Position(false),
             "Gameday", new Position(false));
+    /* 0 = Word (Ignore cases), 1 = Match case (Cases important), 2 = Regex */
+    public static final Value SEARCH_TYPE = new Value(true, 0);
     public static EnumChatFormatting INFO_PREFIX_COLOR = EnumChatFormatting.GRAY;
     public static EnumChatFormatting INFO_VALUE_COLOR = EnumChatFormatting.GOLD;
     public static EnumChatFormatting INFO_SUFFIX_COLOR = EnumChatFormatting.WHITE;

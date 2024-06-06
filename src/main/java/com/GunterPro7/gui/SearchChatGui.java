@@ -1,6 +1,7 @@
 package com.GunterPro7.gui;
 
 import com.GunterPro7.Main;
+import com.GunterPro7.Setting;
 import com.GunterPro7.listener.AdvancedChat;
 import com.GunterPro7.listener.GunterGuiChat;
 import com.GunterPro7.utils.MessageInformation;
@@ -85,7 +86,7 @@ public class SearchChatGui extends Gui {
                                 String string2 = AdvancedChat.clearChatMessageToOnlyThickness(chatLine.getChatComponent().getFormattedText());
                                 String fullString = MessageInformation.getById(chatLine.getChatLineID()).getMessageWithOnlyThickness();
 
-                                searchingParts.put(chatLine, getSearchingPartsForSpecificLine(string2, fullString, sortValue, true, false)); // TODO make a sort like switch, like intellij has
+                                searchingParts.put(chatLine, getSearchingPartsForSpecificLine(string2, fullString, sortValue, Setting.SEARCH_TYPE.getValue() == 0, Setting.SEARCH_TYPE.getValue() == 2)); // TODO make a sort like switch, like intellij has
                             }
 
                             StringBuilder stringBuilder2 = new StringBuilder();
@@ -232,13 +233,11 @@ public class SearchChatGui extends Gui {
     }
 
     public void resetScroll() {
-        this.searchingParts.clear();
         this.scrollPos = 0;
         this.isScrolled = false;
     }
 
     public void scroll(int amount) {
-        int oldScroll = this.scrollPos;
         this.scrollPos += amount;
         int i = this.drawnChatLines.size();
         if (this.scrollPos > i - this.getLineCount()) {
@@ -248,10 +247,6 @@ public class SearchChatGui extends Gui {
         if (this.scrollPos <= 0) {
             this.scrollPos = 0;
             this.isScrolled = false;
-        }
-
-        if (oldScroll != this.scrollPos) {
-            this.searchingParts.clear();
         }
     }
 
@@ -271,12 +266,10 @@ public class SearchChatGui extends Gui {
                 if (j <= MathHelper.floor_float((float) this.getChatWidth() / this.getChatScale()) && k < this.mc.fontRendererObj.FONT_HEIGHT * l + l) {
                     int m = k / this.mc.fontRendererObj.FONT_HEIGHT + this.scrollPos;
                     if (m >= 0 && m < this.drawnChatLines.size()) {
-                        ChatLine chatLine = (ChatLine) this.drawnChatLines.get(m);
+                        ChatLine chatLine = this.drawnChatLines.get(m);
                         int n = 0;
-                        Iterator iterator = chatLine.getChatComponent().iterator();
 
-                        while (iterator.hasNext()) {
-                            IChatComponent iChatComponent = (IChatComponent) iterator.next();
+                        for (IChatComponent iChatComponent : chatLine.getChatComponent()) {
                             if (iChatComponent instanceof ChatComponentText) {
                                 n += this.mc.fontRendererObj.getStringWidth(GuiUtilRenderComponents.func_178909_a(((ChatComponentText) iChatComponent).getChatComponentText_TextValue(), false));
                                 if (n > j) {
