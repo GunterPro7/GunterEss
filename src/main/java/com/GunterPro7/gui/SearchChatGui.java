@@ -58,7 +58,7 @@ public class SearchChatGui extends Gui {
             int o;
             int p;
             for (m = 0; m + this.scrollPos < this.drawnChatLines.size() && m < i; ++m) {
-                ChatLine chatLine = (ChatLine) this.drawnChatLines.get(m + this.scrollPos);
+                ChatLine chatLine = this.drawnChatLines.get(m + this.scrollPos);
                 if (chatLine != null) {
                     n = updateCounter - chatLine.getUpdatedCounter();
                     if (n < 200 || bl) {
@@ -86,7 +86,8 @@ public class SearchChatGui extends Gui {
                                 String string2 = AdvancedChat.clearChatMessageToOnlyThickness(chatLine.getChatComponent().getFormattedText());
                                 String fullString = MessageInformation.getById(chatLine.getChatLineID()).getMessageWithOnlyThickness();
 
-                                searchingParts.put(chatLine, getSearchingPartsForSpecificLine(string2, fullString, sortValue, Setting.SEARCH_TYPE.getValue() == 0, Setting.SEARCH_TYPE.getValue() == 2)); // TODO make a sort like switch, like intellij has
+                                searchingParts.put(chatLine, getSearchingPartsForSpecificLine(string2, fullString, sortValue,
+                                        Setting.SEARCH_TYPE.getValue() % 2 == 0, Setting.SEARCH_TYPE.getValue() >= 2));
                             }
 
                             StringBuilder stringBuilder2 = new StringBuilder();
@@ -160,7 +161,7 @@ public class SearchChatGui extends Gui {
             sortValue = sortValue.toLowerCase();
         }
 
-        String[] strings = (ignoreCase && !regex ? string.replaceAll("§", "").toLowerCase() : string.replaceAll("§", "")).split(regex ? sortValue : Pattern.quote((ignoreCase ? sortValue.toLowerCase() : sortValue)));
+        String[] strings = (ignoreCase ? string.replaceAll("§", "").toLowerCase() : string.replaceAll("§", "")).split(regex ? sortValue : Pattern.quote((ignoreCase ? sortValue.toLowerCase() : sortValue)));
 
         List<Map.Entry<String, Boolean>> parts = new ArrayList<>();
 
@@ -197,20 +198,29 @@ public class SearchChatGui extends Gui {
         return parts;
     }
 
+    public void sortChatLines() {
+        sortChatLines(sortValue);
+    }
+
     public void sortChatLines(String s) {
         this.sortValue = s;
         this.drawnChatLines.clear();
         int i = MathHelper.floor_float((float) this.getChatWidth() / this.getChatScale()) + 1;
 
-        this.chatLines.forEach((chatLine) -> sortChatLine(chatLine, s, i));
+        this.chatLines.forEach((chatLine) -> sortChatLine(chatLine, s, i, Setting.SEARCH_TYPE.getValue() % 2 == 0, Setting.SEARCH_TYPE.getValue() >= 2));
         this.searchingParts.clear();
     }
 
-    private void sortChatLine(ChatLine chatLine, String s, int i) {
+    private void sortChatLine(ChatLine chatLine, String s, int i, boolean ignoreCase, boolean regex) {
         IChatComponent chatComponent = chatLine.getChatComponent();
         String text = AdvancedChat.clearChatMessage(chatLine.getChatComponent().getUnformattedText());
 
-        if (text.toLowerCase().contains(s.toLowerCase())) {
+        if (ignoreCase) {
+            text = text.toLowerCase();
+            s = s.toLowerCase();
+        }
+
+        if (regex ? text.split(s).length >= 1 : text.contains(s)) {
             List<IChatComponent> list = GuiUtilRenderComponents.splitText(chatComponent, i, this.mc.fontRendererObj, false, false);
             IChatComponent iChatComponent;
 
@@ -227,7 +237,7 @@ public class SearchChatGui extends Gui {
 
         ChatLine chatLine = new ChatLine(updateCounter, chatComponent, chatLineId);
 
-        sortChatLine(chatLine, this.sortValue, MathHelper.floor_float((float) this.getChatWidth() / this.getChatScale()) + 1);
+        sortChatLine(chatLine, this.sortValue, MathHelper.floor_float((float) this.getChatWidth() / this.getChatScale()) + 1, Setting.SEARCH_TYPE.getValue() % 2 == 0, Setting.SEARCH_TYPE.getValue() >= 2);
         this.chatLines.add(chatLine);
         this.searchingParts.clear();
     }
