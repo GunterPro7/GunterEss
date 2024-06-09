@@ -54,6 +54,7 @@ public class Setting {
             "Gameday", new Position(false));
     /* 0 = Ignore cases, 1 = Match case, 2 = Regex (Ignore Cases), 3 = Regex (Match Cases) */
     public static final Value SEARCH_TYPE = new Value(true, 0);
+    public static final Setting LIVE_SEARCH = new Setting(true);
     public static EnumChatFormatting INFO_PREFIX_COLOR = EnumChatFormatting.GRAY;
     public static EnumChatFormatting INFO_VALUE_COLOR = EnumChatFormatting.GOLD;
     public static EnumChatFormatting INFO_SUFFIX_COLOR = EnumChatFormatting.WHITE;
@@ -91,9 +92,6 @@ public class Setting {
 
     public boolean isEnabled() {
         return enabled;
-    }
-
-    public Setting() {
     }
 
     public void switchEnabled() {

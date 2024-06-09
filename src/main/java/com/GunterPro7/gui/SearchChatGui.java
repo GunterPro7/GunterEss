@@ -26,7 +26,7 @@ public class SearchChatGui extends Gui {
     private final List<ChatLine> drawnChatLines = Lists.newArrayList();
     private final List<String> sentMessages = Lists.newArrayList();
     private String sortValue = "";
-    public boolean sortInvalid;
+    private boolean sortInvalid;
     private int scrollPos;
     private boolean isScrolled;
 
@@ -173,7 +173,7 @@ public class SearchChatGui extends Gui {
         for (char c : string.toCharArray()) {
             if (c != '§') {
                 boolean stringEqual = stringIdx < strings.length && strings[stringIdx].contentEquals(clearStringBuilder);
-                if (stringEqual || (regex ? clearStringBuilder.toString().matches(sortValue) : sortValue.contentEquals(clearStringBuilder))) { // TODO when we use regex, we need to do "clearStringBuilder.toString().matches()"
+                if (stringEqual || (regex ? clearStringBuilder.toString().matches(sortValue) : sortValue.contentEquals(clearStringBuilder))) {
                     parts.add(new AbstractMap.SimpleEntry<>(stringBuilder.toString(), !stringEqual));
 
                     if (stringEqual) {
@@ -189,7 +189,7 @@ public class SearchChatGui extends Gui {
         }
 
         // Reihenfolge nicht ändern
-        boolean sortValueEqual = !regex ? sortValue.contentEquals(clearStringBuilder) : clearStringBuilder.toString().matches(sortValue); // TODO when we use regex, we need to do "clearStringBuilder.toString().matches()"
+        boolean sortValueEqual = !regex ? sortValue.contentEquals(clearStringBuilder) : clearStringBuilder.toString().matches(sortValue);
 
         if (sortValueEqual || (strings.length > stringIdx && strings[stringIdx].contentEquals(clearStringBuilder))) {
             parts.add(new AbstractMap.SimpleEntry<>(stringBuilder.toString(), sortValueEqual));
@@ -198,8 +198,10 @@ public class SearchChatGui extends Gui {
         return parts;
     }
 
-    public void sortChatLines() {
-        sortChatLines(sortValue);
+    public void addToSentMessages(String message) {
+        if (this.sentMessages.isEmpty() || !this.sentMessages.get(this.sentMessages.size() - 1).equals(message)) {
+            this.sentMessages.add(message);
+        }
     }
 
     public void sortChatLines(String s) {
@@ -251,6 +253,13 @@ public class SearchChatGui extends Gui {
         sortChatLine(chatLine, this.sortValue, MathHelper.floor_float((float) this.getChatWidth() / this.getChatScale()) + 1, Utils.isSearchTypeIgnoringCase(), Utils.isSearchTypeRegex());
         this.chatLines.add(chatLine);
         this.searchingParts.clear();
+    }
+
+    public void update(String text) {
+        this.resetScroll();
+        this.sortChatLines(text);
+        this.addToSentMessages(text);
+        this.sortInvalid = Utils.isSearchTypeRegex() && !Utils.isRegexValid(text);
     }
 
     public void resetScroll() {
@@ -358,5 +367,9 @@ public class SearchChatGui extends Gui {
 
     public List<String> getSentMessages() {
         return sentMessages;
+    }
+
+    public boolean isSortInvalid() {
+        return this.sortInvalid;
     }
 }

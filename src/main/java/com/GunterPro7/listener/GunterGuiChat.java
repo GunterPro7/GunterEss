@@ -6,6 +6,7 @@ import com.GunterPro7.gui.GuiTransparentButton;
 import com.GunterPro7.gui.SearchChatGui;
 import com.GunterPro7.utils.Utils;
 import net.minecraft.client.gui.GuiChat;
+import net.minecraft.client.gui.GuiNewChat;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.MathHelper;
@@ -16,7 +17,7 @@ import java.io.IOException;
 
 import static com.GunterPro7.Command.enableSearchChat;
 
-public class GunterGuiChat extends GuiChat implements Listener { // TODO die text box vom GuiChat so abfragen, das es den text rot oder so schreibt wenn der regex falsch ist opder es keine einträge dafür gibt.
+public class GunterGuiChat extends GuiChat implements Listener {
     private final SearchChatGui searchChat;
     private GuiTransparentButton matchCaseButton;
     private GuiTransparentButton regexCaseButton;
@@ -52,24 +53,19 @@ public class GunterGuiChat extends GuiChat implements Listener { // TODO die tex
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawString(fontRendererObj, "Search:", 1, (int) (this.mc.displayHeight / (this.mc.gameSettings.guiScale == 0 ? 4 : this.mc.gameSettings.guiScale) - Main.mc.fontRendererObj.FONT_HEIGHT * 2.75), 0xFFFFFF);
 
-        this.inputField.setTextColor(searchChat.sortInvalid ? 0xAA0000 : 0xFFFFFF);
+        this.inputField.setTextColor(searchChat.isSortInvalid() ? 0xAA0000 : 0xFFFFFF);
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
     @Override
     protected void keyTyped(char eventChar, int keyCode) throws IOException {
         if (keyCode == 28 || keyCode == 156) {
-            searchChat.resetScroll();
-            searchChat.sortChatLines(inputField.getText());
+            searchChat.update(inputField.getText());
         } else {
             super.keyTyped(eventChar, keyCode);
-            // TODO
-            // if (keyCode == 200) {
-            //                this.getSentHistory(-1);
-            //            } else if (keyCode == 208) {
-            //                this.getSentHistory(1);
-
-            searchChat.sortInvalid = Utils.isSearchTypeRegex() && !Utils.isRegexValid(inputField.getText());
+            if (Setting.LIVE_SEARCH.isEnabled()) {
+                searchChat.update(inputField.getText());
+            }
         }
     }
 
@@ -129,7 +125,10 @@ public class GunterGuiChat extends GuiChat implements Listener { // TODO die tex
                 boolean regex = regexCaseButton.isClicked();
 
                 Setting.SEARCH_TYPE.setValue(!match && !regex ? 0 : match && !regex ? 1 : !match ? 2 : 3);
-                searchChat.sortChatLines();
+
+                if (Setting.LIVE_SEARCH.isEnabled()) {
+                    searchChat.update(inputField.getText());
+                }
             }
 
             IChatComponent ichatcomponent = searchChat.getChatComponent(Mouse.getX(), Mouse.getY());
