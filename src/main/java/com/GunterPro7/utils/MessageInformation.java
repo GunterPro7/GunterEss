@@ -1,25 +1,34 @@
 package com.GunterPro7.utils;
 
 import com.GunterPro7.gui.CustomIngameUI;
+import com.GunterPro7.listener.AdvancedChat;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class MessageInformation {
-    private static final Map<String, MessageInformation> instances = new HashMap<>();
+    private static final Map<String, MessageInformation> instancesByMessage = new HashMap<>();
+    private static final Map<Integer, MessageInformation> instancesById = new HashMap<>();
     private final String message;
     private final String colorMessage;
+    private final String unformattedText;
     private final int id;
     private int count;
     private long time;
 
-    public MessageInformation(String message, String colorMessage, int id) {
+    public MessageInformation(String message, String colorMessage, String unformattedText, int id) {
         this.message = message;
         this.colorMessage = colorMessage;
+        this.unformattedText = unformattedText;
         this.id = id;
         count = 0;
         time = System.currentTimeMillis();
-        instances.put(message, this);
+        instancesByMessage.put(message, this);
+        instancesById.put(id, this);
+    }
+
+    public static MessageInformation getById(int chatLineID) {
+        return instancesById.get(chatLineID);
     }
 
     public void count() {
@@ -49,14 +58,22 @@ public class MessageInformation {
     }
 
     public static Map<String, MessageInformation> getInstances() {
-        return instances;
+        return instancesByMessage;
     }
 
     public static MessageInformation getInstance(String text) {
-        return instances.get(text);
+        return instancesByMessage.get(text);
     }
 
     public String getColorMessage() {
         return colorMessage;
+    }
+
+    public String getMcMessage() {
+        return colorMessage.replaceAll("\\$", "§").replaceAll("\\\\$", "$");
+    }
+
+    public String getMessageWithOnlyThickness() {
+        return AdvancedChat.clearChatMessageToOnlyThickness(getMcMessage());
     }
 }

@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.*;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 import java.util.stream.Collectors;
 
 // This Class if for Utils related to basic Java
@@ -200,5 +202,22 @@ public class Utils {
         String[] parts = string.split(":");
 
         return Setting.INFO_PREFIX_COLOR + parts[0] + Setting.INFO_SUFFIX_COLOR + ":" + Setting.INFO_VALUE_COLOR + parts[1];
+    }
+
+    public static boolean isRegexValid(String regex) {
+        try {
+            Pattern.compile(regex);
+        } catch (PatternSyntaxException exception) {
+            return false;
+        }
+        return true;
+    }
+
+    public static boolean isSearchTypeIgnoringCase() {
+        return Setting.SEARCH_TYPE.getValue() % 2 == 0;
+    }
+
+    public static boolean isSearchTypeRegex() {
+        return Setting.SEARCH_TYPE.getValue() >= 2;
     }
 }

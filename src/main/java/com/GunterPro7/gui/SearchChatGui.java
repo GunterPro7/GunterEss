@@ -1,16 +1,13 @@
 package com.GunterPro7.gui;
 
-import com.GunterPro7.Main;
 import com.GunterPro7.listener.AdvancedChat;
 import com.GunterPro7.listener.GunterGuiChat;
+import com.GunterPro7.utils.MessageInformation;
+import com.GunterPro7.utils.Utils;
 import com.google.common.collect.Lists;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
@@ -27,11 +24,15 @@ public class SearchChatGui extends Gui {
     private final Minecraft mc;
     private final List<ChatLine> chatLines = Lists.newArrayList();
     private final List<ChatLine> drawnChatLines = Lists.newArrayList();
+    private final List<String> sentMessages = Lists.newArrayList();
     private String sortValue = "";
+    private boolean sortInvalid;
     private int scrollPos;
     private boolean isScrolled;
 
-    public SearchChatGui(Minecraft minecraft) {
+    private final Map<ChatLine, List<Map.Entry<String, Boolean>>> searchingParts = new HashMap<>();
+
+    public SearchChatGui(Minecraft minecraft) { // TODO using the hover event thing, so we can hover over everything... not the frkn chat lol
         this.mc = minecraft;
     }
 
@@ -57,7 +58,7 @@ public class SearchChatGui extends Gui {
             int o;
             int p;
             for (m = 0; m + this.scrollPos < this.drawnChatLines.size() && m < i; ++m) {
-                ChatLine chatLine = (ChatLine) this.drawnChatLines.get(m + this.scrollPos);
+                ChatLine chatLine = this.drawnChatLines.get(m + this.scrollPos);
                 if (chatLine != null) {
                     n = updateCounter - chatLine.getUpdatedCounter();
                     if (n < 200 || bl) {
@@ -78,19 +79,27 @@ public class SearchChatGui extends Gui {
                             int q = -m * 9;
                             drawRect(p, q - 9, p + l + 4, q, 0x7F000000);
                             String string = chatLine.getChatComponent().getFormattedText();
+
                             GlStateManager.enableBlend();
 
-                            List<String> parts = getSearchingParts(string, sortValue, true); // TODo make a sort like switch, like intellij has
+                            if (!searchingParts.containsKey(chatLine)) {
+                                String string2 = AdvancedChat.clearChatMessageToOnlyThickness(chatLine.getChatComponent().getFormattedText());
+                                String fullString = MessageInformation.getById(chatLine.getChatLineID()).getMessageWithOnlyThickness();
+
+                                searchingParts.put(chatLine, getSearchingPartsForSpecificLine(string2, fullString, sortValue,
+                                        Utils.isSearchTypeIgnoringCase(), Utils.isSearchTypeRegex()));
+                            }
 
                             StringBuilder stringBuilder2 = new StringBuilder();
-                            FontRenderer fontRenderer = Main.mc.fontRendererObj;
-                            for (String part : parts) {
-                                if (AdvancedChat.clearChatMessage(part).equalsIgnoreCase(sortValue)) {
-                                    int left = fontRenderer.getStringWidth(stringBuilder2.toString());
-                                    int right = fontRenderer.getStringWidth(stringBuilder2.append(part).toString());
-                                    drawRect(left, q - 8, right, q - 8 + fontRenderer.FONT_HEIGHT, 0xA7f9da15);
+
+
+                            for (Map.Entry<String, Boolean> part : searchingParts.get(chatLine)) {
+                                if (part.getValue()) {
+                                    int left = mc.fontRendererObj.getStringWidth(stringBuilder2.toString());
+                                    int right = mc.fontRendererObj.getStringWidth(stringBuilder2.append(part.getKey()).toString());
+                                    drawRect(left, q - 8, right, q - 8 + mc.fontRendererObj.FONT_HEIGHT, 0xA7f9da15);
                                 } else {
-                                    stringBuilder2.append(part);
+                                    stringBuilder2.append(part.getKey());
                                 }
                             }
 
@@ -122,16 +131,39 @@ public class SearchChatGui extends Gui {
     }
 
     @NotNull
-    private List<String> getSearchingParts(String string, String sortValue, boolean ignoreCase) {
+    private static List<Map.Entry<String, Boolean>> getSearchingPartsForSpecificLine(String string, String fullString, String sortValue, boolean ignoreCase, boolean regex) {
+        List<Map.Entry<String, Boolean>> result = new ArrayList<>();
+        List<Map.Entry<String, Boolean>> list = getSearchingParts(fullString, sortValue, ignoreCase, regex);
+
+        int index = fullString.indexOf(string); // multiple indexes in the list are allowed, because it'll have the same output
+
+        int curLength = 0;
+
+        for (Map.Entry<String, Boolean> entry : list) {
+            int length = entry.getKey().length();
+
+            if (curLength + length >= index) {
+                String part = entry.getKey().substring(Math.max(0, index - curLength), Math.min(Math.max(index - curLength + string.length(), 0), length));
+                if (!part.isEmpty()) {
+                    result.add(new AbstractMap.SimpleEntry<>(AdvancedChat.convertChatMessageWithOnlyThickness(part), entry.getValue()));
+                }
+            }
+
+            curLength += length;
+        }
+
+        return result;
+    }
+
+    @NotNull
+    private static List<Map.Entry<String, Boolean>> getSearchingParts(String string, String sortValue, boolean ignoreCase, boolean regex) {
         if (ignoreCase) {
             sortValue = sortValue.toLowerCase();
         }
 
-        String[] strings = (ignoreCase ? AdvancedChat.clearChatMessage(string).toLowerCase() : AdvancedChat.clearChatMessage(string)).split(Pattern.quote((ignoreCase ? sortValue.toLowerCase() : sortValue)));
+        String[] strings = (ignoreCase ? string.replaceAll("§", "").toLowerCase() : string.replaceAll("§", "")).split(regex ? sortValue : Pattern.quote((ignoreCase ? sortValue.toLowerCase() : sortValue)));
 
-        List<String> parts = new ArrayList<>();
-
-        boolean skippingNext = false;
+        List<Map.Entry<String, Boolean>> parts = new ArrayList<>();
 
         StringBuilder stringBuilder = new StringBuilder();
         StringBuilder clearStringBuilder = new StringBuilder();
@@ -139,53 +171,70 @@ public class SearchChatGui extends Gui {
         int stringIdx = 0;
 
         for (char c : string.toCharArray()) {
-            if (!skippingNext) {
-                if (c == '§') {
-                    skippingNext = true;
-                } else {
+            if (c != '§') {
+                boolean stringEqual = stringIdx < strings.length && strings[stringIdx].contentEquals(clearStringBuilder);
+                if (stringEqual || (regex ? clearStringBuilder.toString().matches(sortValue) : sortValue.contentEquals(clearStringBuilder))) {
+                    parts.add(new AbstractMap.SimpleEntry<>(stringBuilder.toString(), !stringEqual));
 
-                    boolean stringEqual = stringIdx < strings.length && strings[stringIdx].contentEquals(clearStringBuilder);
-                    if (stringEqual || sortValue.contentEquals(clearStringBuilder)) {
-                        parts.add(stringBuilder.toString());
-
-                        if (stringEqual) {
-                            stringIdx++;
-                        }
-                        stringBuilder.setLength(0);
-                        clearStringBuilder.setLength(0);
+                    if (stringEqual) {
+                        stringIdx++;
                     }
-                    clearStringBuilder.append(ignoreCase ? Character.toLowerCase(c) : c);
+                    stringBuilder.setLength(0);
+                    clearStringBuilder.setLength(0);
                 }
-
-            } else {
-                skippingNext = false;
+                clearStringBuilder.append(ignoreCase ? Character.toLowerCase(c) : c);
             }
 
             stringBuilder.append(c);
         }
 
         // Reihenfolge nicht ändern
-        if (sortValue.contentEquals(clearStringBuilder) || strings[stringIdx].contentEquals(clearStringBuilder)) {
-            parts.add(stringBuilder.toString());
+        boolean sortValueEqual = !regex ? sortValue.contentEquals(clearStringBuilder) : clearStringBuilder.toString().matches(sortValue);
+
+        if (sortValueEqual || (strings.length > stringIdx && strings[stringIdx].contentEquals(clearStringBuilder))) {
+            parts.add(new AbstractMap.SimpleEntry<>(stringBuilder.toString(), sortValueEqual));
         }
 
         return parts;
     }
 
+    public void addToSentMessages(String message) {
+        if (this.sentMessages.isEmpty() || !this.sentMessages.get(this.sentMessages.size() - 1).equals(message)) {
+            this.sentMessages.add(message);
+        }
+    }
+
     public void sortChatLines(String s) {
+        if (Utils.isSearchTypeRegex() && !Utils.isRegexValid(s)) {
+            this.sortInvalid = true;
+            s = "";
+        } else {
+            this.sortInvalid = false;
+        }
+
         this.sortValue = s;
         this.drawnChatLines.clear();
         int i = MathHelper.floor_float((float) this.getChatWidth() / this.getChatScale()) + 1;
 
-        this.chatLines.forEach((chatLine) -> sortChatLine(chatLine, s, i));
+        this.chatLines.forEach((chatLine) -> sortChatLine(chatLine, this.sortValue, i, Utils.isSearchTypeIgnoringCase(), Utils.isSearchTypeRegex()));
+        if (this.drawnChatLines.isEmpty()) {
+            sortInvalid = true;
+        }
+
+        this.searchingParts.clear();
     }
 
-    private void sortChatLine(ChatLine chatLine, String s, int i) {
+    private void sortChatLine(ChatLine chatLine, String s, int i, boolean ignoreCase, boolean regex) {
         IChatComponent chatComponent = chatLine.getChatComponent();
         String text = AdvancedChat.clearChatMessage(chatLine.getChatComponent().getUnformattedText());
 
-        if (text.toLowerCase().contains(s.toLowerCase())) {
-            List<IChatComponent> list = GuiUtilRenderComponents.splitText(chatComponent, i, this.mc.fontRendererObj, false, false);
+        if (ignoreCase) {
+            text = text.toLowerCase();
+            s = s.toLowerCase();
+        }
+
+        if (regex ? text.split(s).length > 1 : text.contains(s)) { // TODO "text.split(s).length" splitet den string, wenn die phrase "s" jetzt ALLES IST oder ganz am endfe ist, dann ist die länge vom restlichen string auch automatisch 0
+            List<IChatComponent> list = GuiUtilRenderComponents.splitText(chatComponent, i, this.mc.fontRendererObj, false, false); // BSP: "test UWU" regex: "test.*UWU" -> liste: [] weil alles aufgebraucht wurde
             IChatComponent iChatComponent;
 
             for (Iterator<IChatComponent> iterator = list.iterator(); iterator.hasNext(); this.drawnChatLines.add(0, new ChatLine(chatLine.getUpdatedCounter(), iChatComponent, chatLine.getChatLineID()))) {
@@ -201,8 +250,15 @@ public class SearchChatGui extends Gui {
 
         ChatLine chatLine = new ChatLine(updateCounter, chatComponent, chatLineId);
 
-        sortChatLine(chatLine, this.sortValue, MathHelper.floor_float((float) this.getChatWidth() / this.getChatScale()) + 1);
+        sortChatLine(chatLine, this.sortValue, MathHelper.floor_float((float) this.getChatWidth() / this.getChatScale()) + 1, Utils.isSearchTypeIgnoringCase(), Utils.isSearchTypeRegex());
         this.chatLines.add(chatLine);
+        this.searchingParts.clear();
+    }
+
+    public void update(String text) {
+        this.resetScroll();
+        this.sortChatLines(text);
+        this.addToSentMessages(text);
     }
 
     public void resetScroll() {
@@ -221,7 +277,6 @@ public class SearchChatGui extends Gui {
             this.scrollPos = 0;
             this.isScrolled = false;
         }
-
     }
 
     public IChatComponent getChatComponent(int mouseX, int mouseY) {
@@ -240,12 +295,10 @@ public class SearchChatGui extends Gui {
                 if (j <= MathHelper.floor_float((float) this.getChatWidth() / this.getChatScale()) && k < this.mc.fontRendererObj.FONT_HEIGHT * l + l) {
                     int m = k / this.mc.fontRendererObj.FONT_HEIGHT + this.scrollPos;
                     if (m >= 0 && m < this.drawnChatLines.size()) {
-                        ChatLine chatLine = (ChatLine) this.drawnChatLines.get(m);
+                        ChatLine chatLine = this.drawnChatLines.get(m);
                         int n = 0;
-                        Iterator iterator = chatLine.getChatComponent().iterator();
 
-                        while (iterator.hasNext()) {
-                            IChatComponent iChatComponent = (IChatComponent) iterator.next();
+                        for (IChatComponent iChatComponent : chatLine.getChatComponent()) {
                             if (iChatComponent instanceof ChatComponentText) {
                                 n += this.mc.fontRendererObj.getStringWidth(GuiUtilRenderComponents.func_178909_a(((ChatComponentText) iChatComponent).getChatComponentText_TextValue(), false));
                                 if (n > j) {
@@ -309,5 +362,13 @@ public class SearchChatGui extends Gui {
 
     public int getLineCount() {
         return this.getChatHeight() / 9;
+    }
+
+    public List<String> getSentMessages() {
+        return sentMessages;
+    }
+
+    public boolean isSortInvalid() {
+        return this.sortInvalid;
     }
 }

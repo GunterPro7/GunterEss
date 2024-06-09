@@ -6,6 +6,7 @@ import com.GunterPro7.Setting;
 import com.GunterPro7.event.BackendRecievedEvent;
 import com.GunterPro7.event.ClientChatEvent;
 import com.GunterPro7.event.EnteredSkyblockEvent;
+import com.GunterPro7.gui.SearchChatGui;
 import com.GunterPro7.utils.*;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.client.gui.GuiTextField;
@@ -95,7 +96,7 @@ public class AdvancedChat implements Listener {
 
         // Change message so they can be copied afterwards
 
-        MessageInformation messageInformation = MessageInformation.getInstances().computeIfAbsent(text, key -> new MessageInformation(key, formattedText.replaceAll("\\$", "\\$").replaceAll("§", "\\$"), current_id++));
+        MessageInformation messageInformation = MessageInformation.getInstances().computeIfAbsent(text, key -> new MessageInformation(key, formattedText.replaceAll("\\$", "\\$").replaceAll("§", "\\$"), unformattedText, current_id++));
         messageInformation.count();
 
         final IChatComponent iChatComponent = formatChatComponentForCopy(event.message, text, checkColors);
@@ -126,36 +127,38 @@ public class AdvancedChat implements Listener {
 
     @SubscribeEvent
     public void messageCheck(ClientChatEvent event) throws IOException {
-        String text = event.getText();
-        if (Party.isAPartyToggled() && !text.startsWith("/")) {
-            Party.getToggledParty().sendMessage(text);
-        }
-        if (!text.trim().isEmpty() && false) {
-            event.setText(text + "|GunterEss");
+        if (!(mc.currentScreen instanceof GunterGuiChat)) {
+            String text = event.getText();
+            if (Party.isAPartyToggled() && !text.startsWith("/")) {
+                Party.getToggledParty().sendMessage(text);
+            }
+            if (!text.trim().isEmpty() && false) {
+                event.setText(text + "|GunterEss");
 
-            //String playerName = mc.thePlayer.getGameProfile().getName();
-            //BackendService.getInstance().send(String.format("gmsg;%s;%s;%s" , playerName, System.currentTimeMillis(), text));
-            // Syntax: gmsg | playername | timestamp | message
-        }
-        if (Setting.SEND_CHECK_FOR_7MESSAGE.isEnabled()) {
-            if (text.startsWith("7") && text.length() > 1) {
-                char secondChar = text.charAt(1);
-                String command = "/" + text.substring(1);
+                //String playerName = mc.thePlayer.getGameProfile().getName();
+                //BackendService.getInstance().send(String.format("gmsg;%s;%s;%s" , playerName, System.currentTimeMillis(), text));
+                // Syntax: gmsg | playername | timestamp | message
+            }
+            if (Setting.SEND_CHECK_FOR_7MESSAGE.isEnabled()) {
+                if (text.startsWith("7") && text.length() > 1) {
+                    char secondChar = text.charAt(1);
+                    String command = "/" + text.substring(1);
 
-                if (secondChar != ' ' && !Character.isDigit(secondChar)) {
-                    IChatComponent iChatComponent = new ChatComponentText("§7Wrong Command Detected! ").appendSibling(
-                            new ChatComponentText("§e[Send Anyway] ").setChatStyle(
-                                    new ChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/gunterEss mcchat " + text)).setChatHoverEvent(
-                                            new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText("§7Send the Message §r" + text + "§7 into the chat.")))
+                    if (secondChar != ' ' && !Character.isDigit(secondChar)) {
+                        IChatComponent iChatComponent = new ChatComponentText("§7Wrong Command Detected! ").appendSibling(
+                                new ChatComponentText("§e[Send Anyway] ").setChatStyle(
+                                        new ChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/gunterEss mcchat " + text)).setChatHoverEvent(
+                                                new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ChatComponentText("§7Send the Message §r" + text + "§7 into the chat.")))
 
-                            )).appendSibling(
-                            new ChatComponentText("§6[Send As Command]").setChatStyle(
-                                    new ChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/gunterEss mcchat " + command)).setChatHoverEvent(
-                                            new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                                                    new ChatComponentText("§7Use the Command §r" + command + "§7.")))));
+                                )).appendSibling(
+                                new ChatComponentText("§6[Send As Command]").setChatStyle(
+                                        new ChatStyle().setChatClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/gunterEss mcchat " + command)).setChatHoverEvent(
+                                                new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                                                        new ChatComponentText("§7Use the Command §r" + command + "§7.")))));
 
-                    sendPrivateMessage(iChatComponent, true);
-                    event.setCanceled(true);
+                        sendPrivateMessage(iChatComponent, true);
+                        event.setCanceled(true);
+                    }
                 }
             }
         }
@@ -371,6 +374,48 @@ public class AdvancedChat implements Listener {
 
     public static String clearChatMessage(String text) {
         return text.replaceAll("§[0-9a-zA-Z]", "");
+    }
+
+    public static String clearChatMessageToOnlyThickness(String formattedText) {
+        StringBuilder newString = new StringBuilder();
+
+        boolean thick = false;
+        boolean paragraph = false;
+
+        for (char c : formattedText.toCharArray()) {
+            if (c == '§') {
+                paragraph = true;
+            } else if (paragraph && Character.toLowerCase(c) == 'l') {
+                thick = true;
+                paragraph = false;
+            } else if (paragraph && Character.toLowerCase(c) == 'r') {
+                thick = false;
+                paragraph = false;
+            } else if (!paragraph) {
+                if (thick) {
+                    newString.append('§');
+                }
+                newString.append(c);
+            } else {
+                paragraph = false;
+            }
+        }
+
+        return newString.toString();
+    }
+
+    public static String convertChatMessageWithOnlyThickness(String message) {
+        StringBuilder newString = new StringBuilder();
+
+        for (char c : message.toCharArray()) {
+            if (c == '§') {
+                newString.append("§l");
+            } else {
+                newString.append(c).append("§r"); // TODO improve this so at the start there is a "§l" and at the end is a "§r"
+            }
+        }
+
+        return newString.toString();
     }
 
     public static void sendPrivateMessage(String text) {
