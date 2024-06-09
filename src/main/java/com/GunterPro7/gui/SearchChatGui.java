@@ -259,7 +259,6 @@ public class SearchChatGui extends Gui {
         this.resetScroll();
         this.sortChatLines(text);
         this.addToSentMessages(text);
-        this.sortInvalid = Utils.isSearchTypeRegex() && !Utils.isRegexValid(text);
     }
 
     public void resetScroll() {
