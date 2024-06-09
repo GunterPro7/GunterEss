@@ -53,7 +53,7 @@ public class GunterGuiChat extends GuiChat implements Listener {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawString(fontRendererObj, "Search:", 1, (int) (this.mc.displayHeight / (this.mc.gameSettings.guiScale == 0 ? 4 : this.mc.gameSettings.guiScale) - Main.mc.fontRendererObj.FONT_HEIGHT * 2.75), 0xFFFFFF);
 
-        this.inputField.setTextColor(searchChat.isSortInvalid() ? 0xAA0000 : 0xFFFFFF);
+        this.inputField.setTextColor(searchChat.isSortInvalid() ? 0xFF5555 : 0xFFFFFF);
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
