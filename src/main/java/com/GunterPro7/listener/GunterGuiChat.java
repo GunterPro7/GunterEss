@@ -3,27 +3,25 @@ package com.GunterPro7.listener;
 import com.GunterPro7.Main;
 import com.GunterPro7.Setting;
 import com.GunterPro7.gui.GuiTransparentButton;
-import com.GunterPro7.gui.GuiTransparentImageButton;
 import com.GunterPro7.gui.SearchChatGui;
-import com.GunterPro7.utils.CollectionUtils;
-import net.minecraft.client.gui.GuiButton;
+import com.GunterPro7.utils.Utils;
 import net.minecraft.client.gui.GuiChat;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.IChatComponent;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.MathHelper;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import static com.GunterPro7.Command.enableSearchChat;
 
-public class GunterGuiChat extends GuiChat implements Listener {
+public class GunterGuiChat extends GuiChat implements Listener { // TODO die text box vom GuiChat so abfragen, das es den text rot oder so schreibt wenn der regex falsch ist opder es keine einträge dafür gibt.
     private final SearchChatGui searchChat;
     private GuiTransparentButton matchCaseButton;
     private GuiTransparentButton regexCaseButton;
+    private int sentHistoryCursor = -1;
+    private String historyBuffer = "";
 
     public GunterGuiChat(SearchChatGui searchChat) {
         this.searchChat = searchChat;
@@ -34,7 +32,9 @@ public class GunterGuiChat extends GuiChat implements Listener {
         super.initGui();
 
         matchCaseButton = new GuiTransparentButton(11, width - 32, this.height - 30, 14, 14, "Cc", Setting.SEARCH_TYPE.getValue() % 2 == 1);
-        regexCaseButton = new GuiTransparentButton(12, width - 16, this.height - 30, 14, 14, ".*", Setting.SEARCH_TYPE.getValue() >= 2);
+        regexCaseButton = new GuiTransparentButton(12, width - 16, this.height - 30, 14, 14, ".*", Utils.isSearchTypeRegex());
+
+        sentHistoryCursor = searchChat.getSentMessages().size();
 
         buttonList.add(matchCaseButton);
         buttonList.add(regexCaseButton);
@@ -52,6 +52,7 @@ public class GunterGuiChat extends GuiChat implements Listener {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawString(fontRendererObj, "Search:", 1, (int) (this.mc.displayHeight / (this.mc.gameSettings.guiScale == 0 ? 4 : this.mc.gameSettings.guiScale) - Main.mc.fontRendererObj.FONT_HEIGHT * 2.75), 0xFFFFFF);
 
+        this.inputField.setTextColor(searchChat.sortInvalid ? 0xAA0000 : 0xFFFFFF);
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
@@ -62,6 +63,33 @@ public class GunterGuiChat extends GuiChat implements Listener {
             searchChat.sortChatLines(inputField.getText());
         } else {
             super.keyTyped(eventChar, keyCode);
+            // TODO
+            // if (keyCode == 200) {
+            //                this.getSentHistory(-1);
+            //            } else if (keyCode == 208) {
+            //                this.getSentHistory(1);
+
+            searchChat.sortInvalid = Utils.isSearchTypeRegex() && !Utils.isRegexValid(inputField.getText());
+        }
+    }
+
+    @Override
+    public void getSentHistory(int msgPos) {
+        int i = this.sentHistoryCursor + msgPos;
+        int j = searchChat.getSentMessages().size();
+        i = MathHelper.clamp_int(i, 0, j);
+        if (i != this.sentHistoryCursor) {
+            if (i == j) {
+                this.sentHistoryCursor = j;
+                this.inputField.setText(this.historyBuffer);
+            } else {
+                if (this.sentHistoryCursor == j) {
+                    this.historyBuffer = this.inputField.getText();
+                }
+
+                this.inputField.setText(searchChat.getSentMessages().get(i));
+                this.sentHistoryCursor = i;
+            }
         }
     }
 
@@ -100,10 +128,7 @@ public class GunterGuiChat extends GuiChat implements Listener {
                 boolean match = matchCaseButton.isClicked();
                 boolean regex = regexCaseButton.isClicked();
 
-                System.out.println("match: " + match + ", regex: " + regex);
-
                 Setting.SEARCH_TYPE.setValue(!match && !regex ? 0 : match && !regex ? 1 : !match ? 2 : 3);
-
                 searchChat.sortChatLines();
             }
 

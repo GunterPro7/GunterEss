@@ -1,15 +1,13 @@
 package com.GunterPro7.gui;
 
-import com.GunterPro7.Main;
-import com.GunterPro7.Setting;
 import com.GunterPro7.listener.AdvancedChat;
 import com.GunterPro7.listener.GunterGuiChat;
 import com.GunterPro7.utils.MessageInformation;
+import com.GunterPro7.utils.Utils;
 import com.google.common.collect.Lists;
 
 import java.util.*;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
@@ -26,7 +24,9 @@ public class SearchChatGui extends Gui {
     private final Minecraft mc;
     private final List<ChatLine> chatLines = Lists.newArrayList();
     private final List<ChatLine> drawnChatLines = Lists.newArrayList();
+    private final List<String> sentMessages = Lists.newArrayList();
     private String sortValue = "";
+    public boolean sortInvalid;
     private int scrollPos;
     private boolean isScrolled;
 
@@ -87,7 +87,7 @@ public class SearchChatGui extends Gui {
                                 String fullString = MessageInformation.getById(chatLine.getChatLineID()).getMessageWithOnlyThickness();
 
                                 searchingParts.put(chatLine, getSearchingPartsForSpecificLine(string2, fullString, sortValue,
-                                        Setting.SEARCH_TYPE.getValue() % 2 == 0, Setting.SEARCH_TYPE.getValue() >= 2));
+                                        Utils.isSearchTypeIgnoringCase(), Utils.isSearchTypeRegex()));
                             }
 
                             StringBuilder stringBuilder2 = new StringBuilder();
@@ -191,7 +191,7 @@ public class SearchChatGui extends Gui {
         // Reihenfolge nicht ändern
         boolean sortValueEqual = !regex ? sortValue.contentEquals(clearStringBuilder) : clearStringBuilder.toString().matches(sortValue); // TODO when we use regex, we need to do "clearStringBuilder.toString().matches()"
 
-        if (sortValueEqual || strings[stringIdx].contentEquals(clearStringBuilder)) {
+        if (sortValueEqual || (strings.length > stringIdx && strings[stringIdx].contentEquals(clearStringBuilder))) {
             parts.add(new AbstractMap.SimpleEntry<>(stringBuilder.toString(), sortValueEqual));
         }
 
@@ -203,11 +203,22 @@ public class SearchChatGui extends Gui {
     }
 
     public void sortChatLines(String s) {
+        if (Utils.isSearchTypeRegex() && !Utils.isRegexValid(s)) {
+            this.sortInvalid = true;
+            s = "";
+        } else {
+            this.sortInvalid = false;
+        }
+
         this.sortValue = s;
         this.drawnChatLines.clear();
         int i = MathHelper.floor_float((float) this.getChatWidth() / this.getChatScale()) + 1;
 
-        this.chatLines.forEach((chatLine) -> sortChatLine(chatLine, s, i, Setting.SEARCH_TYPE.getValue() % 2 == 0, Setting.SEARCH_TYPE.getValue() >= 2));
+        this.chatLines.forEach((chatLine) -> sortChatLine(chatLine, this.sortValue, i, Utils.isSearchTypeIgnoringCase(), Utils.isSearchTypeRegex()));
+        if (this.drawnChatLines.isEmpty()) {
+            sortInvalid = true;
+        }
+
         this.searchingParts.clear();
     }
 
@@ -220,8 +231,8 @@ public class SearchChatGui extends Gui {
             s = s.toLowerCase();
         }
 
-        if (regex ? text.split(s).length >= 1 : text.contains(s)) {
-            List<IChatComponent> list = GuiUtilRenderComponents.splitText(chatComponent, i, this.mc.fontRendererObj, false, false);
+        if (regex ? text.split(s).length > 1 : text.contains(s)) { // TODO "text.split(s).length" splitet den string, wenn die phrase "s" jetzt ALLES IST oder ganz am endfe ist, dann ist die länge vom restlichen string auch automatisch 0
+            List<IChatComponent> list = GuiUtilRenderComponents.splitText(chatComponent, i, this.mc.fontRendererObj, false, false); // BSP: "test UWU" regex: "test.*UWU" -> liste: [] weil alles aufgebraucht wurde
             IChatComponent iChatComponent;
 
             for (Iterator<IChatComponent> iterator = list.iterator(); iterator.hasNext(); this.drawnChatLines.add(0, new ChatLine(chatLine.getUpdatedCounter(), iChatComponent, chatLine.getChatLineID()))) {
@@ -237,7 +248,7 @@ public class SearchChatGui extends Gui {
 
         ChatLine chatLine = new ChatLine(updateCounter, chatComponent, chatLineId);
 
-        sortChatLine(chatLine, this.sortValue, MathHelper.floor_float((float) this.getChatWidth() / this.getChatScale()) + 1, Setting.SEARCH_TYPE.getValue() % 2 == 0, Setting.SEARCH_TYPE.getValue() >= 2);
+        sortChatLine(chatLine, this.sortValue, MathHelper.floor_float((float) this.getChatWidth() / this.getChatScale()) + 1, Utils.isSearchTypeIgnoringCase(), Utils.isSearchTypeRegex());
         this.chatLines.add(chatLine);
         this.searchingParts.clear();
     }
@@ -343,5 +354,9 @@ public class SearchChatGui extends Gui {
 
     public int getLineCount() {
         return this.getChatHeight() / 9;
+    }
+
+    public List<String> getSentMessages() {
+        return sentMessages;
     }
 }
