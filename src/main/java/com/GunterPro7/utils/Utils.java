@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.*;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 import java.util.stream.Collectors;
@@ -211,6 +212,17 @@ public class Utils {
             return false;
         }
         return true;
+    }
+
+    public static boolean containsRegex(String str, String regex) {
+        if (str == null || regex == null) {
+            return false;
+        }
+
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(str);
+
+        return matcher.find();
     }
 
     public static boolean isSearchTypeIgnoringCase() {

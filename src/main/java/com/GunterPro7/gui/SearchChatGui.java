@@ -233,7 +233,7 @@ public class SearchChatGui extends Gui {
             s = s.toLowerCase();
         }
 
-        if (regex ? text.split(s).length > 1 : text.contains(s)) { // TODO "text.split(s).length" splitet den string, wenn die phrase "s" jetzt ALLES IST oder ganz am endfe ist, dann ist die länge vom restlichen string auch automatisch 0
+        if (regex ? Utils.containsRegex(text, s) : text.contains(s)) {
             List<IChatComponent> list = GuiUtilRenderComponents.splitText(chatComponent, i, this.mc.fontRendererObj, false, false); // BSP: "test UWU" regex: "test.*UWU" -> liste: [] weil alles aufgebraucht wurde
             IChatComponent iChatComponent;
 
