@@ -2,13 +2,18 @@ package com.GunterPro7.listener;
 
 import com.GunterPro7.event.ClientMouseEvent;
 import com.GunterPro7.utils.McUtils;
+import com.GunterPro7.utils.Utils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.client.event.GuiScreenEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
+import org.lwjgl.input.Keyboard;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -26,7 +31,7 @@ public class ItemLoreScroller implements Listener {
     public void onScroll(ClientMouseEvent.Scroll event) {
         if (McUtils.mcLoaded()) {
             if (mc.currentScreen instanceof GuiContainer) {
-                Slot slot = ((GuiContainer) mc.currentScreen).getSlotUnderMouse();
+                Slot slot = McUtils.getInventorySlotUnderMouse();
                 if (slot != null) {
                     ItemStack item = slot.getStack();
                     if (item != null && TOOLTIP_SCROLLS.containsKey(item) && ITEM_TOOLTIP_LENGTH.containsKey(item)) {

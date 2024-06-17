@@ -3,10 +3,13 @@ package com.GunterPro7.utils;
 import com.GunterPro7.listener.AdvancedChat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.network.NetworkPlayerInfo;
+import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import org.lwjgl.input.Mouse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +18,7 @@ import static com.GunterPro7.Main.mc;
 
 // This Class if for Utils related to Minecraft
 public class McUtils {
+    private static final int SLOT_SIZE = 18;
     private static final List<String> ignoredMessages = new ArrayList<>();
 
     public static boolean isTextFieldHovered(GuiTextField textField, int mouseX, int mouseY) {
@@ -81,5 +85,37 @@ public class McUtils {
         }
 
         return "";
+    }
+
+    public static Slot getInventorySlotUnderMouse() {
+        int x = Mouse.getX();
+        int y = Mouse.getY();
+
+        int scaling = getGuiScale();
+
+        GuiContainer container = (GuiContainer) mc.currentScreen;
+
+        for (Slot slot : container.inventorySlots.inventorySlots) {
+            if (isMouseOverSlot(slot, x / scaling, (container.height * scaling - y) / scaling) && slot.canBeHovered()) {
+                return slot;
+            }
+        }
+
+        return null;
+    }
+
+    private static boolean isMouseOverSlot(Slot slotIn, int mouseX, int mouseY) {
+        return isPointInRegion(slotIn.xDisplayPosition, slotIn.yDisplayPosition, 16, 16, mouseX, mouseY, slotIn);
+    }
+
+    protected static boolean isPointInRegion(int left, int top, int right, int bottom, int pointX, int pointY, Slot slot) {
+        GuiContainer container = (GuiContainer) mc.currentScreen;
+
+        int guiLeft = (container.width - 176) / 2;
+        int guiTop = (container.height - 166) / 2;
+        pointX -= guiLeft;
+        pointY -= guiTop;
+
+        return pointX >= left - 1 && pointX < left + right + 1 && pointY >= top - 1 && pointY < top + bottom + 1;
     }
 }
