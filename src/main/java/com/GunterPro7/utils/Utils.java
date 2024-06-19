@@ -7,6 +7,7 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.*;
@@ -223,6 +224,25 @@ public class Utils {
         Matcher matcher = pattern.matcher(str);
 
         return matcher.find();
+    }
+
+    public static Object getField(Class<?> clazz, Object o, String... fieldNames) {
+        Field field = null;
+        for (String fieldName : fieldNames) {
+            try {
+                field = clazz.getDeclaredField(fieldName);
+                break;
+            } catch (Exception ignored) {
+            }
+        }
+        if (field != null) {
+            field.setAccessible(true);
+            try {
+                return field.get(o);
+            } catch (IllegalAccessException ignored) {
+            }
+        }
+        return null;
     }
 
     public static boolean isSearchTypeIgnoringCase() {

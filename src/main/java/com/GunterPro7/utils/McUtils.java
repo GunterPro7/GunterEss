@@ -1,14 +1,19 @@
 package com.GunterPro7.utils;
 
 import com.GunterPro7.listener.AdvancedChat;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockChest;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.network.NetworkPlayerInfo;
+import net.minecraft.entity.Entity;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
 import org.lwjgl.input.Mouse;
 
 import java.util.ArrayList;
@@ -117,5 +122,45 @@ public class McUtils {
         pointY -= guiTop;
 
         return pointX >= left - 1 && pointX < left + right + 1 && pointY >= top - 1 && pointY < top + bottom + 1;
+    }
+
+    public static Entity findEntityByName(String name) {
+        double radius = 6.0;
+        BlockPos pos = Minecraft.getMinecraft().thePlayer.getPosition();
+
+        List<Entity> entities = Minecraft.getMinecraft().theWorld.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(
+                pos.getX() - radius, pos.getY() - radius, pos.getZ() - radius,
+                pos.getX() + radius, pos.getY() + radius, pos.getZ() + radius
+        ));
+
+        for (Entity entity : entities) {
+            System.out.println("Entity Name: " + entity.getCustomNameTag());
+            if (entity.hasCustomName() && entity.getCustomNameTag().equals(name)) {
+                return entity;
+            }
+        }
+        return null;
+    }
+
+    public static BlockPos findChestNearEntity(Entity entity, int radius) {
+        BlockPos entityPos = new BlockPos(entity);
+
+        for (int x = -radius; x <= radius; x++) {
+            for (int y = -radius; y <= radius; y++) {
+                for (int z = -radius; z <= radius; z++) {
+                    BlockPos checkPos = entityPos.add(x, y, z);
+                    Block block = Minecraft.getMinecraft().theWorld.getBlockState(checkPos).getBlock();
+
+                    if (block instanceof BlockChest) {
+                        return checkPos;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public static void hoverBlock(BlockPos blockPos) {
+        // TODO
     }
 }

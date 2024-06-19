@@ -5,7 +5,9 @@ import com.GunterPro7.Setting;
 import com.GunterPro7.gui.GuiTransparentButton;
 import com.GunterPro7.gui.SearchChatGui;
 import com.GunterPro7.utils.Utils;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiChat;
+import net.minecraft.client.gui.GuiLabel;
 import net.minecraft.client.gui.GuiNewChat;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.IChatComponent;
@@ -44,6 +46,7 @@ public class GunterGuiChat extends GuiChat implements Listener {
     @Override
     protected void handleComponentHover(IChatComponent component, int x, int y) {
         IChatComponent chatComponent = !searchChat.getChatOpen() ? component : searchChat.getChatComponent(x, y);
+        System.out.println(chatComponent == null ? "Null" : chatComponent.getFormattedText());
         if (chatComponent != null && chatComponent.getChatStyle() != null && chatComponent.getChatStyle().getChatHoverEvent() != null) {
             super.handleComponentHover(!searchChat.getChatOpen() ? component : searchChat.getChatComponent(x, y), x, y); // TODO check if works
         }
@@ -52,9 +55,19 @@ public class GunterGuiChat extends GuiChat implements Listener {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawString(fontRendererObj, "Search:", 1, (int) (this.mc.displayHeight / (this.mc.gameSettings.guiScale == 0 ? 4 : this.mc.gameSettings.guiScale) - Main.mc.fontRendererObj.FONT_HEIGHT * 2.75), 0xFFFFFF);
+        drawRect(2, this.height - 14, this.width - 2, this.height - 2, Integer.MIN_VALUE);
 
         this.inputField.setTextColor(searchChat.isSortInvalid() ? 0xFF5555 : 0xFFFFFF);
-        super.drawScreen(mouseX, mouseY, partialTicks);
+        this.inputField.drawTextBox();
+
+        IChatComponent ichatcomponent = searchChat.getChatComponent(Mouse.getX(), Mouse.getY());
+        if (ichatcomponent != null && ichatcomponent.getChatStyle().getChatHoverEvent() != null) {
+            this.handleComponentHover(ichatcomponent, mouseX, mouseY);
+        }
+
+        for (GuiButton guiButton : buttonList) {
+            guiButton.drawButton(Main.mc, mouseX, mouseY);
+        }
     }
 
     @Override

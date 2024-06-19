@@ -2,6 +2,7 @@ package com.GunterPro7;
 
 import com.GunterPro7.event.ClientMouseEvent;
 import com.GunterPro7.event.ClientFishingEvent;
+import com.GunterPro7.hypixel.ThreeWeirdosSolver;
 import com.GunterPro7.listener.ItemLoreScroller;
 import com.GunterPro7.listener.*;
 import com.GunterPro7.moneyTracker.FarmingTracker;
@@ -66,7 +67,7 @@ public class Main {
                 new InformationListener(), new TimeUtils(), new GemstoneDisplay(), new MoneyTrackerDisplay(),
                 TpsHandler.getInstance(), PreventLabymodUpdater.getInstance(), new ClientMouseEvent(0),
                 new ClientFishingEvent(null), AdvancedChat.getInstance(), new ItemLoreScroller(),
-                FarmingTracker.getInstance()
+                FarmingTracker.getInstance(), new ThreeWeirdosSolver()
                 /*, new ItemLock(), new HarpListener(), QuiverEmptyChecker.getInstance() */);
 
         for (Listener listener : listenersToRegister) {
