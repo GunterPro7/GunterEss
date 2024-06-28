@@ -2,6 +2,8 @@ package com.GunterPro7;
 
 import com.GunterPro7.event.ClientMouseEvent;
 import com.GunterPro7.event.ClientFishingEvent;
+import com.GunterPro7.hypixel.BlockHoverListener;
+import com.GunterPro7.hypixel.ItemFeatures;
 import com.GunterPro7.hypixel.ThreeWeirdosSolver;
 import com.GunterPro7.listener.ItemLoreScroller;
 import com.GunterPro7.listener.*;
@@ -14,7 +16,6 @@ import com.GunterPro7.utils.TimeUtils;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiNewChat;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
@@ -26,14 +27,11 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
-import net.minecraftforge.fml.common.eventhandler.ListenerList;
 import org.spongepowered.asm.launch.MixinBootstrap;
 import org.spongepowered.asm.mixin.Mixins;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -67,8 +65,8 @@ public class Main {
                 new InformationListener(), new TimeUtils(), new GemstoneDisplay(), new MoneyTrackerDisplay(),
                 TpsHandler.getInstance(), PreventLabymodUpdater.getInstance(), new ClientMouseEvent(0),
                 new ClientFishingEvent(null), AdvancedChat.getInstance(), new ItemLoreScroller(),
-                FarmingTracker.getInstance(), new ThreeWeirdosSolver()
-                /*, new ItemLock(), new HarpListener(), QuiverEmptyChecker.getInstance() */);
+                FarmingTracker.getInstance()
+                /*, new ItemLock(), new HarpListener(), QuiverEmptyChecker.getInstance(), new ItemFeatures(), ThreeWeirdosSolver.getInstance(), BlockHoverListener.getInstance(), */);
 
         for (Listener listener : listenersToRegister) {
             MinecraftForge.EVENT_BUS.register(listener);

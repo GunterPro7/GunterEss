@@ -7,6 +7,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.network.NetworkPlayerInfo;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.entity.Entity;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -14,6 +16,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.Vec3;
+import org.apache.commons.lang3.tuple.Triple;
 import org.lwjgl.input.Mouse;
 
 import java.util.ArrayList;
@@ -160,7 +164,42 @@ public class McUtils {
         return null;
     }
 
+    public static Triple<Double, Double, Double> getViewerPos(float partialTicks) {
+        Entity viewer = mc.getRenderViewEntity();
+
+        return Triple.of(viewer.lastTickPosX + (viewer.posX - viewer.lastTickPosX) * partialTicks,
+                viewer.lastTickPosY + (viewer.posY - viewer.lastTickPosY) * partialTicks,
+                viewer.lastTickPosZ + (viewer.posZ - viewer.lastTickPosZ) * partialTicks);
+    }
+
     public static void hoverBlock(BlockPos blockPos) {
-        // TODO
+        Vec3 playerPos = mc.thePlayer.getPositionEyes(1.0F);
+
+        double x = blockPos.getX() - playerPos.xCoord;
+        double y = blockPos.getY() - playerPos.yCoord;
+        double z = blockPos.getZ() - playerPos.zCoord;
+
+        GlStateManager.pushMatrix();
+        GlStateManager.disableTexture2D();
+        GlStateManager.disableLighting();
+        GlStateManager.disableDepth();
+
+        GlStateManager.color(0.0F, 1.0F, 0.0F, 0.5F); // Green color with 50% opacity
+
+        RenderGlobal.drawSelectionBoundingBox(mc.theWorld.getBlockState(blockPos).getBlock().getSelectedBoundingBox(mc.theWorld, blockPos));
+
+        GlStateManager.enableTexture2D();
+        GlStateManager.enableLighting();
+        GlStateManager.enableDepth();
+        GlStateManager.popMatrix();
+    }
+
+    public static boolean equalsVec3(Vec3 vec1, Vec3 vec2) {
+        if (vec1 == null && vec2 == null) {
+            return true;
+        } else if (vec1 == null ^ vec2 == null) {
+            return false;
+        }
+        return vec1.xCoord == vec2.xCoord && vec1.yCoord == vec2.yCoord && vec1.zCoord == vec2.zCoord;
     }
 }
