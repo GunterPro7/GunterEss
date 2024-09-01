@@ -30,7 +30,6 @@ public class CollectionOverlay extends AbstractOverlay {
     public void initGui() {
         super.initGui();
 
-        title.func_175202_a("§lGunter Essentials");
         title.func_175202_a("");
         title.func_175202_a("-> Collection Tracker");
 

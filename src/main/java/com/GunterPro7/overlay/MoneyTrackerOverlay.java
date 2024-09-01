@@ -31,7 +31,6 @@ public class MoneyTrackerOverlay extends AbstractOverlay {
         super.initGui();
         buttonRelations.clear();
 
-        title.func_175202_a("§lGunter Essentials");
         title.func_175202_a("");
         title.func_175202_a("-> Money Tracker");
 

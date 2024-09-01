@@ -98,7 +98,6 @@ public class InformationOverlay extends AbstractOverlay {
         super.initGui();
         dropdownButtons.clear();
 
-        title.func_175202_a("§lGunter Essentials");
         title.func_175202_a("");
         title.func_175202_a("-> Information Overlay");
 
