@@ -34,7 +34,6 @@ public class GunterEssOverlay extends AbstractOverlay {
         super.initGui();
         buttonRelations.clear();
 
-        title.func_175202_a("§lGunter Essentials " + Main.VERSION);
         title.func_175202_a("");
         title.func_175202_a("by GunterPro7 f. DerKatzenLord");
 

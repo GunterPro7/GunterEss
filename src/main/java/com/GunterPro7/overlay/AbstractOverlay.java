@@ -71,6 +71,7 @@ public abstract class AbstractOverlay extends GuiScreen {
         buttonList.clear();
         labelList.clear();
         title = new GuiLabel(fontRendererObj, 0, width / 2 - 50, 40, 100, 20, 0xFFFFFF).setCentered();
+        title.func_175202_a("§lGunter Essentials " + Main.VERSION);
         labelList.add(title);
 
         textFieldList.clear();

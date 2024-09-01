@@ -9,6 +9,10 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -61,10 +65,7 @@ public class Utils {
     }
 
     public static String formatTime(long time, String pattern) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
-        dateFormat.setTimeZone(java.util.TimeZone.getTimeZone("UTC"));
-
-        return dateFormat.format(new Date(time));
+        return LocalDateTime.ofInstant(Instant.ofEpochMilli(time), ZoneId.systemDefault()).format(DateTimeFormatter.ofPattern(pattern));
     }
 
     public static String getJavaRuntime() throws IOException {
