@@ -7,6 +7,7 @@ import com.GunterPro7.hypixel.ItemFeatures;
 import com.GunterPro7.hypixel.ThreeWeirdosSolver;
 import com.GunterPro7.listener.ItemLoreScroller;
 import com.GunterPro7.listener.*;
+import com.GunterPro7.minigames.MurderMystery;
 import com.GunterPro7.moneyTracker.FarmingTracker;
 import com.GunterPro7.moneyTracker.GemstoneDisplay;
 import com.GunterPro7.moneyTracker.MoneyTrackerDisplay;
@@ -15,6 +16,7 @@ import com.GunterPro7.utils.JsonUtils;
 import com.GunterPro7.utils.TimeUtils;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.mojang.authlib.minecraft.MinecraftSessionService;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.event.ClickEvent;
@@ -22,6 +24,7 @@ import net.minecraft.event.HoverEvent;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.IChatComponent;
+import net.minecraft.util.Session;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -32,6 +35,7 @@ import org.spongepowered.asm.mixin.Mixins;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,14 +62,14 @@ public class Main {
 
 
     @Mod.EventHandler
-    public void serverStarting(final FMLInitializationEvent event) {
+    public void serverStarting(final FMLInitializationEvent event) { // TODO branch machen für Murder Mystery shit etc, und backend call, dass falls irg nen feature das game zum crashen bringt wegen x auch immer, dann mit backend steuern, das ma da beim start up vlt was mitschickt, eigene json klassen erstellen und eigenen IsFeatureEnawbled classe mit methoden die ganz am anfang nen backend call machen, so wie beim Version check
         System.out.println("INITIALIZING GunterEss :D");
 
         List<Listener> listenersToRegister = CollectionUtils.listOf(new ClientBlockListener(), new MiscListener(),
                 new InformationListener(), new TimeUtils(), new GemstoneDisplay(), new MoneyTrackerDisplay(),
                 TpsHandler.getInstance(), PreventLabymodUpdater.getInstance(), new ClientMouseEvent(0),
                 new ClientFishingEvent(null), AdvancedChat.getInstance(), new ItemLoreScroller(),
-                FarmingTracker.getInstance()
+                FarmingTracker.getInstance(), new MurderMystery()
                 /*, new ItemLock(), new HarpListener(), QuiverEmptyChecker.getInstance(), new ItemFeatures(), ThreeWeirdosSolver.getInstance(), BlockHoverListener.getInstance(), */);
 
         for (Listener listener : listenersToRegister) {
