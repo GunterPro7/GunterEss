@@ -52,10 +52,18 @@ public class GemstoneDisplay implements Listener {
     public void onChatMessage(ClientChatReceivedEvent event) {
         String text = event.message.getUnformattedText();
         if (text.startsWith("PRISTINE!")) {
-            String[] parts = text.split("Flawed | Gemstone x|!");
-            System.out.println(Arrays.deepToString(parts));
-            Gemstone gemstone = Gemstone.valueOfShort(parts[2]);
-            int count = Integer.parseInt(parts[3]);
+            Gemstone gemstone;
+            int count;
+            try {
+                String[] parts = text.split("Flawed | Gemstone x|!");
+                System.out.println(Arrays.deepToString(parts));
+                gemstone = Gemstone.valueOfShort(parts[2]);
+                count = Integer.parseInt(parts[3]);
+            } catch (Exception e) {
+                System.err.println("GunterEss > Error while reading flawed gemstone information.");
+                e.printStackTrace();
+                return;
+            }
 
             if (gemstoneIntMap.containsKey(gemstone)) {
                 gemstoneIntMap.get(gemstone).addCount(count);
