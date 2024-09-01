@@ -12,10 +12,10 @@ public enum Gemstone implements SkyblockItem {
     TOPAZ("✧", 'e'),
     JASPER("❁", 'd'),
     OPAL("❂", 'f'),
-    AQUAMARINE("α", 'b'),
-    CITRINE("☘", 'c'),
+    AQUAMARINE("α", '3'),
+    CITRINE("☘", '6'),
     ONYX("☣", '7'),
-    PERIDOT("☘", 'a'),
+    PERIDOT("☘", '2'),
 
     ;
 
