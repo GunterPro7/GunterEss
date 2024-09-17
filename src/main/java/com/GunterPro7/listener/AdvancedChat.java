@@ -9,6 +9,7 @@ import com.GunterPro7.event.EnteredSkyblockEvent;
 import com.GunterPro7.gui.SearchChatGui;
 import com.GunterPro7.utils.*;
 import net.minecraft.client.gui.GuiChat;
+import net.minecraft.client.gui.GuiNewChat;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.HoverEvent;
@@ -46,6 +47,7 @@ public class AdvancedChat implements Listener {
     );
 
     private AdvancedChat() {
+
     }
 
     public static AdvancedChat getInstance() {
